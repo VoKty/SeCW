@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="中文">
+<head>
+    <meta charset="UTF-8">
+    <title>生日快乐</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8vw; /* 根据视口宽度调整字体大小 */
+            color: white;
+            background-color: black;
+        }
+
+        #text-container {
+            text-align: center;
+
+            opacity: 1; /* 初始透明度为1（完全可见） */
+            transition: opacity 1s ease-in-out; /* 添加淡出过渡效果 */
+            color: hotpink;
+            white-space:nowrap;
+        }
+    </style>
+</head>
+<body>
+<div id="text-container"></div>
+<audio src="huahuo.mp3" loop ="loop"  autoplay = "autoplay"></audio>
+<script src="birth.js"></script>
+
+</body>
+</html>

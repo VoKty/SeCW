@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>导航页</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    /* 开场动画 */
+    #welcome{
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #0a0f1f, #000);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      animation: fadeOut 0.4s ease forwards;
+      animation-delay: 0.8s;
+    }
+
+    #welcome h1{
+      font-size: clamp(10rem, 6vw, 6rem);
+      letter-spacing: 0.15em;
+      background: linear-gradient(120deg,#6cf,#9ff,#fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow{
+      from{filter: drop-shadow(0 0 10px rgba(120,220,255,.4));}
+      to{filter: drop-shadow(0 0 40px rgba(120, 220, 255, 0.9));}
+    }
+
+    @keyframes fadeOut{
+      to{
+        opacity:0;
+        pointer-events:none;
+      }
+    }
+    html,body{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      font-family:"Segoe UI","PingFang SC","Microsoft Yahei",sans-serif;
+
+    }
+    body{
+      background:url("bg.jpg") center/cover no-repeat fixed;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* 整体毛玻璃卡片*/
+    .panel{
+      width:min(70vw,2000px);
+      padding:17px 40px 45px;
+      border-radius:50px;
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.25);
+      box-shadow:0 25px 80px rgba(0,0,0,.45);
+      text-align:center;
+    }
+
+    /* 标题 */
+    .title{
+      font-size:clamp(2.5rem,6vw,5rem);
+      font-weight:900;
+      letter-spacing:.25em;
+      background:linear-gradient(120deg,#fa709a,#fee140);
+      -webkit-background-clip:text;
+      color:transparent;
+      filter:drop-shadow(0 0 20px rgba(160,200,255,.8));
+      animation:float 800s ease-in-out infinite alternate;
+    }
+
+    @keyframes float{
+      to{transform:translateY(-10px);}
+    }
+    .subtitle{
+      margin-top:8px;
+      font-size:14px;
+      letter-spacing:.35em;
+      opacity:.75;
+    }
+
+    /* 搜索框 */
+    .search-box{
+      margin:30px auto 40px;
+      width:100%;
+      max-width:9080px;
+      position:relative;
+    }
+    .search-box input{
+      width:100%;
+      height:56px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.15);
+      backdrop-filter:blur(20px);
+      padding:0 22px;
+      font-size:18px;
+      color: #000000;
+      outline:none;
+      transition:.25s;
+    }
+    .search-box input::placeholder{
+      color: rgba(0, 0, 0, 0.6);
+    }
+    .search-box input:focus{
+      background:rgba(255,255,255,.22);
+      box-shadow:0 0 0 2px rgba(120,180,255,.6);
+    }
+
+    /* 按钮区域 */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:24px 28px;
+    }
+
+    /* 按钮 */
+    .btn{
+      height:clamp(72px,10vh,115px);
+      border-radius:32px;
+      background:linear-gradient(135deg, rgb(168, 237, 234), rgb(254, 214, 227));
+      backdrop-filter:blur(2px);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:clamp(2rem,3vw,3rem);
+      font-weight:520;
+      letter-spacing:.2em;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      transition:.25s cubic-bezier(.2,.7,.3,1);
+      box-shadow:0 15px 45px rgba(0,0,0,.35);
+    }
+    .btn::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.65),transparent 60%);
+    }
+    .btn span{position:relative;z-index:2;}
+    .btn:hover{
+      transform:translateY(-6px) scale(1.06);
+      box-shadow:0 30px 70px rgb(168, 237, 234);
+    }
+
+    /* 鼠标流光 */
+    .trail{
+      position:fixed;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      pointer-events:none;
+      background:radial-gradient(circle,#7cf, #0000ff);
+      filter:blur(4px);
+      animation:fade .8s linear forwards;
+    }
+    @keyframes fade{
+      to{opacity:0;transform:scale(2);}
+    }
+
+    /* 移动端 */
+    @media(max-width:768px){
+      .grid{grid-template-columns:1fr;}
+      .panel{padding:28px 20px 35px;}
+    }
+  </style>
+</head>
+
+<body>
+<div id="welcome">
+  <h1>WELCOME</h1>
+</div>
+
+<div class="panel">
+  <div class="title">导航页</div>
+  <div class="subtitle">DESIGNED BY 薛子宏</div>
+
+  <div class="search-box">
+    <input id="search" placeholder="可直接搜索！！！ 回车即搜 🔍">
+  </div>
+
+  <div class="grid">
+    <div class="btn" data-url="https://www.baidu.com"><span>百度</span></div>
+    <div class="btn" data-url="https://www.bilibili.com"><span>哔哩哔哩</span></div>
+    <div class="btn" data-url="https://www.zhixue.com/login.html"><span>智学网</span></div>
+    <div class="btn" data-url="wall.html"><span>留言墙</span></div>
+    <div class="btn" data-url="https://www.bing.com"><span>必应</span></div>
+    <div class="btn" data-url="https://ys.mihoyo.com/cloud/"><span>miHoYo</span></div>
+    <div class="btn" data-url="https://www.douyin.com/"><span>抖音</span></div>
+    <div class="btn" data-url="https://v.qq.com/"><span>腾讯视频</span></div>
+  </div>
+</div>
+
+<script>
+  /* 按钮跳转 */
+  document.querySelectorAll('.btn').forEach(b=>{
+    b.onclick=()=>window.open(b.dataset.url,'_blank');
+  });
+
+  /* 搜索功能（默认走必应） */
+  document.getElementById('search').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const q=e.target.value.trim();
+      if(q) window.open('https://www.bing.com/search?q='+encodeURIComponent(q),'_blank');
+    }
+  });
+
+  /* 鼠标流光拖影 */
+  document.addEventListener('mousemove',e=>{
+    document.querySelectorAll('.btn').forEach(btn=>{
+      const rect=btn.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height/2;
+      const dx=e.clientX-cx;
+      const dy=e.clientY-cy;
+      const dist=Math.hypot(dx,dy);
+      const max=130;/* 大果冻*/
+      if(dist<max){
+        const strength=(max-dist)/max;
+        btn.style.transform=`translate(${dx*0.18*strength}px,${dy*0.18*strength}px) scale(1.06)`;
+      }else{
+        btn.style.transform='';
+      }
+    });
+
+    /* 流光拖影
+    const d=document.createElement('div');
+    d.className='trail';
+    d.style.left=e.clientX+'px';
+    d.style.top=e.clientY+'px';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),110);*/
+  });
+</script>
+
+</body>
+</html>

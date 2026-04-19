@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航页2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        /* 开场动画 */
+        #welcome{
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #0a0f1f, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            animation: fadeOut 0.8s ease forwards;
+            animation-delay: 1s;
+        }
+
+        #welcome h1{
+            font-size: clamp(2.5rem, 6vw, 6rem);
+            letter-spacing: 0.15em;
+            background: linear-gradient(120deg,#6cf,#9ff,#fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow{
+            from{filter: drop-shadow(0 0 10px rgba(120,220,255,.4));}
+            to{filter: drop-shadow(0 0 40px rgba(120,220,255,.9));}
+        }
+
+        @keyframes fadeOut{
+            to{
+                opacity:0;
+                pointer-events:none;
+            }
+        }
+
+
+
+        body{
+            min-height:100vh;
+            background:url("bg.jpg") center/cover no-repeat fixed;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            color:#fff;
+            font-family:"Orbitron","PingFang SC","Microsoft Yahei",sans-serif;
+            overflow:hidden;
+        }
+
+        /* 光晕跟随（慢 & 稳） */
+        .cursor{
+            position:fixed;
+            width:360px;
+            height:360px;
+            border-radius:50%;
+            background:radial-gradient(circle,rgba(120,220,255,.28),transparent 70%);
+            pointer-events:none;
+            mix-blend-mode:screen;
+            filter:blur(26px);
+            transform:translate(-50%,-50%);
+            transition:transform .08s linear;
+            z-index:1;
+        }
+
+        /* 主面板 */
+        .panel{
+            width:min(92vw,1080px);
+            padding:clamp(22px,4vw,42px);
+            border-radius:26px;
+            background:rgba(255,255,255,.14);
+            backdrop-filter: blur(42px) saturate(160%);
+            -webkit-backdrop-filter: blur(42px) saturate(160%);
+            box-shadow:
+                    0 0 60px rgba(0,255,255,.18),
+                    inset 0 0 0 1px rgba(255,255,255,.2);
+            position:relative;
+            z-index:2;
+        }
+
+        /* 标题 */
+        .title{
+            text-align:center;
+            margin-bottom:12px;
+        }
+
+        .title h1{
+            font-size:clamp(3.6rem,8vw,6.8rem);
+            font-weight:900;
+            letter-spacing:.28em;
+            background:linear-gradient(120deg, #fb4802, #86fa09, #03ffdd, #9c14fa);
+            background-size:300% 300%;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            filter:drop-shadow(0 0 20px rgba(120,220,255,.55));
+        }
+
+        .title p{
+            background:linear-gradient(120deg,#9ff,#6cf,#fff);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            filter:drop-shadow(0 0 10px rgba(120,220,255,.35));
+        }
+
+        /* 搜索 */
+        .search{
+            margin:22px auto 26px;
+            max-width:520px;
+        }
+
+        .search input{
+            width:100%;
+            height:52px;
+            border-radius:18px;
+            border:none;
+            outline:none;
+            padding:0 22px;
+            background:rgba(255,255,255,.14);
+            backdrop-filter: blur(18px);
+            color:#fff;
+            font-size:1rem;
+            letter-spacing:.15em;
+        }
+
+        /* 网格 */
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:18px;
+        }
+
+        /* 按钮 */
+        .btn{
+            height:72px;
+            border-radius:18px;
+            background:linear-gradient(135deg,rgba(255,255,255,.32),rgba(255,255,255,.06));
+            backdrop-filter: blur(22px);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            font-size:2.1rem;          /* 字体变大 */
+            font-weight:700;
+            letter-spacing:.45em;
+
+            color:transparent;
+            background:linear-gradient(120deg, #ff667d, #ffd500, #fd7200, #0900fb);
+            background-size:300% 300%;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            animation: gradientMove 6s ease infinite;
+
+            cursor:pointer;
+            transition:.35s cubic-bezier(.19,1,.22,1);
+        }
+
+        .btn:hover{
+            transform:translateY(-6px) scale(1.035);
+            box-shadow:0 0 26px rgba(120,220,255,.55);
+        }
+
+        /* 移动端 */
+        @media(max-width:768px){
+            .grid{grid-template-columns:1fr}
+            .btn{font-size:1.35rem}
+        }
+        @keyframes gradientMove{
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+    </style>
+</head>
+
+<body>
+<div id="welcome">
+    <h1>WELCOME</h1>
+</div>
+
+<div class="cursor"></div>
+
+<div class="panel">
+
+    <div class="title">
+        <h1>导航页</h1>
+        <p>DESIGNED BY XZH</p>
+    </div>
+
+    <div class="search">
+        <input id="search" placeholder="🔍 可以直接在此搜索哦！！！按Enter 直达">
+    </div>
+
+    <div class="grid">
+        <div class="btn" onclick="go('https://www.bilibili.com')">哔哩哔哩</div>
+        <div class="btn" onclick="go('https://www.bing.com')">必 应</div>
+        <div class="btn" onclick="go('https://www.baidu.com')">百 度</div>
+        <div class="btn" onclick="go('https://ys.mihoyo.com/cloud/')">云 原 神</div>
+        <div class="btn" onclick="go('https://www.zhixue.com')">智 学 网</div>
+        <div class="btn" onclick="go('https://www.douyin.com')">抖 音</div>
+        <div class="btn" onclick="go('https://github.com')">GitHub</div>
+        <div class="btn" onclick="go('https://zihong.xyz')">球球小游戏</div>
+    </div>
+
+</div>
+
+<script>
+    const cursor=document.querySelector('.cursor');
+    let x=0,y=0,tx=0,ty=0;
+
+    document.addEventListener('mousemove',e=>{
+        tx=e.clientX;
+        ty=e.clientY;
+    });
+
+    function animate(){
+        x+=(tx-x)*0.08;
+        y+=(ty-y)*0.08;
+        cursor.style.left=x+'px';
+        cursor.style.top=y+'px';
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    function go(url){
+        window.open(url,'_blank');
+    }
+
+    search.onkeydown=e=>{
+        if(e.key==='Enter'){
+            const v=search.value.trim();
+            if(!v) return;
+            if(v.startsWith('http')) window.open(v,'_blank');
+            else window.open('https://www.bing.com/search?q='+encodeURIComponent(v));
+        }
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航页</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,body{
+            width:100%;
+            height:100%;
+            font-family: "Segoe UI","PingFang SC","Microsoft Yahei",sans-serif;
+            overflow:hidden;
+        }
+
+        /* 背景 */
+        body{
+            background:url("bg.jpg") center/cover no-repeat fixed;
+        }
+
+        /* 开场动画遮罩 */
+        .intro{
+            position:fixed;
+            inset:0;
+            background:#000;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:9999;
+            animation:introOut 1.6s ease forwards;
+            animation-delay:1.2s;
+        }
+
+        .intro span{
+            font-size:6vw;
+            letter-spacing:0.15em;
+            background:linear-gradient(120deg,#5ddcff,#c77dff,#ff7ad2);
+            -webkit-background-clip:text;
+            color:transparent;
+            animation:glow 1.2s ease infinite alternate;
+        }
+
+        @keyframes introOut{
+            to{opacity:0;pointer-events:none;}
+        }
+
+        @keyframes glow{
+            from{filter:drop-shadow(0 0 10px rgba(150,200,255,.4));}
+            to{filter:drop-shadow(0 0 40px rgba(150,200,255,.9));}
+        }
+
+        /* 跑马灯边框 */
+        .frame{
+            position:fixed;
+            inset:15px;
+            border-radius:24px;
+            pointer-events:none;
+            overflow:hidden;
+        }
+
+        .frame::before{
+            content:'';
+            position:absolute;
+            inset:-200%;
+            background:conic-gradient(from 0deg,#00f,#0ff,#0f0,#ff0,#f0f,#00f);
+            animation:spin 18s linear infinite;
+        }
+
+        .frame::after{
+            content:'';
+            position:absolute;
+            inset:3px;
+            border-radius:22px;
+            background:rgba(0,0,0,0.55);
+            backdrop-filter:blur(15px);
+        }
+
+        @keyframes spin{
+            to{transform:rotate(360deg);}
+        }
+
+        /* 主体 */
+        .main{
+            position:relative;
+            z-index:10;
+            width:100%;
+            height:100%;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            color:#fff;
+
+            background: rgba(0,0,0,0.03);
+            backdrop-filter: blur(4px);
+        }
+
+        /* 标题 */
+        .title{
+            font-size:clamp(2.5rem,6vw,5.5rem);
+            font-weight:900;
+            letter-spacing:.2em;
+            background:linear-gradient(120deg,#6ee7ff,#a855f7,#ff6ec7);
+            -webkit-background-clip:text;
+            color:transparent;
+            filter:drop-shadow(0 0 20px rgba(150,200,255,.8));
+            animation:titleFloat 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleFloat{
+            from{transform:translateY(0);}
+            to{transform:translateY(-10px);}
+        }
+
+        .subtitle{
+            margin-top:10px;
+            font-size:clamp(12px,1.2vw,18px);
+            opacity:.8;
+            letter-spacing:.25em;
+        }
+
+        /* 按钮区 */
+        .grid{
+            margin-top:5vh;
+            width:100%;
+            max-width:1100px;
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:2.5vh 3vw;
+        }
+
+        .btn{
+            height:clamp(70px,10vh,120px);
+            border-radius:22px;
+            background:linear-gradient(135deg,rgba(80,150,255,.85),rgba(160,80,255,.85));
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:clamp(1rem,2vw,1.8rem);
+            font-weight:700;
+            letter-spacing:.2em;
+            cursor:pointer;
+            position:relative;
+            overflow:hidden;
+            transition:.45s cubic-bezier(.2,.7,.3,1);
+            box-shadow:0 15px 40px rgba(0,0,0,.35);
+        }
+
+        .btn::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.4),transparent 60%);
+            opacity:.6;
+        }
+
+        .btn:hover{
+            transform:translateY(-12px) scale(1.03);
+            box-shadow:0 25px 80px rgba(0,0,0,.55);
+        }
+
+        .btn span{
+            position:relative;
+            z-index:2;
+        }
+
+        /* 移动端适配 */
+        @media(max-width:768px){
+            .grid{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="intro"><span>WELCOME</span></div>
+
+<div class="frame"></div>
+
+<div class="main">
+    <div class="title">导航页 Ultra</div>
+    <div class="subtitle">DESIGNED BY 薛子宏</div>
+
+    <div class="grid">
+        <div class="btn" onclick="go('https://www.baidu.com')"><span>百度</span></div>
+        <div class="btn" onclick="go('https://www.bing.com')"><span>必应</span></div>
+        <div class="btn" onclick="go('https://www.zhixue.com/login.html')"><span>智学网</span></div>
+        <div class="btn" onclick="go('https://github.com')"><span>GitHub</span></div>
+        <div class="btn" onclick="go('https://www.bilibili.com')"><span>Bilibili</span></div>
+        <div class="btn" onclick="go('https://www.zhihu.com')"><span>知乎</span></div>
+        <div class="btn" onclick="go('https://www.douyin.com/')"><span>抖音</span></div>
+        <div class="btn" onclick="go('https://v.qq.com/')"><span>腾讯视频</span></div>
+    </div>
+</div>
+
+<script>
+    function go(url){
+        window.open(url,'_blank');
+    }
+</script>
+
+</body>
+</html>
