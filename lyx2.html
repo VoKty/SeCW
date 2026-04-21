@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李宇轩新婚快乐</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #F067A6;
+            padding: 20px;
+            margin-bottom: 60px;
+        }
+        h1 {
+            color: #00BFFF;
+        }
+        h2 {
+            color: #EE2C2C;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            margin: 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .message {
+            font-size: 20px;
+            color: #333;
+            margin-top: 20px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #F067A6;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        /* 彩蛋的样式 */
+        .easter-egg {
+            display: none;
+            font-size: 24px;
+            color: #ff4081;
+            font-weight: bold;
+            margin-top: 30px;
+            animation: fadeIn 2s ease-in-out;
+        }
+        /* 彩蛋的动画 */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* 图片样式 */
+        .footer-image {
+            width: 20%;
+            max-width: 500px;
+            margin-top: 30px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    window.alert('李宇轩');
+    window.alert('今天');
+    window.alert('我们高二一班为您送上最真挚的新婚祝福');
+    window.alert('快来看看吧');
+</script>
+
+<h1>祝李宇轩新婚快乐!!!</h1>
+<h2>❤❤❤</h2>
+<p>来听听我们一班的专属祝福吧！</p>
+<p>点击查看哦(◔⊖◔)つ————————></p>
+
+<button class="btn" onclick="generateBlessing('happy')">祝你们幸福</button>
+<button class="btn" onclick="generateBlessing('wealth')">祝你们荣华</button>
+<button class="btn" onclick="generateBlessing('love')">祝你们爱情甜蜜</button>
+<button class="btn" onclick="generateBlessing('forever')">祝你们永结同心</button>
+
+<div id="message" class="message"></div>
+<div id="easterEgg" class="easter-egg">🎉 恭喜！你发现了一个小彩蛋！愿你们的爱情比这祝福更加甜蜜！ 🎉</div>
+
+<footer>
+    
+    <p>&copy; 2026 薛子宏. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // 祝福信息生成函数
+    function generateBlessing(type) {
+        let blessings = {
+            happy: "祝丹三姐爱情岁月手牵手，幸福生活天天有！(*´∀`)~♥",
+            wealth: "愿你们富贵荣华，财源滚滚来，生活蒸蒸日上！⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄",
+            love: "愿老师和ta的爱情永远甜蜜，像初见时一样美好！( ♥д♥)",
+            forever: "愿你们永结同心，携手走过每个春夏秋冬！(　ﾟ ∀ ﾟ)つ≡♡♡♡)`ν゜)"
+        };
+
+        let messageElement = document.getElementById('message');
+        messageElement.innerText = blessings[type];
+
+        // 显示祝福信息，并加动画效果
+        messageElement.classList.add('show');
+
+        // 2秒后隐藏祝福信息
+        setTimeout(() => {
+            messageElement.classList.remove('show');
+        }, 2000);
+    }
+
+    // 点击页面空白区域触发彩蛋
+    document.body.addEventListener('click', function(event) {
+        if (event.target === document.body) {
+            let easterEgg = document.getElementById('easterEgg');
+            easterEgg.style.display = 'block';
+            setTimeout(() => {
+                easterEgg.style.display = 'none';
+            }, 3000); // 3秒后隐藏彩蛋
+        }
+    });
+</script>
+</body>
+</html>
