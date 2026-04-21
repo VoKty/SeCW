@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<!-- saved from url=(0021)https://xzihon.cn/hmx -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To 李宇轩 - 520表白</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            font-family: "Microsoft YaHei", sans-serif;
+            touch-action: manipulation;
+        }
+
+        /* 加载提示 */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff69b4;
+            z-index: 999;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* 代码雨样式 */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        /* 爱心树容器 */
+        .love-tree {
+            position: fixed;
+            bottom: 0;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* 表白文字样式 */
+        .love-text {
+            position: fixed;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff69b4;
+            font-size: min(4.5em, 8vw);
+            text-align: center;
+            z-index: 3;
+            text-shadow: 0 0 15px #ff69b4;
+            opacity: 0;
+            animation: fadeInOut 3s ease-in-out infinite;
+            -webkit-text-stroke: 1px #ff1493;
+            paint-order: stroke fill;
+        }
+
+        .signature {
+            position: fixed;
+            top: 65%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff69b4;
+            font-size: min(2.8em, 5vw);
+            text-align: center;
+            z-index: 3;
+            text-shadow: 0 0 12px #ff69b4;
+            opacity: 0;
+            animation: fadeInOut 3s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .apology {
+            position: fixed;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff69b4;
+            font-size: min(2em, 4vw);
+            text-align: center;
+            z-index: 3;
+            text-shadow: 0 0 12px #ff69b4;
+            opacity: 0;
+            animation: fadeInOut 3s ease-in-out infinite;
+            animation-delay: 2s;
+            line-height: 1.8;
+        }
+
+        /* 跑马灯文字 */
+        .marquee {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            color: #ff69b4;
+            font-size: min(2em, 3vw);
+            text-align: center;
+            z-index: 3;
+            white-space: nowrap;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* 爱心雨样式 */
+        .heart {
+            position: fixed;
+            font-size: 20px;
+            color: #ff69b4;
+            z-index: 2;
+            animation: fall linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        /* 粒子效果 */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: 50%;
+            animation: particleFade 1s ease-out forwards;
+        }
+
+        @keyframes particleFade {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .love-text { top: 30%; }
+            .signature { top: 60%; }
+            .apology { top: 72%; }
+            .marquee { bottom: 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .love-text { top: 25%; }
+            .signature { top: 55%; }
+            .apology { top: 70%; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix" width="1609" height="833"></canvas>
+<canvas id="love-tree-left" class="love-tree" width="1609" height="833"></canvas>
+<canvas id="love-tree-right" class="love-tree" width="1609" height="833"></canvas>
+<div class="love-text">
+    李宇轩<br>
+    我爱你 ❤<br>
+    520快乐
+</div>
+<div class="signature">
+    ——李宇轩
+</div>
+<div class="apology">
+    <br>
+    对不起，我做错了很多<br>
+    我会用一生的时间来补偿你<br>
+    永远爱你 ❤
+</div>
+<div class="marquee">
+    李宇轩，遇见你是我最大的幸福，我永远爱你！愿意用余生的每一天来陪伴你、守护你、爱护你！
+</div>
+
+<script>
+    // 初始化加载状态
+    const loader = document.querySelector('.loader');
+    window.addEventListener('load', () => {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 300);
+    });
+
+    // 代码雨效果（优化版）
+    const matrix = document.getElementById('matrix');
+    const ctx = matrix.getContext('2d');
+    matrix.width = window.innerWidth;
+    matrix.height = window.innerHeight;
+
+    const chars = "0123456789ABCDEF我爱你李宇轩❤";
+    const fontSize = 16;
+    const columns = matrix.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+    let lastRender = 0;
+
+    function drawMatrix(timestamp) {
+        if (timestamp - lastRender > 50) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, matrix.width, matrix.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if(drops[i] * fontSize > matrix.height && Math.random() > 0.975)
+                    drops[i] = 0;
+
+                drops[i]++;
+            }
+            lastRender = timestamp;
+        }
+        requestAnimationFrame(drawMatrix);
+    }
+
+    // 爱心树系统
+    const trees = {
+        left: { canvas: document.getElementById('love-tree-left'), ctx: null },
+        right: { canvas: document.getElementById('love-tree-right'), ctx: null }
+    };
+
+    function initTrees() {
+        Object.values(trees).forEach(tree => {
+            tree.canvas.width = window.innerWidth;
+            tree.canvas.height = window.innerHeight;
+            tree.ctx = tree.canvas.getContext('2d');
+        });
+    }
+
+    // 动态树参数
+    function getTreeParams() {
+        const width = window.innerWidth;
+        return {
+            length: width * 0.06, // 树枝长度为屏幕宽度的
+            depth: 6, // 更茂密的树
+            leftPos: 0.2, // 左侧树更靠近边缘
+            rightPos: 0.8 // 右侧树更靠近边缘
+        };
+    }
+
+    function drawTree(ctx, x, y, length, angle, depth) {
+        if (depth === 0) {
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff69b4';
+            ctx.fill();
+            return;
+        }
+
+        const endX = x + length * Math.cos(angle);
+        const endY = y - length * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = `hsl(330, 100%, ${70 - depth*2}%)`;
+        ctx.lineWidth = depth;
+        ctx.stroke();
+
+        drawTree(ctx, endX, endY, length * 0.8, angle + 0.3, depth - 1);
+        drawTree(ctx, endX, endY, length * 0.8, angle - 0.3, depth - 1);
+    }
+
+    // 粒子系统
+    const particles = {
+        list: [],
+        maxCount: 50,
+        create(x, y, color) {
+            if (this.list.length >= this.maxCount) return;
+
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.cssText = `
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: ${Math.random() * 8 + 4}px;
+                    height: ${Math.random() * 8 + 4}px;
+                    background-color: ${color};
+                `;
+            document.body.appendChild(particle);
+            this.list.push(particle);
+
+            setTimeout(() => {
+                particle.remove();
+                this.list = this.list.filter(p => p !== particle);
+            }, 1000);
+        }
+    };
+
+    // 互动系统
+    document.addEventListener('mousemove', (e) => {
+        if (Math.random() > 0.9) {
+            particles.create(e.clientX, e.clientY, '#ff69b4');
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        for (let i = 0; i < 20; i++) {
+            particles.create(e.clientX, e.clientY, '#ff69b4');
+        }
+    });
+
+    // 触摸支持
+    document.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        if (Math.random() > 0.9) {
+            particles.create(touch.clientX, touch.clientY, '#ff69b4');
+        }
+    });
+
+    // 爱心雨系统
+    const hearts = {
+        maxCount: 30,
+        list: [],
+        create() {
+            if (this.list.length >= this.maxCount) return;
+
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.cssText = `
+                    left: ${Math.random() * 100}vw;
+                    animation-duration: ${Math.random() * 3 + 2}s;
+                    font-size: ${Math.random() * 15 + 15}px;
+                    color: hsl(${Math.random() * 60 + 330}, 100%, 65%);
+                `;
+            heart.innerHTML = '❤';
+            document.body.appendChild(heart);
+            this.list.push(heart);
+
+            setTimeout(() => {
+                heart.remove();
+                this.list = this.list.filter(h => h !== heart);
+            }, 5000);
+        }
+    };
+
+    // 窗口适配
+    function handleResize() {
+        matrix.width = window.innerWidth;
+        matrix.height = window.innerHeight;
+        initTrees();
+
+        const params = getTreeParams();
+        drawTree(trees.left.ctx, trees.left.canvas.width * params.leftPos,
+            trees.left.canvas.height, params.length, Math.PI/2, params.depth);
+        drawTree(trees.right.ctx, trees.right.canvas.width * params.rightPos,
+            trees.right.canvas.height, params.length, Math.PI/2, params.depth);
+    }
+
+    // 初始化
+    function init() {
+        initTrees();
+        handleResize();
+        drawMatrix();
+        setInterval(() => hearts.create(), 200);
+        window.addEventListener('resize', handleResize);
+    }
+
+    init();
+</script>
+<script defer="" src="./To 李宇轩 - 520表白_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;de52a850e73f449c9c722e1cbbbd7357&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+<div class="heart" style="left: 24.6873vw; animation-duration: 3.47641s; font-size: 29.5705px; color: rgb(255, 77, 106);">❤</div><div class="heart" style="left: 86.6169vw; animation-duration: 3.24646s; font-size: 20.2798px; color: rgb(255, 77, 93);">❤</div><div class="heart" style="left: 5.67147vw; animation-duration: 4.08306s; font-size: 15.2227px; color: rgb(255, 77, 151);">❤</div><div class="heart" style="left: 65.5164vw; animation-duration: 4.99055s; font-size: 19.3167px; color: rgb(255, 163, 77);">❤</div><div class="heart" style="left: 81.2838vw; animation-duration: 3.74404s; font-size: 28.062px; color: rgb(255, 105, 77);">❤</div><div class="heart" style="left: 98.8799vw; animation-duration: 4.81045s; font-size: 15.0342px; color: rgb(255, 141, 77);">❤</div><div class="heart" style="left: 62.2443vw; animation-duration: 4.25376s; font-size: 18.0217px; color: rgb(255, 77, 130);">❤</div><div class="heart" style="left: 85.6305vw; animation-duration: 2.70046s; font-size: 29.0637px; color: rgb(255, 77, 136);">❤</div><div class="heart" style="left: 1.87588vw; animation-duration: 2.25917s; font-size: 20.2814px; color: rgb(255, 145, 77);">❤</div><div class="heart" style="left: 13.5867vw; animation-duration: 4.93821s; font-size: 21.5592px; color: rgb(255, 132, 77);">❤</div><div class="heart" style="left: 98.8881vw; animation-duration: 3.73434s; font-size: 25.7272px; color: rgb(255, 112, 77);">❤</div><div class="heart" style="left: 10.9879vw; animation-duration: 2.70888s; font-size: 19.4862px; color: rgb(255, 77, 92);">❤</div><div class="heart" style="left: 34.6996vw; animation-duration: 4.32242s; font-size: 29.5702px; color: rgb(255, 77, 83);">❤</div><div class="heart" style="left: 98.4246vw; animation-duration: 4.68807s; font-size: 18.3635px; color: rgb(255, 97, 77);">❤</div><div class="heart" style="left: 16.9522vw; animation-duration: 2.48826s; font-size: 27.1309px; color: rgb(255, 77, 118);">❤</div><div class="heart" style="left: 68.1423vw; animation-duration: 2.99457s; font-size: 29.7947px; color: rgb(255, 85, 77);">❤</div><div class="heart" style="left: 62.8264vw; animation-duration: 4.77888s; font-size: 19.0403px; color: rgb(255, 158, 77);">❤</div><div class="heart" style="left: 61.894vw; animation-duration: 2.2173s; font-size: 28.6228px; color: rgb(255, 147, 77);">❤</div><div class="heart" style="left: 61.6784vw; animation-duration: 3.82611s; font-size: 21.3033px; color: rgb(255, 157, 77);">❤</div><div class="heart" style="left: 23.9016vw; animation-duration: 2.94325s; font-size: 15.7447px; color: rgb(255, 115, 77);">❤</div><div class="heart" style="left: 46.8031vw; animation-duration: 4.65984s; font-size: 23.7765px; color: rgb(255, 122, 77);">❤</div><div class="heart" style="left: 32.855vw; animation-duration: 4.27828s; font-size: 16.745px; color: rgb(255, 77, 113);">❤</div><div class="heart" style="left: 22.753vw; animation-duration: 3.21558s; font-size: 16.8027px; color: rgb(255, 94, 77);">❤</div><div class="heart" style="left: 91.9662vw; animation-duration: 3.28243s; font-size: 15.6001px; color: rgb(255, 77, 132);">❤</div><div class="heart" style="left: 67.8768vw; animation-duration: 4.96775s; font-size: 25.7428px; color: rgb(255, 77, 103);">❤</div></body></html>
