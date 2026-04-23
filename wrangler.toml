@@ -1,0 +1,14 @@
+name = "web-message-board"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "message-board-db"
+database_id = "7611de83-bfc0-4e51-9ca9-4b730dd9524a"  #  D1 数据库 ID
+
+# Rules for importing HTML file
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]

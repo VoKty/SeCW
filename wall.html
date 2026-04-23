@@ -1,342 +1,184 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <!-- 定义网页的字符编码为UTF-8，确保中文能正确显示 -->
-  <meta charset="UTF-8">
-  <!-- 设置页面视口，使其在移动设备上正确缩放 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 设置网页标题 -->
-  <title>我的留言墙</title>
-  <style>
-    /* 重置所有元素的内外边距为0，盒模型为border-box */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* 设置页面主体的背景色、文字颜色和字体 */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      color: #333;
-      padding: 20px;
-      line-height: 1.7;
-    }
-
-    /* 容器样式，用于居中和限制宽度 */
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* 标题样式 */
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 20px;
-    }
-
-    /* 留言输入区域容器样式 */
-    .input-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px; /* 设置子元素之间的间距 */
-      margin-bottom: 20px;
-    }
-
-    /* 文本域样式 */
-    #messageInput {
-      width: 100%; /* 宽度占满父容器 */
-      min-height: 80px; /* 设置最小高度 */
-      padding: 12px;
-      border: 1px solid #ccc; /* 边框 */
-      border-radius: 4px; /* 圆角 */
-      resize: vertical; /* 允许用户垂直调整大小 */
-      font-size: 14px;
-    }
-
-    /* 按钮样式 */
-    #submitBtn {
-      align-self: flex-start; /* 将按钮对齐到左侧 */
-      width: 80px;
-      padding: 10px;
-      background-color: #3498db; /* 背景色 */
-      color: white; /* 字体颜色 */
-      border: none; /* 去掉默认边框 */
-      border-radius: 4px;
-      cursor: pointer; /* 鼠标悬停时变为手型 */
-      font-size: 14px;
-    }
-
-    /* 按钮悬停效果 */
-    #submitBtn:hover {
-      background-color: #2980b9; /* 悬停时更深的颜色 */
-    }
-
-    /* 加载状态按钮样式 */
-    #submitBtn.loading {
-      background-color: #95a5a6;
-      cursor: not-allowed;
-    }
-
-    /* 留言列表容器样式 */
-    #messageList {
-      list-style-type: none; /* 去掉默认的列表符号 */
-    }
-
-    /* 单条留言项样式 */
-    .message-item {
-      background-color: #ecf0f1;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      border-left: 4px solid #3498db; /* 左侧装饰色块 */
-    }
-
-    /* 留言内容样式 */
-    .message-text {
-      margin-bottom: 8px;
-    }
-
-    /* 留言信息（用户名、时间）样式 */
-    .message-info {
-      font-size: 0.8em;
-      color: #7f8c8d;
-      text-align: right;
-    }
-
-    /* 删除按钮样式 */
-    .delete-btn {
-      background-color: #e74c3c;
-      color: white;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 0.8em;
-      margin-left: 10px;
-    }
-
-    /* 删除按钮悬停效果 */
-    .delete-btn:hover {
-      background-color: #c0392b;
-    }
-
-    /* 错误提示样式 */
-    .error-message {
-      color: #e74c3c;
-      font-size: 0.9em;
-      margin-top: 5px;
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <h1>欢迎来到我的留言墙</h1>
-
-  <!-- 留言输入区域 -->
-  <div class="input-section">
-    <!-- 文本域，用于用户输入留言 -->
-    <textarea id="messageInput" placeholder="在这里写下您的留言..."></textarea>
-    <!-- 提交按钮 -->
-    <button id="submitBtn">发布</button>
-    <!-- 错误提示信息 -->
-    <div id="errorMessage" class="error-message" style="display: none;"></div>
-  </div>
-
-  <!-- 留言列表，动态生成的留言将插入到这里 -->
-  <ul id="messageList">
-    <!-- 示例留言 (可选) -->
-    <!-- <li class="message-item">
-        <div class="message-text">这是第一条留言！</div>
-        <div class="message-info">匿名用户 @ 2026-01-01 12:00:00</div>
-    </li> -->
-  </ul>
-</div>
-
-<script>
-  // 配置API基础URL (指向您的Cloudflare Worker URL)
-  // 请注意：Worker URL 通常是 https://subdomain.youraccount.workers.dev
-  // 您提供的 secw.xuezihong006.workers.dev 需要去掉 'secw.' 前缀
-  const API_BASE_URL = 'https://secw.xuezihong006.workers.dev/api';
-
-  // 等待整个DOM文档加载完成后执行
-  document.addEventListener('DOMContentLoaded', function() {
-
-    // 获取页面上的关键元素
-    const messageInput = document.getElementById('messageInput');
-    const submitBtn = document.getElementById('submitBtn');
-    const messageList = document.getElementById('messageList');
-    const errorMessage = document.getElementById('errorMessage');
-
-    // 页面加载时，获取所有留言并渲染
-    loadMessages();
-
-    // --- 处理点击“发布”按钮的逻辑 ---
-    submitBtn.addEventListener('click', handleAddMessage);
-
-    // --- 处理按Enter键（非Shift+Enter）发布留言的逻辑 ---
-    messageInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault(); // 阻止Enter键的默认换行行为
-        handleAddMessage(); // 调用处理添加留言的函数
-      }
-    });
-
-    // --- 处理错误消息显示 ---
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.style.display = 'block';
-      setTimeout(() => {
-        errorMessage.style.display = 'none';
-      }, 5000); // 5秒后自动隐藏
-    }
-
-    // --- 处理添加新留言的流程 ---
-    async function handleAddMessage() {
-      const messageText = messageInput.value.trim();
-      if (!messageText) {
-        showError("留言内容不能为空哦！");
-        return;
-      }
-
-      // 禁用按钮并显示加载状态，防止重复提交
-      submitBtn.disabled = true;
-      submitBtn.classList.add('loading');
-      submitBtn.textContent = '发布中...';
-
-      try {
-        // 调用API添加留言
-        const newMessage = await addMessageToDB(messageText);
-
-        // 成功后，将新留言添加到页面顶部
-        renderMessage(newMessage, true); // true表示添加到顶部
-
-        // 清空输入框并重新获得焦点
-        messageInput.value = '';
-        messageInput.focus();
-      } catch (error) {
-        console.error("添加留言失败:", error);
-        showError(`发布失败: ${error.message || "未知错误"}`);
-      } finally {
-        // 恢复按钮状态
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
-        submitBtn.textContent = '发布';
-      }
-    }
-
-
-    // --- [核心] 调用API添加留言到数据库 ---
-    async function addMessageToDB(text) {
-      // 实际实现示例:
-      const response = await fetch(`${API_BASE_URL}/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: text })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return await response.json();
-    }
-
-    // --- [核心] 调用API从数据库获取所有留言 ---
-    async function loadMessagesFromDB() {
-      // 实际实现示例:
-      const response = await fetch(`${API_BASE_URL}/messages`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return await response.json();
-    }
-
-    // --- [核心] 调用API从数据库删除留言 ---
-    async function deleteMessageFromDB(id) {
-      // 实际实现示例:
-      const response = await fetch(`${API_BASE_URL}/messages/${id}`, {
-        method: 'DELETE'
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return true; // 或者返回响应体
-    }
-
-    // --- 加载并渲染所有留言 ---
-    async function loadMessages() {
-      try {
-        const messages = await loadMessagesFromDB();
-        // 清空现有列表
-        messageList.innerHTML = '';
-        // 渲染每一条留言
-        messages.forEach(msg => renderMessage(msg, false)); // false表示追加到底部
-      } catch (error) {
-        console.error("加载留言失败:", error);
-        showError(`加载留言失败: ${error.message || "未知错误"}`);
-      }
-    }
-
-    // --- 渲染单条留言到页面 ---
-    function renderMessage(message, prepend = false) {
-      const listItem = document.createElement('li');
-      listItem.className = 'message-item';
-      listItem.dataset.id = message.id; // 使用data-id存储消息ID，方便查找和删除
-
-      const textDiv = document.createElement('div');
-      textDiv.className = 'message-text';
-      textDiv.textContent = message.text;
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'message-info';
-
-      const now = new Date(message.timestamp);
-      const timeString = now.toLocaleString('zh-CN');
-
-      // 创建删除按钮
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = '删除';
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.onclick = async function() {
-        if (confirm("确定要删除这条留言吗？")) {
-          try {
-            await deleteMessageFromDB(message.id); // 先调用API删除
-            messageList.removeChild(listItem); // 再从页面移除
-          } catch (error) {
-            console.error("删除留言失败:", error);
-            showError(`删除失败: ${error.message || "未知错误"}`);
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线留言板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fb-blue': '#1877F2',
+                        'fb-blue-dark': '#166FE5',
+                        'fb-bg': '#F0F2F5',
+                        'fb-gray': '#65676B',
+                        'fb-gray-light': '#E4E6EB',
+                    }
+                }
+            }
         }
-      };
+    </script>
+</head>
+<body class="min-h-screen bg-fb-bg p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- 标题 -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                在线留言板
+            </h1>
+            <p class="text-fb-gray text-sm md:text-base">分享你的想法和反馈</p>
+        </div>
 
-      // 组装信息div
-      infoDiv.innerHTML = `<span style="float: left;">${message.author} @ ${timeString}</span>`;
-      infoDiv.appendChild(deleteBtn);
-      infoDiv.style.clear = 'both';
+        <!-- 留言表单 -->
+        <div class="bg-white rounded-lg shadow-md p-6 md:p-8 mb-4">
+            <div id="notification"></div>
+            <form id="messageForm" class="space-y-4">
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                        留言内容
+                    </label>
+                    <textarea
+                        id="content"
+                        name="content"
+                        required
+                        rows="4"
+                        placeholder="分享你的想法..."
+                        class="w-full px-3 py-2 border border-fb-gray-light rounded-lg bg-fb-bg focus:bg-white focus:outline-none focus:ring-2 focus:ring-fb-blue focus:border-transparent transition-all resize-none"
+                    ></textarea>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        邮箱地址
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="your@email.com"
+                        class="w-full px-3 py-2 border border-fb-gray-light rounded-lg bg-fb-bg focus:bg-white focus:outline-none focus:ring-2 focus:ring-fb-blue focus:border-transparent transition-all"
+                    >
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-fb-blue hover:bg-fb-blue-dark text-white font-semibold py-2.5 px-4 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                    发送留言
+                </button>
+            </form>
+        </div>
 
-      listItem.appendChild(textDiv);
-      listItem.appendChild(infoDiv);
+        <!-- 历史留言列表 -->
+        <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                所有留言
+            </h2>
+            <div id="messagesList">
+                <div class="text-center text-fb-gray py-8">加载中...</div>
+            </div>
+        </div>
+    </div>
 
-      if (prepend) {
-        messageList.insertBefore(listItem, messageList.firstChild); // 插入到顶部
-      } else {
-        messageList.appendChild(listItem); // 追加到底部
-      }
-    }
+    <script>
+        const API_URL = '/api';
 
-  });
-</script>
+        // 加载留言列表
+        async function loadMessages() {
+            try {
+                const response = await fetch(`${API_URL}/messages`);
+                const data = await response.json();
 
+                const messagesList = document.getElementById('messagesList');
+
+                if (!data.messages || data.messages.length === 0) {
+                    messagesList.innerHTML = '<div class="text-center text-fb-gray py-12 text-sm">暂无留言，成为第一个留言的人吧！</div>';
+                    return;
+                }
+
+                messagesList.innerHTML = data.messages.map(msg => `
+                    <div class="bg-fb-bg rounded-lg p-4 mb-3 hover:bg-gray-100 transition-colors">
+                        <div class="text-gray-900 text-base mb-2 leading-relaxed">${escapeHtml(msg.content)}</div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-fb-gray">
+                            <span class="font-medium">${escapeHtml(msg.email)}</span>
+                            <span>·</span>
+                            <span>${formatDate(msg.created_at)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('加载留言失败:', error);
+                document.getElementById('messagesList').innerHTML =
+                    '<div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm">加载留言失败，请刷新页面重试</div>';
+            }
+        }
+
+        // 提交留言
+        document.getElementById('messageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const notification = document.getElementById('notification');
+            const content = document.getElementById('content').value;
+            const email = document.getElementById('email').value;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '发送中...';
+            notification.innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_URL}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content, email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    notification.innerHTML = '<div class="bg-green-50 text-green-700 p-3 rounded-lg mb-4 text-sm font-medium">留言发送成功！</div>';
+                    document.getElementById('messageForm').reset();
+                    await loadMessages();
+                    setTimeout(() => {
+                        notification.innerHTML = '';
+                    }, 3000);
+                } else {
+                    notification.innerHTML = `<div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-medium">${data.error || '发送失败，请重试'}</div>`;
+                }
+            } catch (error) {
+                console.error('发送留言失败:', error);
+                notification.innerHTML = '<div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-medium">发送失败，请检查网络连接</div>';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '发送留言';
+            }
+        });
+
+        // HTML转义，防止XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 格式化日期为 yyyy-mm-dd hh:mm:ss 格式
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        // 页面加载时获取留言列表
+        loadMessages();
+    </script>
 </body>
 </html>
