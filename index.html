@@ -54,11 +54,11 @@
 
     /* 整体毛玻璃卡片*/
     .panel{
-      width:min(70vw,2000px);
-      padding:17px 40px 45px;
+      width:min(70vw,1000px);
+      padding:1px 40px 45px;
       border-radius:50px;
       background:rgba(255,255,255,.12);
-      backdrop-filter:blur(6px);
+      backdrop-filter:blur(3px);
       border:1px solid rgba(255,255,255,.25);
       box-shadow:0 25px 80px rgba(0,0,0,.45);
       text-align:center;
@@ -140,11 +140,13 @@
       transition:.25s cubic-bezier(.2,.7,.3,1);
       box-shadow:0 15px 45px rgba(0,0,0,.35);
     }
+
+
     .btn::before{
       content:'';
       position:absolute;
       inset:0;
-      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.65),transparent 60%);
+      /*background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.65),transparent 60%);*/
     }
     .btn span{position:relative;z-index:2;}
     .btn:hover{
