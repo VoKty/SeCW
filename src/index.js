@@ -21,7 +21,7 @@ export default {
 
     try {
       // Serve HTML page
-      if (path === '/' || path === '/index.html') {
+      if (path === '/' || path === '/wall.html') {
         return new Response(indexHtml, {
           headers: {
             'Content-Type': 'text/html;charset=UTF-8',
