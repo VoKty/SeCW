@@ -160,16 +160,21 @@
 
         // 格式化日期为 yyyy-mm-dd hh:mm:ss 格式
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
+            // 创建UTC时间对象
+            const utcDate = new Date(dateString);
+            // 转换为中国标准时间 (UTC+8)
+            const chinaTime = new Date(utcDate.getTime() + (8 * 60 * 60 * 1000));
+
+            const year = chinaTime.getFullYear();
+            const month = String(chinaTime.getMonth() + 1).padStart(2, '0');
+            const day = String(chinaTime.getDate()).padStart(2, '0');
+            const hours = String(chinaTime.getHours()).padStart(2, '0');
+            const minutes = String(chinaTime.getMinutes()).padStart(2, '0');
+            const seconds = String(chinaTime.getSeconds()).padStart(2, '0');
 
             return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
+
 
         // 页面加载时获取留言列表
         loadMessages();
