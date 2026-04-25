@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本地背单词</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        .word-display {
+            font-size: 2em;
+            margin: 20px 0;
+            cursor: pointer;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .word-display:hover {
+            background-color: #f9f9f9;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .progress {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>本地背单词</h1>
+    <div id="wordDisplay" class="word-display">点击开始背单词</div>
+    <div class="controls">
+        <button id="startBtn">开始</button>
+        <button id="prevBtn">上一个</button>
+        <button id="nextBtn">下一个</button>
+        <button id="flipBtn">翻转显示</button>
+    </div>
+    <div class="progress">
+        <span id="progressInfo">第 0/0 个单词</span>
+    </div>
+</div>
+
+<script>
+    // 单词库 - 可以在这里添加更多单词
+    const wordList = [
+        { english: "hello", chinese: "你好" },
+        { english: "world", chinese: "世界" },
+        { english: "computer", chinese: "计算机" },
+        { english: "programming", chinese: "编程" },
+        { english: "javascript", chinese: "JavaScript" },
+        { english: "html", chinese: "超文本标记语言" },
+        { english: "css", chinese: "层叠样式表" },
+        { english: "internet", chinese: "互联网" },
+        { english: "website", chinese: "网站" },
+        { english: "developer", chinese: "开发者" }
+    ];
+
+    // 全局变量
+    let currentIndex = 0;
+    let showChinese = true; // true表示显示中文，false表示显示英文
+    let isStarted = false;
+
+    // 获取DOM元素
+    const wordDisplay = document.getElementById('wordDisplay');
+    const startBtn = document.getElementById('startBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const flipBtn = document.getElementById('flipBtn');
+    const progressInfo = document.getElementById('progressInfo');
+
+    // 更新单词显示
+    function updateWordDisplay() {
+        if (wordList.length === 0) {
+            wordDisplay.textContent = "没有单词";
+            progressInfo.textContent = "第 0/0 个单词";
+            return;
+        }
+
+        const currentWord = wordList[currentIndex];
+        if (showChinese) {
+            wordDisplay.textContent = currentWord.chinese;
+            wordDisplay.title = "点击显示英文";
+        } else {
+            wordDisplay.textContent = currentWord.english;
+            wordDisplay.title = "点击显示中文";
+        }
+
+        progressInfo.textContent = `第 ${currentIndex + 1}/${wordList.length} 个单词`;
+    }
+
+    // 开始学习
+    startBtn.addEventListener('click', () => {
+        if (wordList.length > 0) {
+            currentIndex = 0;
+            showChinese = true;
+            isStarted = true;
+            updateWordDisplay();
+        }
+    });
+
+    // 上一个单词
+    prevBtn.addEventListener('click', () => {
+        if (!isStarted || wordList.length === 0) return;
+
+        currentIndex = (currentIndex - 1 + wordList.length) % wordList.length;
+        showChinese = true;
+        updateWordDisplay();
+    });
+
+    // 下一个单词
+    nextBtn.addEventListener('click', () => {
+        if (!isStarted || wordList.length === 0) return;
+
+        currentIndex = (currentIndex + 1) % wordList.length;
+        showChinese = true;
+        updateWordDisplay();
+    });
+
+    // 翻转显示（中英文切换）
+    flipBtn.addEventListener('click', () => {
+        if (!isStarted || wordList.length === 0) return;
+
+        showChinese = !showChinese;
+        updateWordDisplay();
+    });
+
+    // 点击单词区域翻转显示
+    wordDisplay.addEventListener('click', () => {
+        if (!isStarted || wordList.length === 0) return;
+
+        showChinese = !showChinese;
+        updateWordDisplay();
+    });
+
+    // 初始化进度信息
+    progressInfo.textContent = `第 0/${wordList.length} 个单词`;
+</script>
+</body>
+</html>
