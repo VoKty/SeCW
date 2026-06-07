@@ -1,247 +1,272 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>导航页</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    /* 开场动画 */
-    #welcome{
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at center, #0a0f1f, #000);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      animation: fadeOut 0.4s ease forwards;
-      animation-delay: 0.8s;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航页26</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
 
-    #welcome h1{
-      font-size: clamp(10rem, 6vw, 6rem);
-      letter-spacing: 0.15em;
-      background: linear-gradient(120deg,#6cf,#9ff,#fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-    @keyframes glow{
-      from{filter: drop-shadow(0 0 10px rgba(120,220,255,.4));}
-      to{filter: drop-shadow(0 0 40px rgba(120, 220, 255, 0.9));}
-    }
+        /* ========== 开场动画 ========== */
+        #welcome{
+            position:fixed;inset:0;
+            background:radial-gradient(circle at center,#0a0f1f,#000);
+            display:flex;justify-content:center;align-items:center;
+            z-index:999;
+            animation:fadeOut 1s ease forwards;
+            animation-delay:1s;
+        }
+        #welcome h1{
+            font-size:clamp(3rem,5vw,5rem);
+            letter-spacing:.15em;
+            background:linear-gradient(120deg,#6cf,#9ff,#fff);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            animation:glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow{
+            from{filter:drop-shadow(0 0 10px rgba(120,220,255,.4));}
+            to{filter:drop-shadow(0 0 40px rgba(120,220,255,.9));}
+        }
+        @keyframes fadeOut{to{opacity:0;pointer-events:none;}}
 
-    @keyframes fadeOut{
-      to{
-        opacity:0;
-        pointer-events:none;
-      }
-    }
-    html,body{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      font-family:"Segoe UI","PingFang SC","Microsoft Yahei",sans-serif;
+        /* ========== 基础布局 ========== */
+        html,body{
+            width:100%;height:100%;overflow:hidden;
+            font-family:"Segoe UI","PingFang SC","Microsoft Yahei",sans-serif;
+        }
+        body{
+            background:#0a0f1f url("bg.jpg") center/cover no-repeat fixed;
+            display:flex;align-items:center;justify-content:center;
+            flex-direction:column;       /* ← 新增：纵向排列时间卡+主面板 */
+            gap:15px;                    /* ← 新增：两卡片间距 */
+        }
 
-    }
-    body{
-      background:url("bg2.jpg") center/cover no-repeat fixed;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
+        /* ========== 🆕 时间日期卡片 ========== */
+        .time-card{
+            width:min(60vw,2000px);
+            padding:13px 20px;
+            border-radius:30px;
+            background:rgba(255,255,255,.02);
+            backdrop-filter:blur(4px);
+            -webkit-backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,.2);
+            box-shadow:0 15px 50px rgba(0,0,0,.3);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            color:#fff;
+            user-select:none;
+            opacity:0;
+            animation:slideIn 2s ease forwards;
+            animation-delay:1s;          /* 等开场动画结束后再出现 */
+        }
+        @keyframes slideIn{
+            from{opacity:0;transform:translateY(-20px);}
+            to{opacity:1;transform:translateY(0);}
+        }
 
-    /* 整体毛玻璃卡片*/
-    .panel{
-      width:min(70vw,1000px);
-      padding:1px 40px 45px;
-      border-radius:50px;
-      background:rgba(255,255,255,.12);
-      backdrop-filter:blur(3px);
-      border:1px solid rgba(255,255,255,.25);
-      box-shadow:0 25px 80px rgba(0,0,0,.45);
-      text-align:center;
-    }
+        .time-card .clock{
+            font-size:clamp(2rem,3.7vw,3rem);
+            font-weight:700;
+            letter-spacing:.08em;
+            font-variant-numeric:tabular-nums;  /* ← 等宽数字，防止跳动 */
+            text-shadow:0 0 20px rgba(120,200,255,.5);
+        }
+        .time-card .date-info{
+            text-align:right;
+            line-height:1.6;
+        }
+        .time-card .date-main{
+            font-size:clamp(1rem,2vw,1.4rem);
+            font-weight:600;
+            letter-spacing:.1em;
+        }
+        .time-card .date-sub{
+            font-size:clamp(.7rem,1.2vw,.9rem);
+            opacity:.7;
+            letter-spacing:.15em;
+        }
 
-    /* 标题 */
-    .title{
-      font-size:clamp(2.5rem,6vw,5rem);
-      font-weight:900;
-      letter-spacing:.25em;
-      background:linear-gradient(120deg,#fa709a,#fee140);
-      -webkit-background-clip:text;
-      color:transparent;
-      filter:drop-shadow(0 0 20px rgba(160,200,255,.8));
-      animation:float 800s ease-in-out infinite alternate;
-    }
+        /* ========== 主体毛玻璃卡片 ========== */
+        .panel{
+            width:min(60vw,2000px);
+            padding:5px 20px 20px;
+            border-radius:30px;
+            background:rgba(255,255,255,.01);
+            backdrop-filter:blur(3px);
+            -webkit-backdrop-filter:blur(3px);
+            border:1px solid rgba(255,255,255,.25);
+            box-shadow:0 25px 80px rgba(0,0,0,.45);
+            text-align:center;
+            /* 🆕 给主体也加入场动画，与时间卡错开 */
+            opacity:0;
+            animation:slideUp 2s ease forwards;
+            animation-delay:1s;
+        }
+        @keyframes slideUp{
+            from{opacity:0;transform:translateY(30px);}
+            to{opacity:1;transform:translateY(0);}
+        }
 
-    @keyframes float{
-      to{transform:translateY(-10px);}
-    }
-    .subtitle{
-      margin-top:8px;
-      font-size:14px;
-      letter-spacing:.35em;
-      opacity:.75;
-    }
+        .title{
+            font-size:clamp(2rem,6vw,3rem);font-weight:900;letter-spacing:.25em;
+            background:linear-gradient(120deg,#fa709a,#fee140);
+            -webkit-background-clip:text;color:transparent;
 
-    /* 搜索框 */
-    .search-box{
-      margin:30px auto 40px;
-      width:100%;
-      max-width:9080px;
-      position:relative;
-    }
-    .search-box input{
-      width:100%;
-      height:56px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.25);
-      background:rgba(255,255,255,.15);
-      backdrop-filter:blur(20px);
-      padding:0 22px;
-      font-size:18px;
-      color: #000000;
-      outline:none;
-      transition:.25s;
-    }
-    .search-box input::placeholder{
-      color: rgba(0, 0, 0, 0.6);
-    }
-    .search-box input:focus{
-      background:rgba(255,255,255,.22);
-      box-shadow:0 0 0 2px rgba(120,180,255,.6);
-    }
+        }
+        @keyframes float{to{transform:translateY(-10px);}}
+        .subtitle{margin-top:8px;font-size:14px;letter-spacing:.35em;opacity:.75;}
 
-    /* 按钮区域 */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:24px 28px;
-    }
+        .search-box{margin:15px auto 20px;width:100%;max-width:1508px;position:relative;}
+        .search-box input{
+            width:100%;height:50px;border-radius:18px;
+            border:3px solid rgb(255 190 213);
+            background:rgba(255,255,255,.15);backdrop-filter:blur(20px);
+            padding:0 22px;font-size:18px;color:#000;outline:none;transition:.25s;
+        }
+        .search-box input::placeholder{color:rgba(0,0,0,.6);}
+        .search-box input:focus{background:rgba(255,255,255,.22);box-shadow:0 0 0 4px rgba(120,180,255,.6);}
 
-    /* 按钮 */
-    .btn{
-      height:clamp(72px,10vh,115px);
-      border-radius:32px;
-      background:linear-gradient(135deg, rgb(168, 237, 234), rgb(254, 214, 227));
-      backdrop-filter:blur(2px);
-      border:1px solid rgba(255,255,255,.15);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:clamp(2rem,3vw,3rem);
-      font-weight:520;
-      letter-spacing:.2em;
-      cursor:pointer;
-      position:relative;
-      overflow:hidden;
-      transition:.25s cubic-bezier(.2,.7,.3,1);
-      box-shadow:0 15px 45px rgba(0,0,0,.35);
-    }
+        .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 22px;}
+        .btn{
+            height:clamp(70px,8vh,130px);border-radius:20px;
+            background:linear-gradient(135deg, rgb(255 214 193), rgb(228 202 250));
+            backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.1);
+            display:flex;align-items:center;justify-content:center;
+            font-size:clamp(1.5rem,2.5vw,2.5rem);font-weight:120;letter-spacing:.5em;
+            cursor:pointer;position:relative;overflow:hidden;
+            transition:.25s cubic-bezier(.2,.7,.3,1);
+            box-shadow:0 15px 45px rgba(0,0,0,.35);
+            text-decoration:none;color:#333;   /* ← a标签兼容 */
+        }
+        .btn span{position:relative;z-index:2;}
+        .btn:hover{transform:translateY(-6px) scale(1.06);box-shadow:0 30px 70px rgb(168,237,234);}
 
+        /* 鼠标流光（已注释保留） */
+        .trail{
+            position:fixed;width:12px;height:12px;border-radius:50%;pointer-events:none;
+            background:radial-gradient(circle,#7cf,#0000ff);filter:blur(4px);
+            animation:fade .8s linear forwards;
+        }
+        @keyframes fade{to{opacity:0;transform:scale(2);}}
 
-    .btn::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      /*background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.65),transparent 60%);*/
-    }
-    .btn span{position:relative;z-index:2;}
-    .btn:hover{
-      transform:translateY(-6px) scale(1.06);
-      box-shadow:0 30px 70px rgb(168, 237, 234);
-    }
-
-    /* 鼠标流光 */
-    .trail{
-      position:fixed;
-      width:12px;
-      height:12px;
-      border-radius:50%;
-      pointer-events:none;
-      background:radial-gradient(circle,#7cf, #0000ff);
-      filter:blur(4px);
-      animation:fade .8s linear forwards;
-    }
-    @keyframes fade{
-      to{opacity:0;transform:scale(2);}
-    }
-
-    /* 移动端 */
-    @media(max-width:768px){
-      .grid{grid-template-columns:1fr;}
-      .panel{padding:28px 20px 35px;}
-    }
-  </style>
+        /* ========== 移动端适配 ========== */
+        @media(max-width:768px){
+            body{gap:12px;padding:10px;}
+            .grid{grid-template-columns:1fr;}
+            .panel{padding:28px 20px 35px;border-radius:30px;}
+            .time-card{
+                padding:14px 20px;border-radius:20px;
+                flex-direction:column;gap:4px;text-align:center;
+            }
+            .time-card .date-info{text-align:center;}
+        }
+    </style>
 </head>
 
 <body>
-<div id="welcome">
-  <h1>WELCOME</h1>
+
+<!-- 开场动画 -->
+<div id="welcome"><h1>DESIGNED BY XZH</h1></div>
+
+<!-- 🆕 时间日期卡片 -->
+<div class="time-card">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="date-info">
+        <div class="date-main" id="dateMain">----年--月--日</div>
+        <div class="date-sub" id="dateSub">星期-</div>
+    </div>
 </div>
 
+<!-- 主体导航面板 -->
 <div class="panel">
-  <div class="title">导航页</div>
-  <div class="subtitle">DESIGNED BY 薛子宏</div>
+    <div class="title">漫游星图</div>
 
-  <div class="search-box">
-    <input id="search" placeholder="可直接搜索！！！ 回车即搜 🔍">
-  </div>
+    <div class="search-box">
+        <input id="search" placeholder="🔍在此搜索你感兴趣的内容，回车搜索" aria-label="搜索">
+    </div>
 
-  <div class="grid">
-    <div class="btn" data-url="wall.html"><span>班级留言墙</span></div>
-    <div class="btn" data-url="https://www.baidu.com"><span>百度</span></div>
-    <div class="btn" data-url="https://www.bilibili.com"><span>哔哩哔哩</span></div>
-    <div class="btn" data-url="https://www.zhixue.com/login.html"><span>智学网</span></div>
-    <div class="btn" data-url="https://www.bing.com"><span>必应</span></div>
-    <div class="btn" data-url="https://ys.mihoyo.com/cloud/"><span>miHoYo</span></div>
-    <div class="btn" data-url="https://www.douyin.com/"><span>抖音</span></div>
-    <div class="btn" data-url="https://v.qq.com/"><span>腾讯视频</span></div>
-  </div>
+    <div class="grid">
+        <a class="btn" href="https://www.baidu.com" target="_blank"><span>百度</span></a>
+        <a class="btn" href="https://www.bilibili.com" target="_blank"><span>哔哩哔哩</span></a>
+        <a class="btn" href="https://www.zhixue.com/login.html" target="_blank"><span>智学网</span></a>
+        <a class="btn" href="https://ys.mihoyo.com/cloud/" target="_blank"><span>miHoYo</span></a>
+        <a class="btn" href="https://www.douyin.com/" target="_blank"><span>抖音</span></a>
+        <a class="btn" href="https://metaso.cn" target="_blank"><span>Meta AI</span></a>
+        <a class="btn" href="https://bing.com" target="_blank"><span>Bing</span></a>
+        <a class="btn" data-url="wall.html"><span>留言墙</span></a>
+    </div>
 </div>
 
 <script>
-  /* 按钮跳转 */
-  document.querySelectorAll('.btn').forEach(b=>{
-    b.onclick=()=>window.open(b.dataset.url,'_blank');
-  });
+    /* ========== 🆕 时间日期更新 ========== */
+    const WEEKDAYS = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    const clockEl  = document.getElementById('clock');
+    const dateMainEl = document.getElementById('dateMain');
+    const dateSubEl  = document.getElementById('dateSub');
 
-  /* 搜索功能（默认走必应） */
-  document.getElementById('search').addEventListener('keydown',e=>{
-    if(e.key==='Enter'){
-      const q=e.target.value.trim();
-      if(q) window.open('https://www.bing.com/search?q='+encodeURIComponent(q),'_blank');
+    let lastSecond = -1;
+
+    function updateTime() {
+        const now = new Date();
+        const sec = now.getSeconds();
+
+        // 仅在秒数变化时更新DOM，避免每帧重绘
+        if (sec !== lastSecond) {
+            lastSecond = sec;
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(sec).padStart(2, '0');
+            clockEl.textContent = `${hh}:${mm}:${ss}`;
+
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            dateMainEl.textContent = `${y}年${m}月${d}日`;
+            dateSubEl.textContent = WEEKDAYS[now.getDay()];
+        }
+
+        requestAnimationFrame(updateTime);
     }
-  });
 
-  /* 鼠标流光拖影 */
-  document.addEventListener('mousemove',e=>{
-    document.querySelectorAll('.btn').forEach(btn=>{
-      const rect=btn.getBoundingClientRect();
-      const cx=rect.left+rect.width/2;
-      const cy=rect.top+rect.height/2;
-      const dx=e.clientX-cx;
-      const dy=e.clientY-cy;
-      const dist=Math.hypot(dx,dy);
-      const max=130;/* 大果冻*/
-      if(dist<max){
-        const strength=(max-dist)/max;
-        btn.style.transform=`translate(${dx*0.18*strength}px,${dy*0.18*strength}px) scale(1.06)`;
-      }else{
-        btn.style.transform='';
-      }
+    // 立即执行一次 + 启动循环
+    updateTime();
+
+    /* ========== 按钮跳转（a标签已自带href，此处仅作兜底） ========== */
+    // 改用 <a> 标签后无需JS跳转，保留搜索功能即可
+
+    /* ========== 搜索功能 ========== */
+    document.getElementById('search').addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            const q = e.target.value.trim();
+            if (q) window.open('https://www.bing.com/search?q=' + encodeURIComponent(q), '_blank');
+        }
     });
 
-    /* 流光拖影
-    const d=document.createElement('div');
-    d.className='trail';
-    d.style.left=e.clientX+'px';
-    d.style.top=e.clientY+'px';
-    document.body.appendChild(d);
-    setTimeout(()=>d.remove(),110);*/
-  });
+    /* ========== 磁吸果冻效果（仅非触摸设备） ========== */
+    if (window.matchMedia('(hover: hover)').matches) {
+        document.addEventListener('mousemove', e => {
+            document.querySelectorAll('.btn').forEach(btn => {
+                const rect = btn.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const dx = e.clientX - cx;
+                const dy = e.clientY - cy;
+                const dist = Math.hypot(dx, dy);
+                const max = 130;
+                if (dist < max) {
+                    const strength = (max - dist) / max;
+                    btn.style.transform = `translate(${dx * 0.18 * strength}px,${dy * 0.18 * strength}px) scale(1.06)`;
+                } else {
+                    btn.style.transform = '';
+                }
+            });
+        });
+    }
+
+
+
 </script>
 
 </body>
