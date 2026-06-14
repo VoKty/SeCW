@@ -20,171 +20,174 @@
             }
         }
     </script>
-</head>
     <style>
-        body{
-            background:url("bg.jpg") center/cover no-repeat fixed;
-            
+        body {
+            background: url("bg.jpg") center/cover no-repeat fixed;
+            min-height: 100vh;
         }
-        </style>
-<body class="min-h-screen bg-fb-bg p-4 md:p-8">
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+        /* 留言卡片入场动画 */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .msg-card { animation: fadeUp 0.35s ease-out both; }
+    </style>
+</head>
+<body class="p-4 md:p-8 text-gray-800">
 
-    <div class="max-w-4xl mx-auto">
-        <!-- 标题 -->
-        <div class="text-center mb-6">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                高二1班的留言板
-            </h1>
-            <p class="text-fb-gray text-sm md:text-base">Designed By XZH</p>
-        </div>
+<div class="max-w-4xl mx-auto">
+    <!-- 标题 -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-3 tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+            高二1班的留言板
+        </h1>
+        <p class="text-white/90 text-sm md:text-base font-medium tracking-widest uppercase drop-shadow-md">Designed By XZH</p>
+    </div>
 
-        <!-- 留言表单 -->
-        <div class="bg-white rounded-lg shadow-md p-6 md:p-8 mb-4">
-            <div id="notification"></div>
-            <form id="messageForm" class="space-y-4">
-                <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                        留言内容
-                    </label>
-                    <textarea
+    <!-- 留言表单（纯毛玻璃，无遮罩） -->
+    <div class="bg-white/1 backdrop-blur-md rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-6 md:p-8 mb-6 border border-white/50">
+        <div id="notification"></div>
+        <form id="messageForm" class="space-y-5">
+            <div>
+                <label for="content" class="block text-sm font-semibold text-gray-700 mb-2 ml-1">
+                    留言内容
+                </label>
+                <textarea
                         id="content"
                         name="content"
                         required
                         rows="4"
                         placeholder="分享你的想法..."
-                        class="w-full px-3 py-2 border border-fb-gray-light rounded-lg bg-fb-bg focus:bg-white focus:outline-none focus:ring-2 focus:ring-fb-blue focus:border-transparent transition-all resize-none"
-                    ></textarea>
-                </div>
-
-
-
-
-
-
-
-                <button
-                    type="submit"
-                    class="w-full bg-fb-blue hover:bg-fb-blue-dark text-white font-semibold py-2.5 px-4 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                    发送留言
-                </button>
-            </form>
-        </div>
-
-        <!-- 历史留言列表 -->
-        <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
-            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">
-                所有留言
-            </h2>
-            <div id="messagesList">
-                <div class="text-center text-fb-gray py-8">加载中...</div>
+                        class="w-full px-4 py-3 border border-white/40 rounded-2xl bg-white/40 backdrop-blur-md text-gray-800 placeholder-gray-500 focus:bg-white/60 focus:outline-none focus:ring-2 focus:ring-fb-blue/40 focus:border-transparent transition-all duration-300 resize-none shadow-inner"
+                ></textarea>
             </div>
+
+            <button
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-fb-blue to-blue-500 hover:from-fb-blue-dark hover:to-blue-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 text-base tracking-wide"
+            >
+                发送留言
+            </button>
+        </form>
+    </div>
+
+    <!-- 历史留言列表（纯毛玻璃，无遮罩） -->
+    <div class="bg-white/1 backdrop-blur-md rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-6 md:p-8 border border-white/30">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+            💬所有留言
+        </h2>
+        <div id="messagesList">
+            <div class="text-center text-gray-500 py-8 animate-pulse">加载中...</div>
         </div>
     </div>
 
-    <script>
-        const API_URL = 'https://xn--fjq90aj79a3tf22ictm27a.tech/api';
+    <!-- 底部留白 -->
+    <div class="h-8"></div>
+</div>
 
-        // 加载留言列表
-        async function loadMessages() {
-            try {
-                const response = await fetch(`${API_URL}/messages`);
-                const data = await response.json();
+<script>
+    const API_URL = 'https://xn--fjq90aj79a3tf22ictm27a.tech/api';
 
-                const messagesList = document.getElementById('messagesList');
+    // 加载留言列表
+    async function loadMessages() {
+        try {
+            const response = await fetch(`${API_URL}/messages`);
+            const data = await response.json();
 
-                if (!data.messages || data.messages.length === 0) {
-                    messagesList.innerHTML = '<div class="text-center text-fb-gray py-12 text-sm">暂无留言，成为第一个留言的人吧！</div>';
-                    return;
-                }
+            const messagesList = document.getElementById('messagesList');
 
-                messagesList.innerHTML = data.messages.map(msg => `
-                    <div class="bg-fb-bg rounded-lg p-4 mb-3 hover:bg-gray-100 transition-colors">
-                        <div class="text-gray-900 text-base mb-2 leading-relaxed">${escapeHtml(msg.content)}</div>
-                        <div class="flex flex-wrap items-center gap-2 text-xs text-fb-gray">
+            if (!data.messages || data.messages.length === 0) {
+                messagesList.innerHTML = '<div class="text-center text-gray-500 py-12 text-sm">暂无留言，成为第一个留言的人吧！✨</div>';
+                return;
+            }
 
-                            <span>·</span>
+            messagesList.innerHTML = data.messages.map((msg, i) => `
+                    <div class="msg-card bg-white/35 backdrop-blur-md rounded-2xl p-4 md:p-5 mb-3 hover:bg-white/55 transition-all duration-300 border border-white/25 hover:shadow-md hover:-translate-y-0.5" style="animation-delay:${i * 0.05}s">
+                        <div class="text-gray-800 text-base mb-2 leading-relaxed">${escapeHtml(msg.content)}</div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium">
+                            <span>🕐</span>
                             <span>${formatDate(msg.created_at)}</span>
                         </div>
                     </div>
                 `).join('');
-            } catch (error) {
-                console.error('加载留言失败:', error);
-                document.getElementById('messagesList').innerHTML =
-                    '<div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm">加载留言失败，请刷新页面重试</div>';
+        } catch (error) {
+            console.error('加载留言失败:', error);
+            document.getElementById('messagesList').innerHTML =
+                '<div class="bg-red-50/60 backdrop-blur-sm text-red-600 p-4 rounded-2xl text-sm border border-red-100/50">加载留言失败，请刷新页面重试 😢</div>';
+        }
+    }
+
+    // 提交留言
+    document.getElementById('messageForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const notification = document.getElementById('notification');
+        const content = document.getElementById('content').value;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '发送中...';
+        notification.innerHTML = '';
+
+        try {
+            const response = await fetch(`${API_URL}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ content })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                notification.innerHTML = '<div class="bg-green-50/60 backdrop-blur-sm text-green-700 p-3 rounded-2xl mb-4 text-sm font-semibold border border-green-100/50">✅ 留言发送成功！</div>';
+                document.getElementById('messageForm').reset();
+                await loadMessages();
+                setTimeout(() => {
+                    notification.innerHTML = '';
+                }, 3000);
+            } else {
+                notification.innerHTML = `<div class="bg-red-50/60 backdrop-blur-sm text-red-600 p-3 rounded-2xl mb-4 text-sm font-semibold border border-red-100/50">${data.error || '发送失败，请重试'}</div>`;
             }
+        } catch (error) {
+            console.error('发送留言失败:', error);
+            notification.innerHTML = '<div class="bg-red-50/60 backdrop-blur-sm text-red-600 p-3 rounded-2xl mb-4 text-sm font-semibold border border-red-100/50">发送失败，请检查网络连接 😢</div>';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🚀 发送留言';
         }
+    });
 
-        // 提交留言
-        document.getElementById('messageForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    // HTML转义，防止XSS
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const notification = document.getElementById('notification');
-            const content = document.getElementById('content').value;
+    // 格式化日期为 yyyy-mm-dd hh:mm:ss 格式
+    function formatDate(dateString) {
+        const utcDate = new Date(dateString);
+        const chinaTime = new Date(utcDate.getTime() + (8 * 60 * 60 * 1000));
 
+        const year = chinaTime.getFullYear();
+        const month = String(chinaTime.getMonth() + 1).padStart(2, '0');
+        const day = String(chinaTime.getDate()).padStart(2, '0');
+        const hours = String(chinaTime.getHours()).padStart(2, '0');
+        const minutes = String(chinaTime.getMinutes()).padStart(2, '0');
+        const seconds = String(chinaTime.getSeconds()).padStart(2, '0');
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = '发送中...';
-            notification.innerHTML = '';
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
 
-            try {
-                const response = await fetch(`${API_URL}/messages`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ content })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    notification.innerHTML = '<div class="bg-green-50 text-green-700 p-3 rounded-lg mb-4 text-sm font-medium">留言发送成功！</div>';
-                    document.getElementById('messageForm').reset();
-                    await loadMessages();
-                    setTimeout(() => {
-                        notification.innerHTML = '';
-                    }, 3000);
-                } else {
-                    notification.innerHTML = `<div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-medium">${data.error || '发送失败，请重试'}</div>`;
-                }
-            } catch (error) {
-                console.error('发送留言失败:', error);
-                notification.innerHTML = '<div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-medium">发送失败，请检查网络连接</div>';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = '发送留言';
-            }
-        });
-
-        // HTML转义，防止XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // 格式化日期为 yyyy-mm-dd hh:mm:ss 格式
-        function formatDate(dateString) {
-            // 创建UTC时间对象
-            const utcDate = new Date(dateString);
-            // 转换为中国标准时间 (UTC+8)
-            const chinaTime = new Date(utcDate.getTime() + (8 * 60 * 60 * 1000));
-
-            const year = chinaTime.getFullYear();
-            const month = String(chinaTime.getMonth() + 1).padStart(2, '0');
-            const day = String(chinaTime.getDate()).padStart(2, '0');
-            const hours = String(chinaTime.getHours()).padStart(2, '0');
-            const minutes = String(chinaTime.getMinutes()).padStart(2, '0');
-            const seconds = String(chinaTime.getSeconds()).padStart(2, '0');
-
-            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
-
-
-        // 页面加载时获取留言列表
-        loadMessages();
-    </script>
+    // 页面加载时获取留言列表
+    loadMessages();
+</script>
 </body>
 </html>
