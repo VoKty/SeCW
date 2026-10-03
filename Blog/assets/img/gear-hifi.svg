@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="耳机与小尾巴解码示意图">
+  <title>Hi-Fi · 示意图</title>
+  <defs>
+    <linearGradient id="hpBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b95a6" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#2b3140" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="hpPad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb057" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#9a86ff" stop-opacity=".1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 头戴耳机 -->
+  <g stroke="#8b95a6" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M300 470 C300 300 400 208 530 208 C660 208 760 300 760 470"/>
+    <path d="M300 470 C300 300 400 208 530 208" stroke="#cfe8ff" stroke-opacity=".28" stroke-width="2"/>
+    <rect x="256" y="452" width="92" height="164" rx="34" fill="url(#hpBody)"/>
+    <rect x="712" y="452" width="92" height="164" rx="34" fill="url(#hpBody)"/>
+    <rect x="272" y="486" width="60" height="96" rx="26" fill="url(#hpPad)"/>
+    <rect x="728" y="486" width="60" height="96" rx="26" fill="url(#hpPad)"/>
+    <path d="M302 616 q0 60 60 60" stroke-opacity=".5"/>
+  </g>
+
+  <!-- 线 -->
+  <path d="M802 560 q60 40 20 96 t40 76" stroke="#8b95a6" stroke-opacity=".5" stroke-width="3" fill="none"/>
+
+  <!-- 小尾巴 DAC -->
+  <g transform="translate(300 640)" stroke="#8b95a6" fill="none" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="0" y="0" width="150" height="58" rx="12" fill="url(#hpBody)"/>
+    <rect x="18" y="14" width="52" height="30" rx="6" fill="#5cc7ff" fill-opacity=".18"/>
+    <circle cx="118" cy="29" r="12" fill="#ffb057" fill-opacity=".22"/>
+    <rect x="-40" y="20" width="40" height="18" rx="6" fill="#8b95a6" fill-opacity=".14"/>
+  </g>
+
+  <!-- 右侧：频响曲线示意 -->
+  <g transform="translate(620 250)">
+    <g stroke="#8b95a6" stroke-opacity=".3" stroke-width="1.5" fill="none">
+      <rect x="0" y="0" width="480" height="300" rx="6"/>
+      <path d="M0 100 h480"/><path d="M0 200 h480"/>
+      <path d="M120 0 v300"/><path d="M240 0 v300"/><path d="M360 0 v300"/>
+    </g>
+    <path d="M8 152 C60 148 110 130 170 138 C230 146 260 160 320 150 C380 140 420 126 472 132"
+      stroke="#ffb057" stroke-opacity=".85" stroke-width="3" fill="none"/>
+    <path d="M8 178 C70 176 130 168 190 174 C250 180 300 186 360 178 C410 172 440 166 472 168"
+      stroke="#5cc7ff" stroke-opacity=".7" stroke-width="3" fill="none" stroke-dasharray="8 6"/>
+    <g fill="#8b95a6" font-family="ui-monospace, monospace" font-size="14" opacity=".55">
+      <text x="4" y="322">20HZ</text><text x="200" y="322">1KHZ</text><text x="420" y="322">20KHZ</text>
+      <text x="0" y="-10">+10DB</text><text x="0" y="290">-10DB</text>
+    </g>
+  </g>
+
+  <text x="256" y="748" fill="#8b95a6" font-family="ui-monospace, monospace" font-size="19" letter-spacing="3" opacity=".45">调音 · 频响 · 声场 · 驱动</text>
+</svg>

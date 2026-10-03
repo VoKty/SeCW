@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8GB 显存能跑什么本地模型 · 薛子宏的未完之章</title>
+<meta name="description" content="在 RTX 5060 8GB 上从 3B 跑到 14B 的本地模型实测：速度、显存占用，以及长上下文为什么比模型大小更容易翻车。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="../index.html">首页</a>
+      <a class="nav__link" href="../photography.html">摄影</a>
+      <a class="nav__link" href="../gear.html">装备</a>
+      <a class="nav__link" href="../tech.html">技术</a>
+      <a class="nav__link" href="../ai.html" aria-current="page">AI</a>
+      <a class="nav__link" href="../life.html">生活</a>
+      <a class="nav__link" href="../about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="wrap article-head">
+    <p class="eyebrow" data-intro>AI · 实测</p>
+    <h1 class="article-head__title" data-intro style="--intro-delay:80ms">
+      8GB 显存能跑什么本地模型：一份不太乐观的实测
+    </h1>
+    <div class="article-meta" data-intro style="--intro-delay:160ms">
+      <span>2026-09-14</span>
+      <span>Ollama · 量化</span>
+      <span>阅读约 10 分钟</span>
+      <span>平台：R5 5600 / RTX 5060 8GB</span>
+    </div>
+  </section>
+
+  <section class="wrap section--tight">
+    <div class="article-layout">
+
+      <div class="prose">
+        <p>
+          我买显卡的时候把预算全放在了 GPU 上，选了 8GB 显存的型号。
+          打游戏、剪片子都没问题，但一碰本地模型就很快发现：<strong>显存才是那道墙</strong>。
+        </p>
+        <p>
+          这篇不算评测，只是我自己一台机器上的记录。结论先说：7B 量化是日常能用的甜点，
+          14B 开始变得难受，而真正让我翻车的不是模型大小，是<strong>上下文长度</strong>。
+        </p>
+
+        <h2 id="setup">测试前提</h2>
+        <ul>
+          <li>CPU：Ryzen 5 5600，内存 32GB DDR4（双通道）</li>
+          <li>显卡：RTX 5060，显存 8GB</li>
+          <li>运行方式：Ollama 默认参数，温度与上下文长度按需调整</li>
+          <li>速度用生成阶段的 t/s（每秒 token 数）估算，取多次运行的中位感觉</li>
+        </ul>
+        <div class="note">
+          <span class="note__label">说明</span>
+          <p>
+            下面的数字都是我在自己机器上跑出来的粗略值，会受到驱动版本、上下文长度、
+            是否同时开着浏览器和虚拟机的影响。不同机器上差 30% 都算正常，别把它当成标准答案。
+          </p>
+        </div>
+
+        <h2 id="result">结果</h2>
+        <table>
+          <thead>
+            <tr><th>规模</th><th>量化</th><th>显存</th><th>速度</th><th>能不能日常用</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>3B</code></td><td>Q4_K_M</td><td class="mono-num">约 2.5GB</td><td class="mono-num">55–70 t/s</td><td>能。适合摘要、改写、翻译这种"处理文字"的活</td></tr>
+            <tr><td><code>7B</code></td><td>Q4_K_M</td><td class="mono-num">约 5.2GB</td><td class="mono-num">28–36 t/s</td><td><strong>最佳平衡。</strong>写小脚本、解释报错都靠它</td></tr>
+            <tr><td><code>8B</code></td><td>Q5_K_M</td><td class="mono-num">约 6.4GB</td><td class="mono-num">22–28 t/s</td><td>能，但余量只剩一点，开长上下文就危险</td></tr>
+            <tr><td><code>14B</code></td><td>Q4_K_M</td><td class="mono-num">约 9.3GB</td><td class="mono-num">4–7 t/s</td><td>勉强。部分层跑到内存里，速度掉得很难受</td></tr>
+            <tr><td><code>7B</code> + 32K 上下文</td><td>Q4_K_M</td><td class="mono-num">溢出</td><td class="mono-num">3–5 t/s</td><td>不推荐，体验比 14B 还差</td></tr>
+          </tbody>
+        </table>
+        <p>
+          这里有一个直观的规律：<strong>显存占用和速度几乎是反着走的</strong>。
+          只要模型完全装进显存，速度就有个舒服的底线；一旦有层要被丢回内存，
+          速度会直接掉到原来的十分之一，而且是那种"边想边卡"的掉法。
+        </p>
+
+        <h2 id="context">真正的坑：上下文长度</h2>
+        <p>
+          我一开始只盯着参数量，觉得"7B 才占 5GB，我还有 3GB 可以挥霍"。后来才明白，
+          KV 缓存也要显存，而且它随上下文长度线性增长。
+        </p>
+        <p>
+          当我把上下文从默认值拉到 32K，准备让它读一整份笔记的时候，情况就变了：
+          显存被吃满，部分计算回落到 CPU，输出变成了一秒几个 token。
+          那一刻我甚至怀疑是不是模型有问题，其实只是我在做一件这台机器做不到的事。
+        </p>
+        <pre><code># 实际做过的事，大致是这样
+ollama run &lt;模型&gt;
+&gt;&gt;&gt; /set parameter num_ctx 32768
+&gt;&gt;&gt; 把一整份长文档丢进去，然后等
+
+# 观察到的现象
+# 显存 → 吃满，随后开始用共享内存
+# 生成速度 → 从 30 t/s 掉到 4 t/s 左右
+# 风扇 → 立刻起飞</code></pre>
+        <p>
+          所以对 8GB 显存来说，一个比较现实的做法是：<strong>把上下文控制在 8K 以内</strong>，
+          需要处理长文档就先切块、再分别处理，而不是硬塞。这比换更大的模型有用得多。
+        </p>
+
+        <h2 id="usage">我现在的实际用法</h2>
+        <ul>
+          <li>固定用 7B Q4 级别作为日常模型，不再追求"更大的参数量"</li>
+          <li>长文档先切段，让它逐段总结，我再自己合并</li>
+          <li>跑模型时不开游戏、不跑 AE，否则速度会明显受影响</li>
+          <li>需要更强的能力时直接切云端，不在这台机器上硬撑</li>
+        </ul>
+        <p>
+          另外一件事也值得说：本地模型真正吸引我的不是"能力比云端强"，而是
+          <strong>数据不出本机、随时可用、不用排队、不计费</strong>。
+          整理私人笔记、处理照片目录、写点小脚本，这些活交给它很合适。
+        </p>
+
+        <h2 id="conclusion">结论</h2>
+        <p>
+          8GB 显存完全可以玩本地模型，只要接受它的边界：
+        </p>
+        <ul>
+          <li>7B 量化是甜点，日常够用，速度不烦人</li>
+          <li>14B 是极限，能跑但不舒服</li>
+          <li>上下文长度比参数量更容易把显存吃光，这一条最容易被忽视</li>
+          <li>打算认真玩本地模型的话，显存容量优先于算力</li>
+        </ul>
+        <p>
+          如果让我重新配一次机器，我大概会为了更大的显存多等一两个月，
+          而不是先买一张算力更强但显存只有 8GB 的卡。这是这次实测里最贵的一条经验。
+        </p>
+
+        <div class="article-foot">
+          <span class="chips">
+            <span class="tag">Ollama</span><span class="tag">量化</span><span class="tag">RTX 5060</span><span class="tag">实测</span>
+          </span>
+          <a class="link-more" href="../ai.html">回到 AI 页</a>
+        </div>
+      </div>
+
+      <nav class="toc" data-toc aria-label="本页目录">
+        <div class="toc__title">目录</div>
+        <ol>
+          <li><a href="#setup">测试前提</a></li>
+          <li><a href="#result">结果</a></li>
+          <li><a href="#context">真正的坑：上下文长度</a></li>
+          <li><a href="#usage">我现在的实际用法</a></li>
+          <li><a href="#conclusion">结论</a></li>
+        </ol>
+        <button class="chip mt-2" type="button" data-to-top>回到顶部</button>
+      </nav>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="../about.html">关于我</a> · <a href="../photography.html">摄影</a> ·
+          <a href="../tech.html">技术</a> · <a href="../ai.html">AI</a> · <a href="../life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

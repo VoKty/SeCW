@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400" width="1000" height="1400" role="img" aria-label="山脊与晨雾，长焦压缩">
+  <title>山脊 · 晨雾</title>
+  <defs>
+    <linearGradient id="morningSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2839"/>
+      <stop offset=".42" stop-color="#3f5570"/>
+      <stop offset=".72" stop-color="#8b9db0"/>
+      <stop offset="1" stop-color="#d8cbbd"/>
+    </linearGradient>
+    <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8e2d8" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#eae4da" stop-opacity=".62"/>
+      <stop offset="1" stop-color="#ddd6c9" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="ridgeFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7d8fa2"/><stop offset="1" stop-color="#9aa9b8"/>
+    </linearGradient>
+    <linearGradient id="ridgeMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4d6076"/><stop offset="1" stop-color="#5f7186"/>
+    </linearGradient>
+    <linearGradient id="ridgeNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26323f"/><stop offset="1" stop-color="#1a232e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="1400" fill="url(#morningSky)"/>
+
+  <!-- 太阳：被雾吃掉的冷白光球 -->
+  <circle cx="660" cy="470" r="120" fill="#fdf6e6" opacity=".16"/>
+  <circle cx="660" cy="470" r="52" fill="#fffaef" opacity=".5"/>
+
+  <!-- 四层山脊，越远越淡 -->
+  <path d="M0 720 L120 660 L210 700 L320 620 L430 690 L540 630 L660 700 L780 640 L900 700 L1000 660 L1000 1400 L0 1400 Z" fill="url(#ridgeFar)" opacity=".62"/>
+  <rect x="0" y="640" width="1000" height="220" fill="url(#mist)" opacity=".55"/>
+  <path d="M0 860 L140 790 L260 850 L400 760 L520 840 L650 780 L780 860 L900 800 L1000 850 L1000 1400 L0 1400 Z" fill="url(#ridgeMid)" opacity=".8"/>
+  <rect x="0" y="820" width="1000" height="200" fill="url(#mist)" opacity=".42"/>
+  <path d="M0 1030 L160 950 L300 1030 L460 930 L600 1020 L760 950 L880 1030 L1000 990 L1000 1400 L0 1400 Z" fill="#33404f" opacity=".92"/>
+  <rect x="0" y="990" width="1000" height="180" fill="url(#mist)" opacity=".3"/>
+  <path d="M0 1230 L180 1160 L340 1230 L520 1150 L700 1240 L860 1180 L1000 1240 L1000 1400 L0 1400 Z" fill="url(#ridgeNear)"/>
+
+  <!-- 前坡上的一点植被细节 -->
+  <g fill="#0e1620" opacity=".55">
+    <path d="M120 1300 l8 -26 l8 26 z"/><path d="M148 1312 l7 -22 l7 22 z"/>
+    <path d="M760 1290 l9 -28 l9 28 z"/><path d="M800 1306 l7 -20 l7 20 z"/>
+    <path d="M430 1320 l8 -24 l8 24 z"/>
+  </g>
+</svg>

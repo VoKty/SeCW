@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>为什么我的 SMB 只有 40MB/s · 薛子宏的未完之章</title>
+<meta name="description" content="一次从软件查到网线的 NAS 传输排查记录：先怀疑硬盘，再怀疑系统，最后发现问题在墙里那根线上。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="../index.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="../index.html">首页</a>
+      <a class="nav__link" href="../photography.html">摄影</a>
+      <a class="nav__link" href="../gear.html">装备</a>
+      <a class="nav__link" href="../tech.html" aria-current="page">技术</a>
+      <a class="nav__link" href="../ai.html">AI</a>
+      <a class="nav__link" href="../life.html">生活</a>
+      <a class="nav__link" href="../about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="wrap article-head">
+    <p class="eyebrow" data-intro>Tech · 排查记录</p>
+    <h1 class="article-head__title" data-intro style="--intro-delay:80ms">
+      为什么我的 SMB 只有 40MB/s：一次从软件查到网线的排查
+    </h1>
+    <div class="article-meta" data-intro style="--intro-delay:160ms">
+      <span>2026-09-28</span>
+      <span>NAS · 网络</span>
+      <span>阅读约 8 分钟</span>
+      <span>结论：是网线</span>
+    </div>
+  </section>
+
+  <section class="wrap section--tight">
+    <div class="article-layout">
+
+      <div class="prose">
+        <p>
+          我给家里那台旧平台组的 NAS 加了一块闲置硬盘，本来想的是"扩容完就能痛快地用"，
+          结果拷一个 4GB 的视频文件，速度稳定在 <strong>40MB/s</strong> 左右。
+        </p>
+        <p>
+          40MB/s 不算不能用，但它明显不对劲。千兆网络的理论上限是 125MB/s，实际跑到 110MB/s
+          才算正常。我这个数字大概是三分之一，说明中间有一个环节卡住了。
+        </p>
+
+        <h2 id="symptom">现象与基线</h2>
+        <p>先把能确认的事实列出来，避免瞎猜：</p>
+        <ul>
+          <li>文件从电脑通过 SMB 拷到 NAS，速度稳定在 38–42MB/s，不是抖动，是稳定卡住</li>
+          <li>同一块硬盘在 NAS 本机内部拷贝，速度能到 130MB/s 以上</li>
+          <li>小文件（几百 KB）的组合传输速度更低，但那是另一个问题</li>
+          <li>电脑和 NAS 都显示网卡是千兆链路（1.0Gbps）</li>
+        </ul>
+        <p>
+          注意最后一条：<strong>两端都显示千兆</strong>。这条信息后来被证明是误导我的关键——它只说明
+          网卡协商成功，不代表中间那段线的质量够。
+        </p>
+
+        <h2 id="wrong">我走错的方向</h2>
+        <p>我一开始怀疑的都是软件和硬盘，按顺序说说错在哪：</p>
+        <ul>
+          <li><strong>怀疑硬盘。</strong>测完本机拷贝就打消了，硬盘没问题。</li>
+          <li><strong>怀疑 SMB 协议版本。</strong>换成 SMB3、开大 MTU，速度几乎没变。</li>
+          <li><strong>怀疑系统负载。</strong>NAS 上确实跑着 Docker，但停掉之后速度只涨了 2–3MB/s。</li>
+          <li><strong>怀疑交换机。</strong>换了个口，没用。</li>
+        </ul>
+        <div class="note">
+          <span class="note__label">教训</span>
+          <p>
+            我花了大概两个小时在软件层面绕圈，只是因为"网线和交换机看起来最不像问题"。
+            物理层的问题看起来太蠢，反而最容易被跳过。
+          </p>
+        </div>
+
+        <h2 id="order">最后管用的排查顺序</h2>
+        <p>
+          后来我换了个思路：不去猜谁有问题，而是一段一段地量。具体做法是从电脑开始，
+          顺着链路往 NAS 走，每一段单独测速，谁掉速就是谁的问题。
+        </p>
+        <table>
+          <thead>
+            <tr><th>检查项</th><th>方法</th><th>我这里的表现</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>硬盘本身</td>
+              <td>NAS 内部拷贝同一块盘的大文件</td>
+              <td>130MB/s <span class="unit">正常</span></td>
+            </tr>
+            <tr>
+              <td>协商速率</td>
+              <td>看两端网卡的链路状态</td>
+              <td>都显示 1.0Gbps <span class="unit">但不可信</span></td>
+            </tr>
+            <tr>
+              <td>网线</td>
+              <td>换一根明确知道规格的线直连</td>
+              <td><strong>112MB/s</strong> <span class="unit">问题在这里</span></td>
+            </tr>
+            <tr>
+              <td>协议与设置</td>
+              <td>对比 SMB 版本、MTU、大文件与小文件</td>
+              <td>影响很小</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          换了线之后速度立刻变成 112MB/s，基本吃满千兆。也就是说：<strong>整条链路上有线段只能跑百兆</strong>。
+        </p>
+
+        <h2 id="why">为什么会这样</h2>
+        <p>
+          那根线是装修时埋在墙里的，两端的水晶头是当时随便压的。
+          千兆以太网需要用到 8 根线芯全部参与（1000BASE-T），而百兆只需要 4 根。
+          如果 8 根里有 1–2 根接触不良或者线序不对，设备会自动降级到百兆链路——
+          但有些网卡和系统在降级后，界面显示的数字仍然让人产生误会，加上交换机端口协商的结果
+          我一开始也没仔细看，于是一路怀疑到了软件。
+        </p>
+        <p>这次的收获不是"换根线"，而是几条更通用的经验：</p>
+        <ul>
+          <li>速度异常时，<strong>先量再猜</strong>。分段测量比任何经验都可靠</li>
+          <li>"显示千兆"不等于"能跑千兆"，报告值和实际吞吐是两件事</li>
+          <li>越基础的环节，越容易被默认排除，也越应该早点验证</li>
+        </ul>
+
+        <h2 id="after">留下的几个习惯</h2>
+        <p>
+          顺手做了几件之前一直拖着的事：把 NAS 的线全部换成成品六类线，两端的口都重新整理了一遍；
+          在 NAS 上放了一个固定大小的测试文件，以后遇到速度问题先拷它，两分钟就能判断是网络还是存储；
+          另外把这次排查的顺序写在了便利贴上，贴在机箱侧面。
+        </p>
+        <p>
+          最后说一句实话：这个过程没有技术含量，纯粹是我自己绕远路。
+          但它也挺典型的——很多"疑难问题"，答案就是你最不愿意检查的那一层。
+        </p>
+
+        <div class="article-foot">
+          <span class="chips">
+            <span class="tag">NAS</span><span class="tag">SMB</span><span class="tag">千兆</span><span class="tag">排查</span>
+          </span>
+          <a class="link-more" href="../tech.html">回到技术页</a>
+        </div>
+      </div>
+
+      <nav class="toc" data-toc aria-label="本页目录">
+        <div class="toc__title">目录</div>
+        <ol>
+          <li><a href="#symptom">现象与基线</a></li>
+          <li><a href="#wrong">我走错的方向</a></li>
+          <li><a href="#order">最后管用的排查顺序</a></li>
+          <li><a href="#why">为什么会这样</a></li>
+          <li><a href="#after">留下的几个习惯</a></li>
+        </ol>
+        <button class="chip mt-2" type="button" data-to-top>回到顶部</button>
+      </nav>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="../about.html">关于我</a> · <a href="../photography.html">摄影</a> ·
+          <a href="../tech.html">技术</a> · <a href="../ai.html">AI</a> · <a href="../life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

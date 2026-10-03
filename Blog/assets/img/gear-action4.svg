@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="DJI Action 4 运动相机示意图">
+  <title>DJI Osmo Action 4 · 示意图</title>
+  <defs>
+    <linearGradient id="a4Body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b95a6" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#2b3140" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="a4Glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5cc7ff" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#9a86ff" stop-opacity=".14"/>
+    </linearGradient>
+  </defs>
+
+  <g stroke="#8b95a6" fill="none" stroke-width="2.5" stroke-linejoin="round">
+    <!-- 方形机身 -->
+    <rect x="300" y="220" width="300" height="360" rx="34" fill="url(#a4Body)"/>
+    <!-- 正面镜头 -->
+    <circle cx="450" cy="400" r="96" fill="#0b0e13" stroke="#8b95a6" stroke-opacity=".55" stroke-width="3"/>
+    <circle cx="450" cy="400" r="72" fill="url(#a4Glass)" stroke="#8b95a6" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="424" cy="372" r="14" fill="#cfe8ff" fill-opacity=".22"/>
+    <!-- 前置小屏 -->
+    <rect x="336" y="252" width="228" height="52" rx="12" fill="#0b0e13" fill-opacity=".4"/>
+    <!-- 磁吸卡扣 -->
+    <rect x="356" y="546" width="188" height="22" rx="8" fill="url(#a4Body)"/>
+  </g>
+
+  <!-- 侧视图：厚度对比 -->
+  <g transform="translate(880 400)" stroke="#8b95a6" fill="none" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="-40" y="-180" width="80" height="360" rx="26" fill="url(#a4Body)"/>
+    <rect x="-40" y="-120" width="80" height="90" rx="10" fill="#0b0e13" fill-opacity=".35"/>
+    <rect x="-14" y="-190" width="28" height="16" rx="6" fill="url(#a4Body)"/>
+  </g>
+
+  <!-- 增稳示意：两条轨迹 -->
+  <g stroke-width="3" fill="none">
+    <path d="M120 660 q80 -46 160 0 t160 0" stroke="#ffb057" stroke-opacity=".5"/>
+    <path d="M120 700 q80 -16 160 0 t160 0" stroke="#5cc7ff" stroke-opacity=".45"/>
+  </g>
+  <text x="120" y="628" fill="#8b95a6" font-family="ui-monospace, monospace" font-size="18" letter-spacing="3" opacity=".5">GYRO / EIS</text>
+
+  <text x="300" y="748" fill="#8b95a6" font-family="ui-monospace, monospace" font-size="19" letter-spacing="3" opacity=".45">1/1.3" SENSOR · 4K120 · 155° FOV</text>
+</svg>

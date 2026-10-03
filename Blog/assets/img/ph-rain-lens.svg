@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" width="1400" height="800" role="img" aria-label="雨滴附着在镜头前的散射光">
+  <title>雨点</title>
+  <defs>
+    <linearGradient id="rainBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#161b24"/>
+      <stop offset=".45" stop-color="#232a36"/>
+      <stop offset="1" stop-color="#0d1119"/>
+    </linearGradient>
+    <radialGradient id="drop" cx=".35" cy=".3" r=".75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/>
+      <stop offset=".45" stop-color="#cfe4ff" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#8fb6e0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="rainLight" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffe0b0" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#ffb057" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="rainSoft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="800" fill="url(#rainBg)"/>
+
+  <!-- 背景虚化的城市灯光，全部被雨幕糊掉 -->
+  <g filter="url(#rainSoft)">
+    <circle cx="240" cy="300" r="150" fill="url(#rainLight)"/>
+    <circle cx="700" cy="220" r="180" fill="#5cc7ff" opacity=".14"/>
+    <circle cx="1140" cy="360" r="200" fill="url(#rainLight)"/>
+    <circle cx="520" cy="600" r="160" fill="#9a86ff" opacity=".12"/>
+    <circle cx="1000" cy="640" r="140" fill="#5cc7ff" opacity=".1"/>
+  </g>
+
+  <!-- 雨丝 -->
+  <g stroke="#dbe8f6" stroke-opacity=".18" stroke-width="2">
+    <path d="M120 0 L96 800"/><path d="M300 0 L276 800"/><path d="M480 0 L456 800"/>
+    <path d="M660 0 L636 800"/><path d="M840 0 L816 800"/><path d="M1020 0 L996 800"/>
+    <path d="M1200 0 L1176 800"/><path d="M1360 0 L1336 800"/>
+  </g>
+
+  <!-- 镜头上的水珠 -->
+  <g>
+    <ellipse cx="360" cy="280" rx="86" ry="78" fill="url(#drop)"/>
+    <ellipse cx="352" cy="264" rx="26" ry="20" fill="#ffffff" opacity=".38"/>
+
+    <ellipse cx="880" cy="420" rx="120" ry="106" fill="url(#drop)"/>
+    <ellipse cx="866" cy="398" rx="34" ry="26" fill="#ffffff" opacity=".32"/>
+
+    <ellipse cx="1180" cy="200" rx="60" ry="56" fill="url(#drop)" opacity=".8"/>
+    <ellipse cx="1172" cy="188" rx="18" ry="14" fill="#ffffff" opacity=".3"/>
+
+    <ellipse cx="150" cy="600" rx="70" ry="62" fill="url(#drop)" opacity=".7"/>
+    <ellipse cx="144" cy="588" rx="20" ry="15" fill="#ffffff" opacity=".28"/>
+
+    <ellipse cx="620" cy="640" rx="52" ry="48" fill="url(#drop)" opacity=".65"/>
+    <ellipse cx="700" cy="120" rx="44" ry="40" fill="url(#drop)" opacity=".6"/>
+  </g>
+
+  <!-- 水珠内部的折射条 -->
+  <g stroke="#ffffff" stroke-opacity=".22" stroke-width="2">
+    <path d="M300 300 q60 -40 120 0" fill="none"/>
+    <path d="M800 440 q80 -50 160 0" fill="none"/>
+  </g>
+
+  <!-- 画面下方：跑道的反光 -->
+  <rect x="0" y="700" width="1400" height="100" fill="#0a0e15" opacity=".8"/>
+  <g opacity=".25">
+    <rect x="180" y="726" width="240" height="3" fill="#ffd79a"/>
+    <rect x="760" y="746" width="320" height="3" fill="#9fd2ff"/>
+    <rect x="1120" y="716" width="180" height="2" fill="#ffd79a"/>
+  </g>
+</svg>

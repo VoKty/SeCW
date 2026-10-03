@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="黄昏城市天际线">
+  <title>黄昏 · 天际线</title>
+  <defs>
+    <linearGradient id="duskSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1728"/>
+      <stop offset=".34" stop-color="#27364f"/>
+      <stop offset=".58" stop-color="#6c5468"/>
+      <stop offset=".74" stop-color="#c0754f"/>
+      <stop offset=".87" stop-color="#e9a15e"/>
+      <stop offset="1" stop-color="#f3bd7c"/>
+    </linearGradient>
+    <radialGradient id="duskSun" cx=".63" cy=".9" r=".55">
+      <stop offset="0" stop-color="#ffe0ac" stop-opacity=".9"/>
+      <stop offset=".35" stop-color="#ff9f52" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#ff9f52" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="duskHaze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7cf9c" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#f4c896" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#e9b17c" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="duskGround" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2b35"/>
+      <stop offset=".4" stop-color="#161a26"/>
+      <stop offset="1" stop-color="#0a0d14"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#duskSky)"/>
+  <rect width="1200" height="800" fill="url(#duskSun)"/>
+
+  <!-- 远景楼群：低对比，靠雾拉开空气透视 -->
+  <g fill="#1d2436" opacity=".55">
+    <rect x="40" y="560" width="70" height="120"/>
+    <rect x="132" y="530" width="52" height="150"/>
+    <rect x="205" y="588" width="86" height="92"/>
+    <rect x="900" y="598" width="64" height="82"/>
+    <rect x="980" y="556" width="48" height="124"/>
+    <rect x="1046" y="574" width="92" height="106"/>
+  </g>
+
+  <!-- 中景楼群 -->
+  <g fill="#131a2a">
+    <rect x="0" y="612" width="132" height="92"/>
+    <rect x="112" y="556" width="76" height="148"/>
+    <rect x="196" y="600" width="120" height="104"/>
+    <rect x="330" y="512" width="58" height="192"/>
+    <rect x="398" y="566" width="104" height="138"/>
+    <rect x="516" y="470" width="72" height="234"/>
+    <rect x="600" y="540" width="126" height="164"/>
+    <rect x="740" y="486" width="54" height="218"/>
+    <rect x="806" y="562" width="112" height="142"/>
+    <rect x="932" y="508" width="66" height="196"/>
+    <rect x="1010" y="576" width="190" height="128"/>
+  </g>
+
+  <!-- 窗光 -->
+  <g fill="#ffd79a" opacity=".66">
+    <rect x="128" y="576" width="6" height="4"/><rect x="142" y="590" width="6" height="4"/>
+    <rect x="156" y="570" width="6" height="4"/><rect x="170" y="604" width="6" height="4"/>
+    <rect x="342" y="536" width="5" height="4"/><rect x="356" y="560" width="5" height="4"/>
+    <rect x="342" y="590" width="5" height="4"/><rect x="412" y="588" width="6" height="4"/>
+    <rect x="440" y="612" width="6" height="4"/><rect x="468" y="586" width="6" height="4"/>
+    <rect x="530" y="500" width="5" height="4"/><rect x="546" y="524" width="5" height="4"/>
+    <rect x="530" y="556" width="5" height="4"/><rect x="558" y="600" width="5" height="4"/>
+    <rect x="622" y="566" width="6" height="4"/><rect x="652" y="588" width="6" height="4"/>
+    <rect x="690" y="562" width="6" height="4"/><rect x="752" y="520" width="5" height="4"/>
+    <rect x="826" y="588" width="6" height="4"/><rect x="864" y="606" width="6" height="4"/>
+    <rect x="944" y="536" width="5" height="4"/><rect x="960" y="576" width="5" height="4"/>
+  </g>
+  <g fill="#8fd0ff" opacity=".5">
+    <rect x="128" y="618" width="6" height="4"/><rect x="418" y="630" width="6" height="4"/>
+    <rect x="640" y="620" width="6" height="4"/><rect x="846" y="618" width="6" height="4"/>
+    <rect x="1058" y="620" width="6" height="4"/>
+  </g>
+
+  <!-- 地平雾带 -->
+  <rect x="0" y="600" width="1200" height="110" fill="url(#duskHaze)"/>
+
+  <!-- 地面：湿反光 -->
+  <rect x="0" y="700" width="1200" height="100" fill="url(#duskGround)"/>
+  <g opacity=".32">
+    <rect x="516" y="700" width="72" height="60" fill="#c98a58"/>
+    <rect x="330" y="700" width="58" height="42" fill="#b47b52"/>
+    <rect x="740" y="700" width="54" height="52" fill="#a8704b"/>
+    <rect x="932" y="700" width="66" height="46" fill="#9d6a48"/>
+  </g>
+  <rect x="0" y="696" width="1200" height="6" fill="#f0c08a" opacity=".22"/>
+</svg>

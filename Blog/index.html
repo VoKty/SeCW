@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>薛子宏的未完之章 · 一个高中生的数字基地</title>
+<meta name="description" content="一个正在准备高考、但还在折腾相机、电脑和 AI 的高中生的个人博客。记录摄影、器材、本地模型、系统和一些折腾成功或失败的东西。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  /* 在样式生效前定好主题，并决定这一轮要不要播开场动画 */
+  (function () {
+    var t = "";
+    try { t = localStorage.getItem("blog.theme") || ""; } catch (e) {}
+    if (t !== "light" && t !== "dark") {
+      t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+    document.documentElement.setAttribute("data-theme", t);
+
+    /* 每个会话只播一次；file:// 下 sessionStorage 可能不可用，那就每次都播 */
+    var play = true;
+    try { if (sessionStorage.getItem("blog.booted")) play = false; } catch (e) {}
+    if (play && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("is-booting");
+    }
+  })();
+</script>
+</head>
+<body>
+
+<!-- 开场：一圈细线、一个光圈、一行字。克制为主，不要再往里堆元素。
+     这里不要写任何个人信息 —— 点一下或按任意键可以立刻跳过 -->
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot__halo"></div>
+
+  <div class="boot__stage">
+    <svg class="boot__lens" viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="boot__ring" cx="100" cy="100" r="72"/>
+      <g class="boot__iris">
+        <path d="M100 100 L172 100 A72 72 0 0 1 136 162.35 Z"/>
+        <path d="M100 100 L136 162.35 A72 72 0 0 1 64 162.35 Z"/>
+        <path d="M100 100 L64 162.35 A72 72 0 0 1 28 100 Z"/>
+        <path d="M100 100 L28 100 A72 72 0 0 1 64 37.65 Z"/>
+        <path d="M100 100 L64 37.65 A72 72 0 0 1 136 37.65 Z"/>
+        <path d="M100 100 L136 37.65 A72 72 0 0 1 172 100 Z"/>
+      </g>
+      <circle class="boot__core" cx="100" cy="100" r="6"/>
+    </svg>
+
+    <span class="boot__rule"></span>
+
+    <p class="boot__word"><span>未完之章</span></p>
+    <p class="boot__tag">于此记录，与世界相见</p>
+  </div>
+
+  <p class="boot__skip">点击任意处跳过</p>
+</div>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="sweep" aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="index.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="index.html" aria-current="page">首页</a>
+      <a class="nav__link" href="photography.html">摄影</a>
+      <a class="nav__link" href="gear.html">装备</a>
+      <a class="nav__link" href="tech.html">技术</a>
+      <a class="nav__link" href="ai.html">AI</a>
+      <a class="nav__link" href="life.html">生活</a>
+      <a class="nav__link" href="about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ 首屏 ============ -->
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <div>
+        <p class="eyebrow" data-intro style="--intro-delay:0ms">薛子宏 · 苏州 · 高三 · INTP</p>
+        <h1 class="hero__title" data-intro style="--intro-delay:90ms">
+          一个正在准备高考，但还在偷偷折腾<em>相机、电脑和 AI</em> 的高中生。
+        </h1>
+        <div class="hero__rule"></div>
+        <p class="lede" data-intro style="--intro-delay:220ms">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          失败的比成功的多，不过我都写下来了——毕竟加起来也没几个读者。
+        </p>
+        <p class="flex wrap-gap gap-2 mt-2" data-intro style="--intro-delay:320ms">
+          <a class="link-more" href="photography.html">看照片</a>
+          <a class="link-more" href="gear.html">翻装备</a>
+          <a class="link-more" href="tech.html">读折腾记录</a>
+        </p>
+      </div>
+
+      <aside class="glass status" data-intro data-tilt style="--intro-delay:420ms" aria-label="当前状态">
+        <div class="status__head">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="mono">当前状态</span>
+          <span class="mono mono-num" data-clock style="margin-left:auto">--:--</span>
+        </div>
+        <ul class="status__list">
+          <li><span class="mono">名字</span><b>薛子宏</b></li>
+          <li><span class="mono">坐标</span><b>江苏 · 苏州</b></li>
+          <li><span class="mono">身份</span><b>高三学生 / 业余玩家</b></li>
+          <li><span class="mono">在拍</span><b>Canon 1DX · G7 · Action 4</b></li>
+          <li><span class="mono">在跑</span><b>Ollama · 本地 7B 模型</b></li>
+          <li><span class="mono">在补</span><b>物理、数学、地理</b></li>
+          <li><span class="mono">目标</span><b>考上本科，顺便把东西玩明白</b></li>
+        </ul>
+        <p class="mono" style="margin:1rem 0 0; line-height:1.7; letter-spacing:.06em; text-transform:none; color:var(--ink-4)">
+          注：站内照片和设备图是手绘 SVG 占位。真照片在卡里，卡在书包里，书包在椅子上。
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 关键词走马灯 ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span class="ticker__item">摄影</span><span class="ticker__item">计算摄影</span>
+      <span class="ticker__item">M4/3</span><span class="ticker__item">Hi-Fi</span>
+      <span class="ticker__item">耳机</span><span class="ticker__item">PC 硬件</span>
+      <span class="ticker__item">RTX 5060</span><span class="ticker__item">Ollama</span>
+      <span class="ticker__item">Linux</span><span class="ticker__item">Kali</span>
+      <span class="ticker__item">NAS</span><span class="ticker__item">虚拟机</span>
+      <span class="ticker__item">Web 前端</span><span class="ticker__item">After Effects</span>
+      <span class="ticker__item">视频后期</span><span class="ticker__item">网络</span>
+      <span class="ticker__item">DIY</span><span class="ticker__item">好奇心</span>
+      <span class="ticker__item">摄影</span><span class="ticker__item">计算摄影</span>
+      <span class="ticker__item">M4/3</span><span class="ticker__item">Hi-Fi</span>
+      <span class="ticker__item">耳机</span><span class="ticker__item">PC 硬件</span>
+      <span class="ticker__item">RTX 5060</span><span class="ticker__item">Ollama</span>
+      <span class="ticker__item">Linux</span><span class="ticker__item">Kali</span>
+      <span class="ticker__item">NAS</span><span class="ticker__item">虚拟机</span>
+      <span class="ticker__item">Web 前端</span><span class="ticker__item">After Effects</span>
+      <span class="ticker__item">视频后期</span><span class="ticker__item">网络</span>
+      <span class="ticker__item">DIY</span><span class="ticker__item">好奇心</span>
+    </div>
+  </div>
+
+  <!-- ============ 最近更新 ============ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <div class="section-head__title">
+          <span class="eyebrow">Recent</span>
+          <h2 class="h2">最近在写什么</h2>
+        </div>
+        <a class="link-more" href="tech.html">全部记录</a>
+      </div>
+
+      <div class="log">
+        <a class="log__item" href="posts/nas-smb-slow.html" data-reveal>
+          <span class="log__date">2026-09-28</span>
+          <span class="log__title">给 NAS 塞了块旧硬盘，然后花一整晚查 SMB 只有 40MB/s <span>—— 结果是网线，很没面子</span></span>
+          <span class="log__cat">Tech</span>
+        </a>
+        <a class="log__item" href="posts/1dx-high-iso.html" data-reveal>
+          <span class="log__date">2026-09-21</span>
+          <span class="log__title">2012 年的旗舰，ISO 6400 到底还能不能用 <span>—— 能用，主要是我的手在抖</span></span>
+          <span class="log__cat">Photo</span>
+        </a>
+        <a class="log__item" href="posts/local-llm-5060.html" data-reveal>
+          <span class="log__date">2026-09-14</span>
+          <span class="log__title">8GB 显存上跑本地模型：能做什么，不能做什么 <span>—— 主要是不能跑大模型</span></span>
+          <span class="log__cat">AI</span>
+        </a>
+        <a class="log__item" href="posts/m43-vs-phone.html" data-reveal>
+          <span class="log__date">2026-09-06</span>
+          <span class="log__title">M4/3 和手机计算摄影，各自解决了什么问题 <span>—— 结论：都很好，都需要钱</span></span>
+          <span class="log__cat">Photo</span>
+        </a>
+      </div>
+      <p class="mono" style="margin:1.25rem 0 0; letter-spacing:.06em; text-transform:none; color:var(--ink-4)">
+        一共四篇。产量和我晚自习的效率一样稳定。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 摄影 ============ -->
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <div class="section-head__title">
+          <span class="eyebrow">Photography</span>
+          <h2 class="h2">最近拍的几张</h2>
+          <p class="lede" style="font-size:.95rem">点开能看到当时的机身、镜头和参数。照片本身一般，但我记得每一张是怎么拍出来的。</p>
+        </div>
+        <a class="link-more" href="photography.html">全部作品</a>
+      </div>
+
+      <div class="grid grid--4" data-stagger="70">
+        <a class="shot shot--crop card" href="photography.html">
+          <img src="assets/img/ph-dusk-skyline.svg" alt="黄昏时分的城市天际线" width="1200" height="800" loading="lazy">
+          <span class="shot__badge">1DX</span>
+          <span class="shot__meta">
+            <span class="shot__cap">放学路上的天</span>
+            <span class="shot__exif">135mm · f/4 · 1/250 · ISO 400</span>
+          </span>
+        </a>
+        <a class="shot shot--crop card" href="photography.html">
+          <img src="assets/img/ph-night-sky.svg" alt="夜空与银河，前景是山脊剪影" width="1000" height="1400" loading="lazy">
+          <span class="shot__badge">1DX</span>
+          <span class="shot__meta">
+            <span class="shot__cap">第一次拍到银河</span>
+            <span class="shot__exif">16mm · f/2.8 · 20s · ISO 3200</span>
+          </span>
+        </a>
+        <a class="shot shot--crop card" href="photography.html">
+          <img src="assets/img/ph-follow-pan.svg" alt="追随拍摄产生的横向动态模糊" width="1400" height="700" loading="lazy">
+          <span class="shot__badge">Action 4</span>
+          <span class="shot__meta">
+            <span class="shot__cap">骑车下坡，手持</span>
+            <span class="shot__exif">等效 16mm · f/2.8 · 1/60 · ISO 100</span>
+          </span>
+        </a>
+        <a class="shot shot--crop card" href="photography.html">
+          <img src="assets/img/ph-corridor.svg" alt="教学楼走廊，重复的灯带与消失点" width="1000" height="1250" loading="lazy">
+          <span class="shot__badge">G7</span>
+          <span class="shot__meta">
+            <span class="shot__cap">晚自习前的走廊</span>
+            <span class="shot__exif">25mm · f/1.7 · 1/80 · ISO 800</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 现在在折腾 ============ -->
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <div class="section-head__title">
+          <span class="eyebrow">Now</span>
+          <h2 class="h2">现在在折腾</h2>
+        </div>
+        <span class="mono">更新于 2026 / 09</span>
+      </div>
+
+      <div class="now-grid" data-reveal>
+        <div class="now-item">
+          <div class="now-item__head">
+            <h3>本地模型与 Agent</h3>
+            <span class="mono">60%</span>
+          </div>
+          <p>目标是让 AI 帮我干活。目前的成果是它烧掉了我的电费，我学会了怎么重启服务。</p>
+          <div class="bar" style="--w:60%"><i></i></div>
+        </div>
+        <div class="now-item">
+          <div class="now-item__head">
+            <h3>摄影流程整理</h3>
+            <span class="mono">45%</span>
+          </div>
+          <p>卡里有三千多张没整理的图。这个数字每周都在变大，进度条一直没动。</p>
+          <div class="bar" style="--w:45%"><i></i></div>
+        </div>
+        <div class="now-item">
+          <div class="now-item__head">
+            <h3>物理与数学</h3>
+            <span class="mono">70%</span>
+          </div>
+          <p>物理还能靠理解撑住，数学的解析几何是真的不轻松。每天固定几个题，然后发现错的总是同一类。</p>
+          <div class="bar" style="--w:70%"><i></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 关于 ============ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="glass glass--pad" style="padding:clamp(1.5rem,4vw,2.5rem)" data-reveal>
+        <span class="eyebrow">About</span>
+        <p class="pull">
+          我不太喜欢单纯讨论参数。我更想知道一个东西真正用起来怎么样、为什么会这样、它适合什么人。
+        </p>
+        <p class="lede" style="margin-bottom:1.25rem">
+          我不是科技博主，我是科技的消费者兼长期受害者。这个网站记的就是这些：
+          一个普通高中生怎么在高考和一堆兴趣之间来回横跳。
+        </p>
+        <a class="link-more" href="about.html">接着读</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="about.html">关于我</a> · <a href="photography.html">摄影</a> ·
+          <a href="tech.html">技术</a> · <a href="ai.html">AI</a> · <a href="life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

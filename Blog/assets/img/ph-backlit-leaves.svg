@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="逆光下的树叶与透射光">
+  <title>逆光</title>
+  <defs>
+    <linearGradient id="leafSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe6b8"/>
+      <stop offset=".42" stop-color="#f3e7b4"/>
+      <stop offset=".72" stop-color="#e7b978"/>
+      <stop offset="1" stop-color="#8d6b40"/>
+    </linearGradient>
+    <linearGradient id="leafA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3d6b32" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#7ea84a" stop-opacity=".7"/>
+    </linearGradient>
+    <linearGradient id="leafB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#24501f" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#5d8a37" stop-opacity=".68"/>
+    </linearGradient>
+    <radialGradient id="leafGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff8dc" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="leafBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#leafSky)"/>
+  <circle cx="700" cy="300" r="260" fill="url(#leafGlow)"/>
+
+  <!-- 远处虚化的叶团 -->
+  <g filter="url(#leafBlur)" opacity=".5">
+    <ellipse cx="240" cy="220" rx="180" ry="120" fill="#5a8a3c"/>
+    <ellipse cx="980" cy="180" rx="200" ry="140" fill="#6c9a44"/>
+    <ellipse cx="1080" cy="640" rx="220" ry="160" fill="#4a7a34"/>
+    <ellipse cx="140" cy="700" rx="200" ry="150" fill="#3f6b2e"/>
+  </g>
+
+  <!-- 前景叶片：逆光下脉络透亮 -->
+  <g>
+    <path d="M180 300 C320 220 470 250 540 380 C420 470 260 460 180 300 Z" fill="url(#leafA)"/>
+    <path d="M180 300 C300 320 430 350 540 380" stroke="#dff0b0" stroke-opacity=".55" stroke-width="2" fill="none"/>
+    <path d="M300 268 l30 96" stroke="#dff0b0" stroke-opacity=".3" stroke-width="1.5"/>
+    <path d="M380 262 l24 108" stroke="#dff0b0" stroke-opacity=".3" stroke-width="1.5"/>
+    <path d="M460 282 l16 92" stroke="#dff0b0" stroke-opacity=".3" stroke-width="1.5"/>
+  </g>
+  <g>
+    <path d="M700 520 C860 470 1000 540 1020 680 C860 740 720 680 700 520 Z" fill="url(#leafB)"/>
+    <path d="M700 520 C810 570 920 620 1020 680" stroke="#e6f2c0" stroke-opacity=".5" stroke-width="2" fill="none"/>
+    <path d="M790 540 l26 104" stroke="#e6f2c0" stroke-opacity=".26" stroke-width="1.5"/>
+    <path d="M880 578 l22 96" stroke="#e6f2c0" stroke-opacity=".26" stroke-width="1.5"/>
+  </g>
+  <g>
+    <path d="M420 660 C520 590 660 610 700 720 C580 800 460 770 420 660 Z" fill="url(#leafA)" opacity=".92"/>
+    <path d="M420 660 C520 690 620 710 700 720" stroke="#e6f2c0" stroke-opacity=".45" stroke-width="2" fill="none"/>
+  </g>
+  <g>
+    <path d="M60 90 C180 40 300 80 320 190 C210 250 100 210 60 90 Z" fill="url(#leafB)" opacity=".85"/>
+    <path d="M60 90 C160 140 250 170 320 190" stroke="#e6f2c0" stroke-opacity=".38" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- 漏光斑 -->
+  <g opacity=".55">
+    <circle cx="600" cy="180" r="30" fill="#fff6d8"/>
+    <circle cx="880" cy="330" r="18" fill="#fff6d8" opacity=".7"/>
+    <circle cx="330" cy="520" r="22" fill="#fff6d8" opacity=".5"/>
+  </g>
+</svg>
