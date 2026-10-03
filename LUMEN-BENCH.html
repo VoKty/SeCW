@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>LUMEN 测试台 — GPU 光追基准</title>
+<style>
+/* ══════════════════════════════════════════════════════════════
+   LUMEN 测试台 — 仪表盘布局，同一个渲染引擎，专门用来量数据
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#030407;
+  --fg:#e9eef8;
+  --dim:rgba(226,236,250,.55);
+  --dim2:rgba(226,236,250,.28);
+  --line:rgba(255,255,255,.08);
+  --line2:rgba(255,255,255,.045);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.34,1.28,.64,1);
+  --soft:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI Variable Display","Segoe UI",
+              "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;letter-spacing:-.011em;
+  font-variant-numeric:tabular-nums;
+}
+::selection{background:rgba(110,160,255,.28)}
+#stage{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0;background:#030407}
+#scrim{position:fixed;inset:0;z-index:1;pointer-events:none;transition:opacity .8s var(--ease);
+  background:linear-gradient(180deg,rgba(3,4,7,.90) 0%,rgba(3,4,7,.74) 42%,rgba(3,4,7,.94) 100%)}
+
+.shell{position:relative;z-index:2;width:min(1320px,94vw);margin:0 auto;padding:22px 0 60px}
+
+/* ── 顶栏 ─────────────────────────────────────────────────── */
+.top{display:flex;align-items:center;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.mark{font-size:14px;font-weight:600;letter-spacing:.26em;text-transform:uppercase}
+.mark em{font-style:normal;color:#7fa8ff}
+.mark small{display:block;font-size:9.5px;letter-spacing:.30em;color:var(--dim2);margin-top:3px;font-weight:500}
+.spacer{margin-left:auto}
+.pill{
+  display:flex;align-items:center;gap:9px;padding:7px 14px 7px 12px;border-radius:980px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+  transition:border-color .6s var(--soft)
+}
+.pill i{width:6px;height:6px;border-radius:50%;background:#5ce28a;box-shadow:0 0 9px #5ce28a;
+        transition:background .5s var(--soft),box-shadow .5s var(--soft)}
+.pill.warn i{background:#ffc84a;box-shadow:0 0 9px #ffc84a}
+.pill.bad  i{background:#ff5f5f;box-shadow:0 0 9px #ff5f5f}
+.pill b{font-size:15px;font-weight:600;min-width:32px;text-align:right}
+.pill span{font-size:9.5px;letter-spacing:.16em;color:var(--dim2);text-transform:uppercase}
+.btn{
+  font:inherit;font-size:12.5px;font-weight:560;color:var(--fg);cursor:pointer;text-decoration:none;
+  padding:9px 17px;border-radius:980px;border:1px solid var(--line);background:rgba(255,255,255,.045);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  transition:transform .5s var(--ease),background .4s var(--soft),border-color .4s var(--soft),opacity .4s;
+}
+.btn:hover{transform:translateY(-1.5px);background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.17)}
+.btn:active{transform:translateY(0) scale(.985)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.btn.primary{background:#eef3fb;color:#04060b;border-color:transparent}
+.btn.hot{background:linear-gradient(150deg,#dc3232,#dd7a10);color:#180300;border-color:transparent;font-weight:640}
+
+/* ── 栅格 ─────────────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:1.45fr 1fr;gap:15px;align-items:start}
+@media (max-width:1080px){ .grid{grid-template-columns:1fr} }
+.pane{
+  border-radius:20px;padding:20px 22px 22px;
+  background:linear-gradient(160deg,rgba(255,255,255,.062),rgba(255,255,255,.014));
+  border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);
+  box-shadow:0 22px 64px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.10);
+}
+.pane + .pane{margin-top:15px}
+.pane h4{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#7fa8ff;font-weight:600;margin-bottom:16px}
+
+/* ── 大数字 ───────────────────────────────────────────────── */
+.hero-num{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.hero-num .big{font-size:clamp(52px,8vw,86px);font-weight:640;letter-spacing:-.055em;line-height:.9}
+.hero-num .unit{font-size:12px;letter-spacing:.22em;color:var(--dim2);text-transform:uppercase;padding-bottom:10px}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line2);
+      border:1px solid var(--line2);border-radius:14px;overflow:hidden;margin-top:18px}
+.mini div{background:rgba(5,7,11,.5);padding:12px 14px}
+.mini i{display:block;font-style:normal;font-size:9.5px;letter-spacing:.16em;color:var(--dim2);text-transform:uppercase}
+.mini b{display:block;font-size:17px;font-weight:600;margin-top:5px;letter-spacing:-.02em}
+
+/* ── 帧时间图 ─────────────────────────────────────────────── */
+#chart{display:block;width:100%;height:132px;border-radius:12px;background:rgba(0,0,0,.28);
+       border:1px solid var(--line2);margin-top:14px}
+.legend{display:flex;gap:18px;margin-top:10px;font-size:11px;color:var(--dim2);flex-wrap:wrap}
+.legend s{text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.legend s::before{content:"";width:9px;height:2px;border-radius:2px;background:#7fa8ff}
+.legend s.g60::before{background:#5ce28a}
+.legend s.g30::before{background:#ffc84a}
+
+/* ── 通道耗时 ─────────────────────────────────────────────── */
+.pass{display:grid;grid-template-columns:92px 1fr 62px;gap:12px;align-items:center;padding:7px 0}
+.pass span{font-size:12px;color:var(--dim)}
+.pass .bar{height:5px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden}
+.pass .bar i{display:block;height:100%;width:0;border-radius:5px;
+  background:linear-gradient(90deg,#4f7fe8,#8ab4ff);transition:width .35s var(--soft)}
+.pass.hot .bar i{background:linear-gradient(90deg,#dc3232,#ff9a3c)}
+.pass b{font-size:12px;font-weight:560;text-align:right;color:#c6d8fb}
+
+/* ── 控件 ─────────────────────────────────────────────────── */
+.seg{position:relative;display:flex;padding:3px;border-radius:980px;background:rgba(255,255,255,.045);
+     border:1px solid var(--line2);margin-bottom:16px}
+.seg .knob{position:absolute;top:3px;bottom:3px;left:3px;width:0;border-radius:980px;
+  background:rgba(255,255,255,.115);box-shadow:0 4px 18px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.20);
+  transition:transform .6s var(--spring),width .6s var(--spring)}
+.seg button{position:relative;z-index:1;flex:1;font:inherit;font-size:11.5px;font-weight:560;padding:8px 0;
+  border-radius:980px;border:none;background:transparent;color:var(--dim);cursor:pointer;
+  transition:color .5s var(--soft)}
+.seg button.on{color:#f4f8ff}
+.row{display:flex;align-items:center;gap:13px;padding:7px 0}
+.row label{flex:0 0 96px;font-size:12px;color:var(--dim)}
+.row output{flex:0 0 48px;text-align:right;font-size:12px;color:#c6d8fb}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:3px;border-radius:3px;outline:none;
+  background:linear-gradient(90deg,#7098f0,rgba(255,255,255,.11))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+  background:#f2f6ff;cursor:grab;box-shadow:0 2px 10px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.35);
+  transition:transform .3s var(--spring)}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.22)}
+.chk{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:12px;color:var(--dim)}
+.chk label{display:flex;align-items:center;gap:6px;cursor:pointer}
+
+/* ── 跑分 ─────────────────────────────────────────────────── */
+.run{display:flex;gap:9px;margin-top:16px}
+.run .btn{flex:1;text-align:center}
+#progress{height:2px;border-radius:2px;background:rgba(255,255,255,.07);margin-top:14px;overflow:hidden}
+#progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4f7fe8,#8ab4ff);
+  transition:width .3s var(--soft)}
+#status{font-size:11.5px;color:var(--dim2);margin-top:9px;min-height:16px}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+th{text-align:right;font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+   color:var(--dim2);padding:6px 4px;border-bottom:1px solid var(--line2)}
+th:first-child,td:first-child{text-align:left}
+td{text-align:right;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.03);color:#d8e4fa}
+tbody tr{opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+tbody tr.in{opacity:1;transform:none}
+.grade{display:inline-block;padding:2px 9px;border-radius:8px;font-weight:640;font-size:11px;
+  background:rgba(126,168,255,.16);color:#a8c4ff;border:1px solid rgba(126,168,255,.3)}
+.grade.s{background:rgba(92,226,138,.16);color:#8dffb9;border-color:rgba(92,226,138,.35)}
+.grade.c{background:rgba(255,159,74,.16);color:#ffc48a;border-color:rgba(255,159,74,.35)}
+.grade.d{background:rgba(255,95,95,.16);color:#ff9d9d;border-color:rgba(255,95,95,.35)}
+
+/* ── GPU 信息 ─────────────────────────────────────────────── */
+.info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 22px;font-size:12px}
+.info div{display:flex;justify-content:space-between;gap:14px}
+.info i{font-style:normal;color:var(--dim2);flex:0 0 auto}
+.info b{font-weight:520;color:#d8e4fa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:6px;
+  background:rgba(92,226,138,.14);color:#8dffb9;border:1px solid rgba(92,226,138,.3)}
+.badge.no{background:rgba(255,120,120,.12);color:#ff9d9d;border-color:rgba(255,120,120,.28)}
+
+#err{position:fixed;left:0;right:0;bottom:0;z-index:300;display:none;background:rgba(52,8,10,.95);
+  border-top:1px solid rgba(255,90,90,.45);padding:12px 20px;max-height:36vh;overflow:auto;
+  font:11.5px/1.55 ui-monospace,Menlo,Consolas,monospace;color:#ffd9d9;white-space:pre-wrap}
+#boot{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#030407;
+  transition:opacity 1s var(--ease),visibility 1s;font-size:11px;letter-spacing:.34em;
+  text-transform:uppercase;color:#4d6a92}
+#boot.gone{opacity:0;visibility:hidden}
+body.zen .pane,body.zen .hatch{display:none}
+body.zen #scrim{opacity:0}
+body.zen .shell{padding-top:16px}
+.hatch{position:fixed;left:0;right:0;bottom:0;height:1px}
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+<div id="scrim"></div>
+
+<div class="shell">
+  <div class="top">
+    <div class="mark">LUMEN<em>·</em>BENCH<small>GPU 光追基准</small></div>
+    <div class="spacer"></div>
+    <a class="btn" href="LUMEN.html">体验页</a>
+    <button class="btn" id="zen">纯渲染</button>
+    <button class="btn primary" id="run-btn">开始跑分</button>
+    <div class="pill" id="pill"><i></i><b id="p-fps">--</b><span>FPS</span></div>
+  </div>
+
+  <div class="grid">
+    <!-- 左列：实时数据 -->
+    <div>
+      <div class="pane">
+        <h4>Live</h4>
+        <div class="hero-num">
+          <div class="big" id="big-fps">--</div>
+          <div class="unit">frames / second</div>
+        </div>
+        <div class="mini">
+          <div><i>帧耗时</i><b id="m-ms">—</b></div>
+          <div><i>GPU 耗时</i><b id="m-gpu">—</b></div>
+          <div><i>渲染分辨率</i><b id="m-res">—</b></div>
+        </div>
+        <canvas id="chart"></canvas>
+        <div class="legend">
+          <s>帧时间</s><s class="g60">16.7 ms · 60 FPS</s><s class="g30">33.3 ms · 30 FPS</s>
+        </div>
+      </div>
+
+      <div class="pane">
+        <h4>Pass Breakdown · GPU</h4>
+        <div id="passes"></div>
+        <div class="legend" style="margin-top:12px">
+          <span id="pass-note">等待 GPU 计时查询（EXT_disjoint_timer_query_webgl2）</span>
+        </div>
+      </div>
+
+      <div class="pane">
+        <h4>Device</h4>
+        <div class="info" id="dev"></div>
+      </div>
+    </div>
+
+    <!-- 右列：控制 + 结果 -->
+    <div>
+      <div class="pane">
+        <h4>Tier</h4>
+        <div class="seg" id="seg">
+          <div class="knob" id="knob"></div>
+          <button data-tier="feather">极轻</button>
+          <button data-tier="elegant" class="on">优雅</button>
+          <button data-tier="extreme">极限</button>
+          <button data-tier="melt">熔毁</button>
+          <button data-tier="inferno">地狱</button>
+        </div>
+        <div class="row"><label>弹射次数</label><input id="q-bounce" type="range" min="1" max="6" step="1" value="1"><output id="v-bounce">1</output></div>
+        <div class="row"><label>光源数量</label><input id="q-light" type="range" min="1" max="64" step="1" value="6"><output id="v-light">6</output></div>
+        <div class="row"><label>阴影光源</label><input id="q-shadow" type="range" min="0" max="48" step="1" value="3"><output id="v-shadow">3</output></div>
+        <div class="row"><label>光追球体</label><input id="q-sph" type="range" min="1" max="64" step="1" value="32"><output id="v-sph">32</output></div>
+        <div class="row"><label>实例数量</label><input id="q-inst" type="range" min="16" max="4096" step="16" value="900"><output id="v-inst">900</output></div>
+        <div class="row"><label>渲染倍率</label><input id="q-res" type="range" min="0.4" max="1.35" step="0.05" value="0.7"><output id="v-res">0.70</output></div>
+        <div class="row"><label>时序混合</label><input id="q-taa" type="range" min="0.05" max="1" step="0.01" value="0.25"><output id="v-taa">0.25</output></div>
+        <div class="row"><label>泛光强度</label><input id="q-bloom" type="range" min="0" max="1.5" step="0.05" value="0.45"><output id="v-bloom">0.45</output></div>
+        <div class="row"><label>景深强度</label><input id="q-dof" type="range" min="0" max="1" step="0.05" value="0.3"><output id="v-dof">0.30</output></div>
+        <div class="chk">
+          <label><input id="c-disp" type="checkbox" checked> 色散折射</label>
+          <label><input id="c-heat" type="checkbox"> 自动升温</label>
+        </div>
+      </div>
+
+      <div class="pane">
+        <h4>Benchmark</h4>
+        <div class="row"><label>每档帧数</label><input id="samples" type="range" min="60" max="600" step="30" value="240"><output id="v-samples">240</output></div>
+        <div class="run">
+          <button class="btn primary" id="run-btn2">开始跑分</button>
+          <button class="btn" id="clear-btn">清空</button>
+        </div>
+        <div id="progress"><i id="progress-bar"></i></div>
+        <div id="status">依次跑完五档，每档先预热再取样。</div>
+      </div>
+
+      <div class="pane">
+        <h4>Result</h4>
+        <table>
+          <thead><tr><th>档位</th><th>平均 FPS</th><th>帧耗时</th><th>1% Low</th><th>GPU</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="run">
+          <button class="btn" id="copy-btn" disabled>复制 JSON</button>
+          <button class="btn" id="dl-btn" disabled>下载报告</button>
+        </div>
+        <div id="status2" style="font-size:11.5px;color:var(--dim2);margin-top:9px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="boot">正在编译着色器</div>
+<pre id="err"></pre>
+
+<script src="lumen.engine.js"></script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const errBox = $("err");
+function fatal(m){ errBox.style.display="block"; errBox.textContent += m + "\n"; console.error(m); }
+window.addEventListener("error", e => fatal("运行错误：" + (e.message || e)));
+
+if (!window.LUMEN){
+  fatal("找不到 lumen.engine.js，请确认它与本页面在同一目录下。");
+  $("boot").classList.add("gone");
+  throw new Error("engine missing");
+}
+
+/* ─────────── 帧等待工具（跑分流程靠它驱动） ─────────── */
+const waiters = [];
+function waitFrames(n){ return new Promise(res => waiters.push({ n, res })); }
+function withTimeout(p, ms){ return Promise.race([p, new Promise(r => setTimeout(() => r(null), ms))]); }
+
+/* ─────────── 引擎 ─────────── */
+const view = LUMEN.create({ canvas: $("stage"), onFrame: onFrame });
+
+if (!view.ok){
+  fatal(view.message || "渲染管线初始化失败。");
+  if (view.errors) view.errors.forEach(e => fatal(e));
+  $("boot").classList.add("gone");
+}
+
+/* ─────────── 实时刷新 ─────────── */
+const pill = $("pill");
+let hudT = 0;
+function onFrame(s){
+  /* 帧等待者 */
+  for (let i = waiters.length - 1; i >= 0; i--){
+    const w = waiters[i];
+    w.n--;
+    if (w.n <= 0){ waiters.splice(i, 1); w.res(s); }
+  }
+
+  const now = performance.now();
+  if (now - hudT < 200) return;
+  hudT = now;
+
+  const fps = s.fps || 0;
+  $("big-fps").textContent = fps.toFixed(0);
+  $("p-fps").textContent = fps.toFixed(0);
+  pill.classList.toggle("bad", fps < 24);
+  pill.classList.toggle("warn", fps >= 24 && fps < 46);
+  $("m-ms").textContent = s.ms.toFixed(1) + " ms";
+  const g = passTotal(s);
+  $("m-gpu").textContent = g > 0 ? g.toFixed(1) + " ms" : (view.info.hasTimer ? "—" : "无计时扩展");
+  $("m-res").textContent = view.gl.canvas.width + "×" + view.gl.canvas.height;
+
+  updatePasses(s);
+}
+
+function passTotal(s){
+  let t = 0, any = false;
+  for (const k in s.passMs){ if (s.passMs[k] != null){ t += s.passMs[k]; any = true; } }
+  return any ? t : 0;
+}
+
+/* ─────────── 通道耗时条 ─────────── */
+const PASS_LABEL = { gbuf:"G-Buffer", light:"光照", rt:"光线追踪", taa:"TAA", bloom:"泛光", comp:"合成" };
+const passEls = {};
+const passBox = $("passes");
+LUMEN.PASS_NAMES.forEach(name => {
+  const d = document.createElement("div");
+  d.className = "pass";
+  d.innerHTML = '<span>' + (PASS_LABEL[name] || name) + '</span><div class="bar"><i></i></div><b>—</b>';
+  passBox.appendChild(d);
+  passEls[name] = { row:d, bar:d.querySelector("i"), val:d.querySelector("b") };
+});
+
+function updatePasses(s){
+  const ms = s.passMs || {};
+  const total = passTotal(s);
+  let maxName = null, maxVal = 0;
+  LUMEN.PASS_NAMES.forEach(n => {
+    const v = ms[n];
+    if (v != null && v > maxVal){ maxVal = v; maxName = n; }
+  });
+  LUMEN.PASS_NAMES.forEach(n => {
+    const e = passEls[n], v = ms[n];
+    const share = (total > 0 && v != null) ? v/total : 0;
+    e.bar.style.width = (share*100).toFixed(1) + "%";
+    e.val.textContent = v == null ? "—" : v.toFixed(2) + " ms";
+    e.row.classList.toggle("hot", n === maxName && share > 0.3);
+  });
+  $("pass-note").textContent = maxName
+    ? "瓶颈：" + (PASS_LABEL[maxName] || maxName) + " 占 GPU 时间 " + (maxVal/Math.max(total,1e-6)*100).toFixed(0) + "%"
+    : (view.info.hasTimer ? "等待 GPU 计时结果…" : "此浏览器未开放 GPU 计时扩展，仅显示 CPU 侧帧耗时");
+}
+
+/* ─────────── 帧时间曲线 ─────────── */
+const chart = $("chart"), cx = chart.getContext("2d");
+const hist = new Float32Array(120);
+function drawChart(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = chart.clientWidth, h = chart.clientHeight;
+  if (chart.width !== Math.floor(w*dpr) || chart.height !== Math.floor(h*dpr)){
+    chart.width = Math.floor(w*dpr); chart.height = Math.floor(h*dpr);
+  }
+  const W = chart.width, H = chart.height;
+  cx.setTransform(1,0,0,1,0,0);
+  cx.clearRect(0,0,W,H);
+  cx.scale(dpr, dpr);
+  const plot = (ms) => H/dpr - Math.min(1, ms/66.7) * (H/dpr - 6);
+
+  /* 参考线 */
+  [[16.7,'rgba(92,226,138,.35)'],[33.3,'rgba(255,200,74,.30)'],[50,'rgba(255,95,95,.25)']].forEach(([ms,col]) => {
+    cx.strokeStyle = col; cx.lineWidth = 1;
+    cx.beginPath(); cx.moveTo(0, plot(ms)); cx.lineTo(w, plot(ms)); cx.stroke();
+  });
+
+  const n = hist.length;
+  cx.beginPath();
+  for (let i = 0; i < n; i++){
+    const x = i/(n-1)*w, y = plot(hist[i]);
+    if (i === 0) cx.moveTo(x, y); else cx.lineTo(x, y);
+  }
+  cx.strokeStyle = "#7fa8ff"; cx.lineWidth = 1.4; cx.lineJoin = "round"; cx.stroke();
+  cx.lineTo(w, H/dpr); cx.lineTo(0, H/dpr); cx.closePath();
+  const grd = cx.createLinearGradient(0,0,0,H/dpr);
+  grd.addColorStop(0,"rgba(127,168,255,.20)"); grd.addColorStop(1,"rgba(127,168,255,0)");
+  cx.fillStyle = grd; cx.fill();
+}
+setInterval(() => { if (view.ok) { view.frameTimes(hist); drawChart(); } }, 66);
+
+/* ─────────── 控件 ─────────── */
+const seg = $("seg"), knob = $("knob");
+function moveKnob(){
+  const b = seg.querySelector("button.on");
+  if (!b) return;
+  const r = b.getBoundingClientRect(), pr = seg.getBoundingClientRect();
+  knob.style.width = r.width + "px";
+  knob.style.transform = "translateX(" + (r.left - pr.left - 3) + "px)";
+}
+seg.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (b) setTier(b.dataset.tier);
+});
+function setTier(name){
+  view.setTier(name);
+  seg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.tier === name));
+  moveKnob(); syncUI();
+  const note = LUMEN.TIER_NOTE[name];
+  $("status").textContent = LUMEN.TIER_LABEL[name] + " · " + (note || "");
+}
+addEventListener("resize", () => requestAnimationFrame(moveKnob));
+
+const FIELDS = [
+  ["q-bounce","v-bounce","bounce",0],
+  ["q-light","v-light","light",0],
+  ["q-shadow","v-shadow","shadow",0],
+  ["q-sph","v-sph","sph",0],
+  ["q-inst","v-inst","inst",0],
+  ["q-res","v-res","res",2],
+  ["q-taa","v-taa","taa",2],
+  ["q-bloom","v-bloom","bloom",2],
+  ["q-dof","v-dof","dof",2]
+];
+function syncUI(){
+  FIELDS.forEach(([i,o,k,dec]) => {
+    const inp = $(i), out = $(o);
+    if (!inp || !out) return;
+    inp.value = view.cfg[k];
+    out.textContent = dec ? (+view.cfg[k]).toFixed(dec) : view.cfg[k];
+  });
+  $("c-disp").checked = !!view.cfg.disp;
+  $("c-heat").checked = !!view.cfg.heat;
+}
+FIELDS.forEach(([i,o,k]) => {
+  const inp = $(i);
+  inp.addEventListener("input", () => {
+    view.apply({ [k]: +inp.value });
+    syncUI();
+  });
+});
+$("c-disp").addEventListener("change", e => view.apply({ disp: e.target.checked ? 1 : 0 }));
+$("c-heat").addEventListener("change", e => view.apply({ heat: e.target.checked }));
+
+/* ─────────── 指针：拖动环绕 ─────────── */
+let dragging = false, lx = 0, ly = 0;
+addEventListener("pointerdown", e => {
+  if (e.target.closest("button,a,input,label,.pane,.seg,.top")) return;
+  dragging = true; lx = e.clientX; ly = e.clientY;
+});
+addEventListener("pointermove", e => {
+  view.setPointer((e.clientX/innerWidth - 0.5)*2, -(e.clientY/innerHeight - 0.5)*2);
+  if (dragging){ view.orbit(e.clientX - lx, e.clientY - ly); lx = e.clientX; ly = e.clientY; }
+});
+addEventListener("pointerup", () => { dragging = false; });
+addEventListener("pointercancel", () => { dragging = false; });
+
+$("zen").addEventListener("click", () => {
+  document.body.classList.toggle("zen");
+  $("zen").textContent = document.body.classList.contains("zen") ? "显示面板" : "纯渲染";
+  requestAnimationFrame(() => { chart.width = 0; drawChart(); });
+});
+
+/* ─────────── 设备信息 ─────────── */
+function fillDevice(){
+  const i = view.info;
+  const g = passTotal(view.stats);
+  $("dev").innerHTML = [
+    ["渲染器", i.renderer],
+    ["厂商", i.vendor],
+    ["WebGL", i.version],
+    ["浮点渲染目标", i.hasFloat ? '<span class="badge">RGBA16F</span>' : '<span class="badge no">RGBA8 回退</span>'],
+    ["GPU 计时扩展", i.hasTimer ? '<span class="badge">可用</span>' : '<span class="badge no">不可用</span>'],
+    ["片元 uniform 容量", i.maxUniformVectors + " vec4"],
+    ["光追球体上限", view.maxSph],
+    ["光源上限", view.maxLight],
+    ["最大纹理", i.maxTexture + " px"]
+  ].map(([k,v]) => '<div><i>'+k+'</i><b>'+v+'</b></div>').join("");
+}
+if (view.ok) fillDevice();
+
+/* ─────────── 跑分 ─────────── */
+let results = [];
+let running = false;
+
+function stats(arr){
+  const s = arr.slice().sort((a,b) => a-b);
+  const sum = s.reduce((a,b) => a+b, 0);
+  const avg = sum/s.length;
+  const p99 = s[Math.min(s.length-1, Math.floor(s.length*0.99))];
+  const p50 = s[Math.floor(s.length*0.5)];
+  return { avg, p50, p99, min:s[0], max:s[s.length-1] };
+}
+
+async function sampleFrames(n){
+  const arr = [];
+  view.resetStats();
+  for (let i = 0; i < n; i++){
+    const s = await withTimeout(waitFrames(1), 8000);
+    if (!s) break;
+    arr.push(Math.max(s.ms, 0.0001));
+    if (i % 4 === 0) bar(i/n);
+  }
+  return arr;
+}
+function bar(p){ $("progress-bar").style.width = (p*100).toFixed(1) + "%"; }
+
+async function runSweep(){
+  if (running || !view.ok) return;
+  running = true;
+  results = [];
+  $("tbody").innerHTML = "";
+  const per = +$("samples").value;
+  const tiers = LUMEN.TIER_ORDER;
+  const wasHeat = view.cfg.heat;
+
+  for (let t = 0; t < tiers.length; t++){
+    const name = tiers[t];
+    $("status").textContent = "[" + (t+1) + "/" + tiers.length + "] " + LUMEN.TIER_LABEL[name] +
+                              " · 预热中…";
+    view.setTier(name);
+    view.apply({ heat:false });
+    seg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.tier === name));
+    moveKnob(); syncUI();
+    await withTimeout(waitFrames(75), 15000);
+
+    $("status").textContent = "[" + (t+1) + "/" + tiers.length + "] " + LUMEN.TIER_LABEL[name] +
+                              " · 采样 " + per + " 帧…";
+    const arr = await sampleFrames(per);
+    if (!arr.length){ fatal("采样中断：" + LUMEN.TIER_LABEL[name]); continue; }
+
+    const st = stats(arr);
+    const gpu = passTotal(view.stats);
+    const rec = {
+      tier: name,
+      label: LUMEN.TIER_LABEL[name],
+      fps: 1000/st.avg,
+      avgMs: st.avg,
+      p50Ms: st.p50,
+      p99Ms: st.p99,
+      low1Fps: 1000/st.p99,
+      gpuMs: gpu || null,
+      passes: Object.assign({}, view.stats.passMs),
+      config: {
+        res:view.cfg.res, bounce:view.cfg.bounce, light:view.cfg.light, shadow:view.cfg.shadow,
+        sph:view.cfg.sph, inst:view.cfg.inst, taa:view.cfg.taa, bloom:view.cfg.bloom,
+        dof:view.cfg.dof, disp:view.cfg.disp
+      },
+      pixels: view.stats.pixels
+    };
+    results.push(rec);
+    addRow(rec);
+    bar((t+1)/tiers.length);
+  }
+
+  view.apply({ heat: wasHeat });
+  $("status").textContent = "完成。等级：" + grade(results) + " · 综合分 " + score(results).toFixed(0);
+  $("copy-btn").disabled = false; $("dl-btn").disabled = false;
+  $("status2").innerHTML = summaryLine(results);
+  running = false;
+}
+
+function addRow(r){
+  const tr = document.createElement("tr");
+  tr.innerHTML = "<td>" + r.label + "</td><td>" + r.fps.toFixed(1) + "</td><td>" +
+                 r.avgMs.toFixed(1) + " ms</td><td>" + r.low1Fps.toFixed(1) + "</td><td>" +
+                 (r.gpuMs ? r.gpuMs.toFixed(1) + " ms" : "—") + "</td>";
+  $("tbody").appendChild(tr);
+  requestAnimationFrame(() => tr.classList.add("in"));
+}
+
+function score(rs){
+  if (!rs.length) return 0;
+  const w = { feather:0.6, elegant:1.0, extreme:1.5, melt:2.2, inferno:3.0 };
+  let s = 0, ws = 0;
+  rs.forEach(r => { const k = w[r.tier] || 1; s += k*Math.min(r.fps, 240); ws += k; });
+  return s/Math.max(ws, 1e-6)*3.2;
+}
+function grade(rs){
+  if (!rs.length) return "—";
+  const sc = score(rs);
+  if (sc >= 260) return "S";
+  if (sc >= 170) return "A";
+  if (sc >= 100) return "B";
+  if (sc >= 50)  return "C";
+  return "D";
+}
+function gradeClass(g){ return g === "S" ? "s" : (g === "C" ? "c" : (g === "D" ? "d" : "")); }
+function summaryLine(rs){
+  if (!rs.length) return "";
+  const g = grade(rs);
+  const sc = score(rs);
+  const worst = rs.reduce((a,b) => a.fps < b.fps ? a : b);
+  return '<span class="grade ' + gradeClass(g) + '">' + g + '</span> 综合分 ' + sc.toFixed(0) +
+         ' · 最重档位 ' + worst.label + ' 仅 ' + worst.fps.toFixed(1) + ' FPS';
+}
+
+$("run-btn").addEventListener("click", runSweep);
+$("run-btn2").addEventListener("click", runSweep);
+$("samples").addEventListener("input", e => { $("v-samples").textContent = e.target.value; });
+$("clear-btn").addEventListener("click", () => {
+  results = []; $("tbody").innerHTML = "";
+  $("copy-btn").disabled = true; $("dl-btn").disabled = true;
+  $("status2").textContent = ""; bar(0);
+  $("status").textContent = "已清空。";
+});
+
+function report(){
+  return JSON.stringify({
+    tool: "LUMEN Bench",
+    time: new Date().toISOString(),
+    device: {
+      renderer: view.info.renderer, vendor: view.info.vendor,
+      webgl: view.info.version, float16: view.info.hasFloat, gpuTimer: view.info.hasTimer,
+      maxUniformVectors: view.info.maxUniformVectors, maxSph: view.maxSph, maxLight: view.maxLight
+    },
+    screen: { width: innerWidth, height: innerHeight, dpr: devicePixelRatio },
+    grade: grade(results),
+    score: +score(results).toFixed(1),
+    results
+  }, null, 2);
+}
+$("copy-btn").addEventListener("click", async () => {
+  const txt = report();
+  try { await navigator.clipboard.writeText(txt); $("status2").textContent = "已复制到剪贴板（" + txt.length + " 字符）"; }
+  catch (e){ $("status2").textContent = "剪贴板不可用，请用下载报告。"; }
+});
+$("dl-btn").addEventListener("click", () => {
+  const blob = new Blob([report()], { type:"application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "lumen-bench-" + Date.now() + ".json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  $("status2").textContent = "已生成报告文件。";
+});
+
+addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.code === "Space"){ e.preventDefault(); view.pause(!view.cfg.pause); }
+}, true);
+
+/* ─────────── 启动 ─────────── */
+if (view.ok){
+  ["q-light"].forEach(i => { const e = $(i); if (e) e.max = view.maxLight; });
+  ["q-shadow"].forEach(i => { const e = $(i); if (e) e.max = Math.min(48, view.maxLight); });
+  ["q-sph"].forEach(i => { const e = $(i); if (e) e.max = view.maxSph; });
+  view.setPath(0.20);
+  view.apply({ followScroll:false });
+  setTier("elegant");
+  syncUI();
+  view.start();
+  requestAnimationFrame(() => { moveKnob(); drawChart(); });
+  setTimeout(() => $("boot").classList.add("gone"), 300);
+  console.log("%c LUMEN BENCH 就绪 ", "background:#7098f0;color:#04060b;font-weight:700;padding:2px 6px");
+}
+</script>
+</body>
+</html>
