@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" width="1200" height="1000" role="img" aria-label="水面倒影与低角度日光">
+  <title>倒影</title>
+  <defs>
+    <linearGradient id="poolSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2c46"/>
+      <stop offset=".5" stop-color="#4f6d8c"/>
+      <stop offset=".86" stop-color="#c9a273"/>
+      <stop offset="1" stop-color="#e8c795"/>
+    </linearGradient>
+    <linearGradient id="poolWater" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8f7f68"/>
+      <stop offset=".28" stop-color="#3e4a5c"/>
+      <stop offset=".72" stop-color="#1d2836"/>
+      <stop offset="1" stop-color="#0d141d"/>
+    </linearGradient>
+    <radialGradient id="poolGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff0d2" stop-opacity=".9"/>
+      <stop offset=".5" stop-color="#ffc178" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#ffc178" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="poolBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="1000" fill="url(#poolSky)"/>
+  <circle cx="470" cy="500" r="240" fill="url(#poolGlow)"/>
+  <circle cx="470" cy="500" r="46" fill="#fff4dd" opacity=".85"/>
+
+  <!-- 水线 -->
+  <rect x="0" y="500" width="1200" height="500" fill="url(#poolWater)"/>
+
+  <!-- 倒影：太阳的柱状拉伸 -->
+  <g filter="url(#poolBlur)" opacity=".75">
+    <rect x="424" y="504" width="92" height="26" fill="#ffe6bb"/>
+    <rect x="410" y="540" width="120" height="16" fill="#ffcf92" opacity=".8"/>
+    <rect x="432" y="572" width="76" height="10" fill="#ffbf7d" opacity=".65"/>
+    <rect x="398" y="600" width="144" height="8" fill="#ffb26a" opacity=".5"/>
+    <rect x="440" y="628" width="60" height="6" fill="#ffa95e" opacity=".38"/>
+    <rect x="416" y="660" width="110" height="4" fill="#ff9f52" opacity=".26"/>
+  </g>
+
+  <!-- 横向波纹：越远越密 -->
+  <g stroke="#dfe8f2" fill="none">
+    <path d="M0 520 q60 6 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke-opacity=".16" stroke-width="2"/>
+    <path d="M0 556 q70 8 140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0" stroke-opacity=".13" stroke-width="2"/>
+    <path d="M0 604 q80 10 160 0 t160 0 t160 0 t160 0 t160 0 t160 0 t160 0" stroke-opacity=".1" stroke-width="3"/>
+    <path d="M0 668 q90 12 180 0 t180 0 t180 0 t180 0 t180 0 t180 0" stroke-opacity=".08" stroke-width="3"/>
+    <path d="M0 748 q100 16 200 0 t200 0 t200 0 t200 0 t200 0" stroke-opacity=".07" stroke-width="4"/>
+    <path d="M0 850 q120 20 240 0 t240 0 t240 0 t240 0" stroke-opacity=".05" stroke-width="5"/>
+  </g>
+
+  <!-- 远岸的一条暗线 -->
+  <rect x="0" y="494" width="1200" height="8" fill="#0c1420" opacity=".7"/>
+  <g fill="#0b131e" opacity=".85">
+    <path d="M980 494 l14 -34 l14 34 z"/><path d="M1024 494 l10 -24 l10 24 z"/>
+    <path d="M1080 494 l16 -40 l16 40 z"/>
+  </g>
+</svg>

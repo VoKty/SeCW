@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1250" width="1000" height="1250" role="img" aria-label="教学楼走廊，重复的灯带与消失点">
+  <title>放学后的走廊</title>
+  <defs>
+    <linearGradient id="hallBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b1f2a"/>
+      <stop offset=".55" stop-color="#2b3040"/>
+      <stop offset="1" stop-color="#12161f"/>
+    </linearGradient>
+    <linearGradient id="hallFloor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b4152"/>
+      <stop offset=".5" stop-color="#232833"/>
+      <stop offset="1" stop-color="#0f131a"/>
+    </linearGradient>
+    <radialGradient id="hallEnd" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffe4b8" stop-opacity=".85"/>
+      <stop offset=".45" stop-color="#ffbf72" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#ffbf72" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lampWarm" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffd79a" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#ffe3b4" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffd79a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lampCool" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#bfe4ff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#d7efff" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#bfe4ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="1250" fill="url(#hallBg)"/>
+
+  <!-- 远端窗口的光 -->
+  <ellipse cx="500" cy="620" rx="190" ry="240" fill="url(#hallEnd)"/>
+
+  <!-- 天花板：向消失点收敛的透视线 -->
+  <path d="M0 0 L1000 0 L1000 180 L500 470 L0 180 Z" fill="#161a24"/>
+  <g stroke="#3a4152" stroke-opacity=".55" stroke-width="2" fill="none">
+    <path d="M0 60 L500 470"/><path d="M1000 60 L500 470"/>
+    <path d="M200 0 L500 470"/><path d="M800 0 L500 470"/>
+  </g>
+
+  <!-- 灯带 -->
+  <g>
+    <rect x="330" y="120" width="340" height="10" rx="5" fill="url(#lampWarm)"/>
+    <rect x="380" y="210" width="240" height="8" rx="4" fill="url(#lampWarm)" opacity=".85"/>
+    <rect x="416" y="288" width="168" height="6" rx="3" fill="url(#lampWarm)" opacity=".7"/>
+    <rect x="444" y="352" width="112" height="5" rx="2.5" fill="url(#lampWarm)" opacity=".55"/>
+    <rect x="466" y="404" width="68" height="4" rx="2" fill="url(#lampWarm)" opacity=".4"/>
+  </g>
+
+  <!-- 左侧：一扇扇教室门 -->
+  <g>
+    <path d="M0 200 L0 1050 L300 900 L300 320 Z" fill="#1e2430"/>
+    <path d="M0 300 L220 400 L220 300 L0 220 Z" fill="#2c3546" opacity=".9"/>
+    <path d="M0 470 L230 560 L230 450 L0 380 Z" fill="#2c3546" opacity=".8"/>
+    <path d="M0 650 L250 730 L250 620 L0 550 Z" fill="#2c3546" opacity=".7"/>
+    <path d="M0 830 L270 890 L270 790 L0 720 Z" fill="#2c3546" opacity=".6"/>
+    <g fill="#9fd2ff" opacity=".22">
+      <rect x="16" y="316" width="120" height="60"/>
+      <rect x="16" y="486" width="130" height="56"/>
+      <rect x="16" y="664" width="140" height="52"/>
+    </g>
+  </g>
+
+  <!-- 右侧：窗，冷光 -->
+  <g>
+    <path d="M1000 180 L1000 1120 L720 950 L720 300 Z" fill="#202736"/>
+    <g fill="url(#lampCool)">
+      <rect x="752" y="352" width="200" height="12" rx="6"/>
+      <rect x="770" y="480" width="170" height="10" rx="5" opacity=".8"/>
+      <rect x="790" y="600" width="140" height="8" rx="4" opacity=".65"/>
+    </g>
+    <path d="M748 330 L960 260 L960 900 L748 960 Z" fill="#5cc7ff" opacity=".07"/>
+  </g>
+
+  <!-- 地板：光线在人造石材上的反射 -->
+  <path d="M0 1050 L300 900 L720 950 L1000 1120 L1000 1250 L0 1250 Z" fill="url(#hallFloor)"/>
+  <g opacity=".3">
+    <rect x="380" y="960" width="240" height="6" rx="3" fill="#ffd79a"/>
+    <rect x="420" y="1010" width="160" height="5" rx="2.5" fill="#ffcf8f"/>
+    <rect x="300" y="1060" width="120" height="4" rx="2" fill="#9fd2ff"/>
+    <rect x="600" y="1050" width="140" height="4" rx="2" fill="#9fd2ff"/>
+  </g>
+  <ellipse cx="500" cy="1000" rx="200" ry="70" fill="#ffc98b" opacity=".08"/>
+</svg>

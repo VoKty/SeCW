@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技术 · 薛子宏的未完之章</title>
+<meta name="description" content="系统、Linux、虚拟机、NAS、网络与前端的折腾记录。多数是实验日志，写了失败的部分。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="blog.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="blog.html">首页</a>
+      <a class="nav__link" href="photography.html">摄影</a>
+      <a class="nav__link" href="gear.html">装备</a>
+      <a class="nav__link" href="tech.html" aria-current="page">技术</a>
+      <a class="nav__link" href="ai.html">AI</a>
+      <a class="nav__link" href="life.html">生活</a>
+      <a class="nav__link" href="about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow" data-intro>Tech</p>
+      <h1 data-intro style="--intro-delay:80ms">折腾记录：拆开、搞明白、再装回去</h1>
+      <p class="lede" data-intro style="--intro-delay:160ms">
+        系统、虚拟机、NAS、网络、前端、后期流程。这里写的多数是过程，不是教程——
+        包括写错的地方和浪费掉的时间。我不是程序员，我只是一直想搞明白这些东西是怎么工作的。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 文章 ============ -->
+  <section class="wrap section--tight">
+    <div class="section-head" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Articles</span>
+        <h2 class="h2">写完了的</h2>
+      </div>
+    </div>
+    <div class="grid grid--2" data-stagger="70">
+      <a class="glass post-card card" href="posts/nas-smb-slow.html" data-reveal>
+        <span class="card__sheen" aria-hidden="true"></span>
+        <span class="post-card__meta">
+          <span>2026-09-28</span><span class="sep">/</span><span>NAS · 网络</span><span class="sep">/</span><span>约 8 分钟</span>
+        </span>
+        <h3>为什么我的 SMB 只有 40MB/s：一次从软件查到网线的排查</h3>
+        <p>先怀疑硬盘、再怀疑系统、最后发现是墙里那根线的故事。附带一份还算有用的排查顺序表。</p>
+        <span class="chips mt-1">
+          <span class="tag">NAS</span><span class="tag">SMB</span><span class="tag">千兆</span>
+        </span>
+      </a>
+
+      <a class="glass post-card card" href="posts/local-llm-5060.html" data-reveal>
+        <span class="card__sheen" aria-hidden="true"></span>
+        <span class="post-card__meta">
+          <span>2026-09-14</span><span class="sep">/</span><span>AI · 本地部署</span><span class="sep">/</span><span>约 10 分钟</span>
+        </span>
+        <h3>8GB 显存能跑什么本地模型：一份不太乐观的实测</h3>
+        <p>7B 量化能日常用，14B 只能勉强，长上下文会直接把显存吃光。附具体的速度和显存占用记录。</p>
+        <span class="chips mt-1">
+          <span class="tag">Ollama</span><span class="tag">量化</span><span class="tag">RTX 5060</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="section-head mt-3" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Queue</span>
+        <h2 class="h2">还欠着的</h2>
+        <p class="lede" style="font-size:.95rem">写过一半就搁置的，先挂在这里提醒自己。</p>
+      </div>
+    </div>
+    <ul class="timeline" data-reveal>
+      <li>
+        <time>草稿</time>
+        <div>
+          <h3>Kali 虚拟机清单：我到底用它干什么</h3>
+          <p>装完之后发现真正用到的功能其实很少。想写一篇"别为了酷去装 Kali"的文章。</p>
+        </div>
+      </li>
+      <li>
+        <time>草稿</time>
+        <div>
+          <h3>4K 剪辑在 6 核 CPU 上的真实体验</h3>
+          <p>代理文件、缓存盘、编码器选择，这三件事比 CPU 型号重要得多。</p>
+        </div>
+      </li>
+      <li>
+        <time>设想</time>
+        <div>
+          <h3>让旧平台再就业：一次家用服务器的降噪改造</h3>
+          <p>换风扇、换电源、限制功耗。目标是让它晚上能放在房间里不被投诉。</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ 实验日志 ============ -->
+  <section class="section wrap">
+    <div class="glass glass--pad" data-reveal style="padding:clamp(1.5rem,4vw,2.5rem)">
+      <span class="eyebrow">Lab log</span>
+      <h2 class="h2 mt-1">实验日志</h2>
+      <p class="lede mt-1">短记录，不单独成文，但留着有用。</p>
+      <ul class="loglist">
+        <li>
+          <time>2026-09-28</time>
+          <strong>把 NAS 的网线换了</strong>
+          <span>从 40MB/s 变成 112MB/s。原来那根是装修时埋的百兆线，两端水晶头做的也不太规范。</span>
+        </li>
+        <li>
+          <time>2026-09-22</time>
+          <strong>虚拟机改用 virtio 磁盘驱动</strong>
+          <span>Windows 虚拟机的磁盘写入快了不少，开机时间从 40 秒降到 20 秒左右。装驱动的时候遇到一次蓝屏。</span>
+        </li>
+        <li>
+          <time>2026-09-12</time>
+          <strong>给浏览器换了一套更严格的扩展策略</strong>
+          <span>关掉了一堆"增强体验"的插件，页面加载明显更快。结论：很多所谓的优化工具本身就是负担。</span>
+        </li>
+        <li>
+          <time>2026-08-30</time>
+          <strong>尝试用脚本自动整理照片目录</strong>
+          <span>按拍摄日期建目录、重命名、抽缩略图。脚本跑了三次才不报错，主要原因是我没处理好文件名里的空格。</span>
+        </li>
+        <li>
+          <time>2026-08-16</time>
+          <strong>把系统盘从 SATA 固态换成 NVMe</strong>
+          <span>AE 的缓存读写提升能感觉到，但日常操作差距没有跑分那么夸张。</span>
+        </li>
+        <li>
+          <time>2026-08-02</time>
+          <strong>给家里网络做了简单的分流</strong>
+          <span>把下载和游戏分开走。第一次配的时候把网关写错了，全家断网半小时，被念了很久。</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 技术栈 ============ -->
+  <section class="wrap section--tight">
+    <div class="section-head" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Stack</span>
+        <h2 class="h2">平时在用的东西</h2>
+      </div>
+    </div>
+    <div class="grid grid--3" data-stagger="50">
+      <div class="glass glass--pad" data-reveal>
+        <span class="mono">系统</span>
+        <div class="chips mt-1">
+          <span class="tag">Windows</span><span class="tag">Debian</span><span class="tag">Ubuntu</span>
+          <span class="tag">Kali Linux</span><span class="tag">双系统</span>
+        </div>
+      </div>
+      <div class="glass glass--pad" data-reveal>
+        <span class="mono">折腾</span>
+        <div class="chips mt-1">
+          <span class="tag">虚拟机</span><span class="tag">Docker</span><span class="tag">NAS</span>
+          <span class="tag">网络</span><span class="tag">Android 底层</span>
+        </div>
+      </div>
+      <div class="glass glass--pad" data-reveal>
+        <span class="mono">开发与后期</span>
+        <div class="chips mt-1">
+          <span class="tag">HTML / CSS / JS</span><span class="tag">Python</span><span class="tag">Git</span>
+          <span class="tag">After Effects</span><span class="tag">图片处理</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="about.html">关于我</a> · <a href="photography.html">摄影</a> ·
+          <a href="tech.html">技术</a> · <a href="ai.html">AI</a> · <a href="life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

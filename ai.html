@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI · 薛子宏的未完之章</title>
+<meta name="description" content="本地模型、Agent、AI 编程与 AI 图像的使用记录。不讨论哪个模型更强，只记录实际用起来怎么样。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="blog.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="blog.html">首页</a>
+      <a class="nav__link" href="photography.html">摄影</a>
+      <a class="nav__link" href="gear.html">装备</a>
+      <a class="nav__link" href="tech.html">技术</a>
+      <a class="nav__link" href="ai.html" aria-current="page">AI</a>
+      <a class="nav__link" href="life.html">生活</a>
+      <a class="nav__link" href="about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow" data-intro>AI</p>
+      <h1 data-intro style="--intro-delay:80ms">不比较谁更强，只关心它能不能真的帮上忙</h1>
+      <p class="lede" data-intro style="--intro-delay:160ms">
+        我每天都会用 AI，既有云端的，也有跑在自己电脑上的。这一页记录的是使用体验：
+        哪些事情它确实做到了，哪些事情我以为它能做但其实不行。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 态度 ============ -->
+  <section class="wrap section--tight">
+    <div class="glass glass--pad" data-reveal style="padding:clamp(1.5rem,4vw,2.5rem)">
+      <span class="eyebrow">Stance</span>
+      <p class="pull">模型排行榜上的分数，和我今天晚上能不能把作业和一张照片同时处理完，基本没什么关系。</p>
+      <p class="lede" style="margin-bottom:0">
+        我关心的是几个很具体的问题：它能不能读懂我丢进去的一堆杂乱文件？能不能在我描述得不太清楚的时候还猜对意思？
+        能不能长期记住我在做什么？以及，它会不会一本正经地编一些我一眼看不出来的东西——这一点在查资料的时候特别危险。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 文章 ============ -->
+  <section class="wrap section--tight">
+    <div class="section-head" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Articles</span>
+        <h2 class="h2">相关记录</h2>
+      </div>
+    </div>
+    <div class="grid grid--2" data-stagger="70">
+      <a class="glass post-card card" href="posts/local-llm-5060.html" data-reveal>
+        <span class="card__sheen" aria-hidden="true"></span>
+        <span class="post-card__meta">
+          <span>2026-09-14</span><span class="sep">/</span><span>本地部署</span><span class="sep">/</span><span>约 10 分钟</span>
+        </span>
+        <h3>8GB 显存能跑什么本地模型</h3>
+        <p>从 3B 到 14B 逐个试，记录了速度、显存占用和"到底能不能用"的主观判断。</p>
+        <span class="chips mt-1"><span class="tag">Ollama</span><span class="tag">量化</span><span class="tag">实测</span></span>
+      </a>
+      <div class="glass post-card" data-reveal>
+        <span class="card__sheen" aria-hidden="true"></span>
+        <span class="post-card__meta">
+          <span>草稿中</span><span class="sep">/</span><span>Agent</span>
+        </span>
+        <h3>让模型动手操作文件，到底靠不靠谱</h3>
+        <p>试着让它整理照片目录，结果它删掉了一个我还没来得及备份的文件夹。这篇文章还在写，因为我想先把备份流程做完。</p>
+        <span class="chips mt-1"><span class="tag">Agent</span><span class="tag">自动化</span><span class="tag">踩坑</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 实测表格 ============ -->
+  <section class="wrap section--tight">
+    <div class="section-head" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Bench</span>
+        <h2 class="h2">本地模型实测</h2>
+        <p class="lede" style="font-size:.95rem">
+          平台：R5 5600 / 32GB DDR4 / RTX 5060 8GB。数字是我自己看着跑出来的，只代表这台机器。
+        </p>
+      </div>
+    </div>
+
+    <div class="prose glass glass--pad" data-reveal style="max-width:none">
+      <table>
+        <thead>
+          <tr>
+            <th>模型规模</th><th>量化</th><th>显存占用</th><th>生成速度</th><th>我的判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>3B</code></td><td>Q4_K_M</td><td class="mono-num">约 2.5 GB</td><td class="mono-num">55–70 t/s</td>
+            <td>很快，适合摘要、翻译、改错别字。稍微复杂一点的推理就明显吃力。</td>
+          </tr>
+          <tr>
+            <td><code>7B</code></td><td>Q4_K_M</td><td class="mono-num">约 5.2 GB</td><td class="mono-num">28–36 t/s</td>
+            <td><strong>甜点区。</strong>写脚本、解释报错、整理文字都能用，速度也不烦人。</td>
+          </tr>
+          <tr>
+            <td><code>8B</code></td><td>Q5_K_M</td><td class="mono-num">约 6.4 GB</td><td class="mono-num">22–28 t/s</td>
+            <td>质量比 Q4 的 7B 稳一些，但长上下文一开就开始挤。</td>
+          </tr>
+          <tr>
+            <td><code>14B</code></td><td>Q4_K_M</td><td class="mono-num">约 9.3 GB</td><td class="mono-num">4–7 t/s</td>
+            <td>部分层跑在内存里，速度掉得很难受。能用，但不如直接用云端。</td>
+          </tr>
+          <tr>
+            <td><code>7B</code> 长上下文</td><td>Q4_K_M</td><td class="mono-num">溢出到内存</td><td class="mono-num">3–5 t/s</td>
+            <td>超过 8K 上下文之后，显存就不够了。这比模型大小更容易被忽略。</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mono" style="letter-spacing:.05em; text-transform:none; color:var(--ink-4)">
+        注：t/s 是生成速度；速度波动主要来自上下文长度和是否切换模型。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 用什么 / 不用什么 ============ -->
+  <section class="wrap section--tight">
+    <div class="grid grid--2" data-stagger="70">
+      <div class="glass glass--pad" data-reveal>
+        <span class="eyebrow">Actually used</span>
+        <h2 class="h3 mt-1">我确实在用的场景</h2>
+        <ul class="mt-1" style="color:var(--ink-2); font-size:.92rem">
+          <li>把一堆乱糟糟的资料先归类，我自己再复核一遍</li>
+          <li>解释报错信息，尤其是我不熟的命令行输出</li>
+          <li>写一次性的小脚本：批量重命名、抽缩略图、整理目录</li>
+          <li>整理摄影笔记和器材参数，做成能检索的表格</li>
+          <li>把一段中文改成更自然的表达，或者反过来</li>
+          <li>当"陪聊的思考对象"：帮我从另一个角度看一个问题</li>
+        </ul>
+      </div>
+      <div class="glass glass--pad" data-reveal>
+        <span class="eyebrow">Not used</span>
+        <h2 class="h3 mt-1">我不太用它的地方</h2>
+        <ul class="mt-1" style="color:var(--ink-2); font-size:.92rem">
+          <li>做题——尤其物理。它会给出很自信的推导，然后错在第三步</li>
+          <li>查事实性资料。没有来源的答案我不会当依据</li>
+          <li>直接删改我的文件。这个坑我踩过一次就够了</li>
+          <li>代替自己思考。用它给答案很快，但理解不会因此变快</li>
+          <li>写作。可以帮我改，但不想让它替我形成观点</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note mt-3">
+      <span class="note__label">一句总结</span>
+      <p>
+        对我来说，AI 最像的不是"更聪明的搜索引擎"，而是一个永远在线、从不嫌我问题太啰嗦、
+        但会自信地编错东西的助手。用它的关键是知道什么时候该自己核对。
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="about.html">关于我</a> · <a href="photography.html">摄影</a> ·
+          <a href="tech.html">技术</a> · <a href="ai.html">AI</a> · <a href="life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

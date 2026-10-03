@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>摄影 · 薛子宏的未完之章</title>
+<meta name="description" content="用 Canon 1DX、Panasonic G7 和 DJI Action 4 拍的一些照片，附上机身、镜头和当时参数。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="blog.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="blog.html">首页</a>
+      <a class="nav__link" href="photography.html" aria-current="page">摄影</a>
+      <a class="nav__link" href="gear.html">装备</a>
+      <a class="nav__link" href="tech.html">技术</a>
+      <a class="nav__link" href="ai.html">AI</a>
+      <a class="nav__link" href="life.html">生活</a>
+      <a class="nav__link" href="about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap photo-head">
+      <div>
+        <p class="eyebrow" data-intro>Photography</p>
+        <h1 data-intro style="--intro-delay:80ms">拍得不多，但每一张都记得怎么拍的</h1>
+        <p class="lede" data-intro style="--intro-delay:160ms">
+          这里的照片主要来自三台机器：一台 2012 年的全画幅旗舰、一台便宜的 M4/3 微单，
+          和一台运动相机。装备差距很大，正好能看出不同系统的脾气。
+        </p>
+      </div>
+      <div class="filmstrip" data-intro style="--intro-delay:240ms">
+        <div class="stat">
+          <div class="stat__num">3</div>
+          <div class="stat__label">在用的机身</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num"><span data-shot-count>11</span></div>
+          <div class="stat__label">本页照片</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">35mm</div>
+          <div class="stat__label">用得最多的视角</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">2026 / 09</div>
+          <div class="stat__label">最近一次拍</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 筛选 ============ -->
+  <section class="wrap section--tight" aria-label="筛选">
+    <div class="glass glass--pad" data-reveal>
+      <div class="flex between wrap-gap gap-2 items-center">
+        <div class="flex wrap-gap gap-2 items-center">
+          <span class="mono">机身</span>
+          <div class="chips" data-filter-group="camera" role="group" aria-label="按机身筛选">
+            <button class="chip" type="button" data-value="all" aria-pressed="true">全部</button>
+            <button class="chip" type="button" data-value="1dx" aria-pressed="false">Canon 1DX</button>
+            <button class="chip" type="button" data-value="g7" aria-pressed="false">Lumix G7</button>
+            <button class="chip" type="button" data-value="action4" aria-pressed="false">Action 4</button>
+          </div>
+        </div>
+        <div class="flex wrap-gap gap-2 items-center">
+          <span class="mono">题材</span>
+          <div class="chips" data-filter-group="topic" role="group" aria-label="按题材筛选">
+            <button class="chip" type="button" data-value="all" aria-pressed="true">全部</button>
+            <button class="chip" type="button" data-value="landscape" aria-pressed="false">风景</button>
+            <button class="chip" type="button" data-value="city" aria-pressed="false">城市</button>
+            <button class="chip" type="button" data-value="campus" aria-pressed="false">校园</button>
+            <button class="chip" type="button" data-value="sport" aria-pressed="false">运动</button>
+            <button class="chip" type="button" data-value="daily" aria-pressed="false">日常</button>
+            <button class="chip" type="button" data-value="still" aria-pressed="false">静物</button>
+          </div>
+        </div>
+      </div>
+      <p class="mono" style="margin:1rem 0 0; letter-spacing:.06em; text-transform:none; color:var(--ink-4)">
+        点任意一张可以放大，右侧面板里有当时的参数。所有图片目前都是手绘 SVG 占位，替换方法写在 <code style="font-family:var(--font-mono)">assets/img/</code> 同名的位置。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 作品网格 ============ -->
+  <section class="wrap section--tight" aria-label="摄影作品">
+    <div class="photo-grid" data-shot-grid data-reveal>
+
+      <button class="shot" type="button"
+        data-camera="1dx" data-topic="city"
+        data-title="放学路上的天" data-note="骑车过桥的时候看到的，停下来拍了三张，这张云最好看。"
+        data-lens="EF 70-200mm f/4L" data-focal="135mm" data-aperture="f/4" data-shutter="1/250s"
+        data-iso="ISO 400" data-date="2026-09-18 17:42" data-place="苏州 · 桥上">
+        <img src="assets/img/ph-dusk-skyline.svg" alt="黄昏时分的城市天际线，楼群剪影和暖色云层" width="1200" height="800" loading="lazy">
+        <span class="shot__badge">1DX</span>
+        <span class="shot__meta">
+          <span class="shot__cap">放学路上的天</span>
+          <span class="shot__exif">135mm · f/4 · 1/250 · ISO 400</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="1dx" data-topic="landscape"
+        data-title="第一次拍到银河" data-note="三脚架是我自己焊的一个铁架子，不太稳，但那天晚上风很小。"
+        data-lens="Samyang 14mm f/2.8" data-focal="14mm" data-aperture="f/2.8" data-shutter="20s"
+        data-iso="ISO 3200" data-date="2026-08-12 01:10" data-place="苏州郊外">
+        <img src="assets/img/ph-night-sky.svg" alt="夜空与银河，前景是山脊剪影" width="1000" height="1400" loading="lazy">
+        <span class="shot__badge">1DX</span>
+        <span class="shot__meta">
+          <span class="shot__cap">第一次拍到银河</span>
+          <span class="shot__exif">14mm · f/2.8 · 20s · ISO 3200</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="action4" data-topic="sport"
+        data-title="骑车下坡，手持" data-note="运动相机的电子增稳确实厉害，代价是画面边缘会有点软。"
+        data-lens="机身自带镜头" data-focal="等效 16mm" data-aperture="f/2.8" data-shutter="1/60s"
+        data-iso="ISO 100" data-date="2026-08-03 18:05" data-place="苏州 · 环湖路">
+        <img src="assets/img/ph-follow-pan.svg" alt="追随拍摄产生的横向动态模糊，主体保持相对清晰" width="1400" height="700" loading="lazy">
+        <span class="shot__badge">Action 4</span>
+        <span class="shot__meta">
+          <span class="shot__cap">骑车下坡，手持</span>
+          <span class="shot__exif">等效 16mm · f/2.8 · 1/60 · ISO 100</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="g7" data-topic="campus"
+        data-title="晚自习前的走廊" data-note="每天这个时候的光都一样，但只有那天我带了相机。"
+        data-lens="Lumix 25mm f/1.7" data-focal="25mm" data-aperture="f/1.7" data-shutter="1/80s"
+        data-iso="ISO 800" data-date="2026-09-09 18:20" data-place="学校 · 教学楼">
+        <img src="assets/img/ph-corridor.svg" alt="教学楼走廊，重复的灯带与消失点" width="1000" height="1250" loading="lazy">
+        <span class="shot__badge">G7</span>
+        <span class="shot__meta">
+          <span class="shot__cap">晚自习前的走廊</span>
+          <span class="shot__exif">25mm · f/1.7 · 1/80 · ISO 800</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="1dx" data-topic="landscape"
+        data-title="晨雾里的山脊" data-note="长焦把远处的山压在一起，空气里的雾正好帮了忙。"
+        data-lens="EF 70-200mm f/4L" data-focal="200mm" data-aperture="f/5.6" data-shutter="1/500s"
+        data-iso="ISO 200" data-date="2026-07-28 06:35" data-place="浙江 · 山里">
+        <img src="assets/img/ph-ridge-mist.svg" alt="层叠的山脊与晨雾，长焦压缩后的空气透视" width="1000" height="1400" loading="lazy">
+        <span class="shot__badge">1DX</span>
+        <span class="shot__meta">
+          <span class="shot__cap">晨雾里的山脊</span>
+          <span class="shot__exif">200mm · f/5.6 · 1/500 · ISO 200</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="1dx" data-topic="landscape"
+        data-title="水面上的光" data-note="低角度逆光，水面的波纹把太阳拉成一条竖线。"
+        data-lens="EF 24-70mm f/2.8L" data-focal="35mm" data-aperture="f/11" data-shutter="1/800s"
+        data-iso="ISO 100" data-date="2026-07-19 17:55" data-place="太湖边">
+        <img src="assets/img/ph-reflection.svg" alt="水面倒影与低角度日光，太阳被波纹拉成竖条" width="1200" height="1000" loading="lazy">
+        <span class="shot__badge">1DX</span>
+        <span class="shot__meta">
+          <span class="shot__cap">水面上的光</span>
+          <span class="shot__exif">35mm · f/11 · 1/800 · ISO 100</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="g7" data-topic="city"
+        data-title="雨后的街" data-note="下过雨的柏油路反光很好看，代价是鞋全湿了。"
+        data-lens="Lumix 12-32mm f/3.5-5.6" data-focal="12mm" data-aperture="f/3.5" data-shutter="1/30s"
+        data-iso="ISO 1600" data-date="2026-06-30 21:15" data-place="苏州 · 老城区">
+        <img src="assets/img/ph-street-night.svg" alt="雨后街道与路灯在湿地面上的反光" width="1200" height="850" loading="lazy">
+        <span class="shot__badge">G7</span>
+        <span class="shot__meta">
+          <span class="shot__cap">雨后的街</span>
+          <span class="shot__exif">12mm · f/3.5 · 1/30 · ISO 1600</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="g7" data-topic="daily"
+        data-title="逆光的叶子" data-note="试的是那颗老镜头的抗眩光，结果意外地不错。"
+        data-lens="Lumix 25mm f/1.7" data-focal="25mm" data-aperture="f/2.8" data-shutter="1/1000s"
+        data-iso="ISO 200" data-date="2026-06-14 15:40" data-place="小区楼下">
+        <img src="assets/img/ph-backlit-leaves.svg" alt="逆光下的树叶与透射光" width="1200" height="900" loading="lazy">
+        <span class="shot__badge">G7</span>
+        <span class="shot__meta">
+          <span class="shot__cap">逆光的叶子</span>
+          <span class="shot__exif">25mm · f/2.8 · 1/1000 · ISO 200</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="g7" data-topic="daily"
+        data-title="焦外测试" data-note="纯粹想看这支镜头的大光圈光斑圆不圆，结论是洋葱圈有一点。"
+        data-lens="Lumix 42.5mm f/1.7" data-focal="42.5mm" data-aperture="f/1.7" data-shutter="1/160s"
+        data-iso="ISO 400" data-date="2026-05-22 20:10" data-place="家里">
+        <img src="assets/img/ph-bokeh.svg" alt="大光圈下的焦外光斑" width="1200" height="900" loading="lazy">
+        <span class="shot__badge">G7</span>
+        <span class="shot__meta">
+          <span class="shot__cap">焦外测试</span>
+          <span class="shot__exif">42.5mm · f/1.7 · 1/160 · ISO 400</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="1dx" data-topic="still"
+        data-title="桌上的东西" data-note="把常用的都摆在桌上拍了一张，用来记我当时到底在用哪些东西。"
+        data-lens="EF 50mm f/1.4" data-focal="50mm" data-aperture="f/4" data-shutter="1/60s"
+        data-iso="ISO 800" data-date="2026-05-08 22:30" data-place="书桌">
+        <img src="assets/img/ph-desk-still.svg" alt="桌面静物：相机、镜头、耳机" width="1200" height="900" loading="lazy">
+        <span class="shot__badge">1DX</span>
+        <span class="shot__meta">
+          <span class="shot__cap">桌上的东西</span>
+          <span class="shot__exif">50mm · f/4 · 1/60 · ISO 800</span>
+        </span>
+      </button>
+
+      <button class="shot" type="button"
+        data-camera="action4" data-topic="city"
+        data-title="雨点糊在镜头上" data-note="镜头没擦干净反而更接近当时的感觉，所以留下来了。"
+        data-lens="机身自带镜头" data-focal="等效 16mm" data-aperture="f/2.8" data-shutter="1/120s"
+        data-iso="ISO 800" data-date="2026-04-26 19:05" data-place="苏州 · 回家路上">
+        <img src="assets/img/ph-rain-lens.svg" alt="雨滴附着在镜头前的散射光" width="1400" height="800" loading="lazy">
+        <span class="shot__badge">Action 4</span>
+        <span class="shot__meta">
+          <span class="shot__cap">雨点糊在镜头上</span>
+          <span class="shot__exif">等效 16mm · f/2.8 · 1/120 · ISO 800</span>
+        </span>
+      </button>
+
+    </div>
+
+    <p class="grid-empty" data-shot-empty hidden>这个组合下暂时没有照片，换个筛选试试。</p>
+  </section>
+
+  <!-- ============ 一点想法 ============ -->
+  <section class="section wrap">
+    <div class="glass glass--pad" data-reveal style="padding:clamp(1.5rem,4vw,2.5rem)">
+      <span class="eyebrow">Notes</span>
+      <p class="pull">设备越贵，照片不一定越好。但一台你愿意带出门的机器，确实会让你多拍很多。</p>
+      <p class="lede">
+        1DX 的画质和可靠性都比 G7 好，但我带 G7 出门的次数明显更多，因为它轻。
+        Action 4 的画质最差，可它拍到的东西是另外两台根本拍不到的。
+        这三台机器谁也不能替代谁，这件事我觉得挺有意思。
+      </p>
+      <a class="link-more" href="posts/m43-vs-phone.html">读一下我对 M4/3 和手机计算摄影的比较</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ 灯箱 ============ -->
+<div class="lightbox" data-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="照片查看">
+  <button class="icon-btn lightbox__close" type="button" data-lb-close aria-label="关闭">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <div class="lightbox__stage">
+    <figure class="lightbox__figure">
+      <img class="lightbox__img" data-lb-img src="assets/img/ph-dusk-skyline.svg" alt="">
+      <figcaption class="lightbox__caption" data-lb-caption></figcaption>
+    </figure>
+  </div>
+  <aside class="lightbox__side">
+    <span class="mono" data-lb-index>1 / 11</span>
+    <h3 class="h3 mt-1" data-lb-title></h3>
+    <div class="kv" data-lb-exif></div>
+    <div class="lightbox__nav">
+      <button class="chip" type="button" data-lb-prev>← 上一张</button>
+      <button class="chip" type="button" data-lb-next>下一张 →</button>
+    </div>
+  </aside>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="about.html">关于我</a> · <a href="photography.html">摄影</a> ·
+          <a href="tech.html">技术</a> · <a href="ai.html">AI</a> · <a href="life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

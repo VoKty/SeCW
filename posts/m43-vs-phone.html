@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4/3 和手机计算摄影，各自解决了什么问题 · 薛子宏的未完之章</title>
+<meta name="description" content="从景深、动态范围和多帧合成出发，比较 M4/3 相机与手机计算摄影的实际差别，以及它们各自真正擅长的事。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="../blog.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="../blog.html">首页</a>
+      <a class="nav__link" href="../photography.html" aria-current="page">摄影</a>
+      <a class="nav__link" href="../gear.html">装备</a>
+      <a class="nav__link" href="../tech.html">技术</a>
+      <a class="nav__link" href="../ai.html">AI</a>
+      <a class="nav__link" href="../life.html">生活</a>
+      <a class="nav__link" href="../about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="wrap article-head">
+    <p class="eyebrow" data-intro>摄影 · 计算摄影</p>
+    <h1 class="article-head__title" data-intro style="--intro-delay:80ms">
+      M4/3 和手机计算摄影，各自解决了什么问题
+    </h1>
+    <div class="article-meta" data-intro style="--intro-delay:160ms">
+      <span>2026-09-06</span>
+      <span>M4/3 · 计算摄影</span>
+      <span>阅读约 9 分钟</span>
+      <span>结论：不是替代关系</span>
+    </div>
+  </section>
+
+  <section class="wrap section--tight">
+    <div class="article-layout">
+
+      <div class="prose">
+        <p>
+          网上关于"手机能不能取代相机"的争论，我认为大部分是无效的，因为双方在比较不同的东西。
+          我更想把问题拆成一句话：<strong>手机和相机，各自解决的问题是什么？</strong>
+        </p>
+        <p>
+          我自己在用的是 M4/3 的 Lumix G7（传感器 17.3 × 13mm）和一台手机。
+          前者传感器面积大概是手机主摄的 <strong>8 倍左右</strong>，但手机在很多场景下拍出来的照片
+          观感反而更"讨喜"。这件事值得认真想一想。
+        </p>
+
+        <h2 id="why">为什么手机能拍出看起来不错的照片</h2>
+        <p>
+          手机赢的方式很简单：<strong>它不靠光学，它靠计算。</strong>
+          典型的一整套流程大概是这样的：
+        </p>
+        <ul>
+          <li><strong>多帧合成</strong>：按下快门其实拍了 5–15 张，然后对齐、叠加，用数量换信噪比</li>
+          <li><strong>HDR 与色调映射</strong>：分别保留亮部和暗部，再压成一个看起来舒服的范围</li>
+          <li><strong>夜景算法</strong>：延长总曝光时间，同时逐帧对齐，抵消手抖</li>
+          <li><strong>AI 降噪与超分辨率</strong>：把噪点抹掉，再"猜"出一些细节</li>
+          <li><strong>计算景深</strong>：用深度信息或多摄视差模拟虚化</li>
+        </ul>
+        <p>
+          这些做法本质上是在弥补物理上的不足：传感器小、镜头小、单帧信息量少。
+          而成果确实可观——在大多数"光线还不错、主体不动"的场景下，手机的直出观感相当能打。
+        </p>
+
+        <h2 id="depth">关键差别一：景深是光学，不是算法</h2>
+        <p>
+          先说最容易看出来的差别。M4/3 配 25mm f/1.7，等效视角 50mm、等效景深大约是
+          f/3.4 的水平——这个虚化虽然不算夸张，但它是<strong>真实的、连续的</strong>：
+          前景、主体、背景的过渡自然，焦外光斑的形状由光圈叶片决定，不会突然出现边缘。
+        </p>
+        <p>
+          手机的"人像模式"是另一回事：它先判断哪里是人，再给背景加模糊。
+          在头发丝、眼镜框、半透明物体这些地方，算法经常露出破绽。
+          更本质的差别是<strong>过渡</strong>——真实光学里的景深是连续的渐变，
+          而算法合成的虚化常常在某条边线上突然变化。
+        </p>
+
+        <h2 id="dr">关键差别二：动态范围的取舍方向不同</h2>
+        <p>
+          手机 HDR 的目标是"一眼看上去好看"：把天空压下去、把阴影提上来，让整张照片没有明显的黑和死白。
+          这在社交分享的场景下几乎总是正确的选择。
+        </p>
+        <p>
+          但代价是<strong>光照关系会被改变</strong>。逆光时的氛围、傍晚的暗部、舞台上的高反差——
+          这些原本属于照片表达的一部分，被强行拉平了。而 M4/3 的 RAW 虽然动态范围也就那样
+          （比全画幅还差一截），但它至少保留了一个可以由我自己决定的起点。
+        </p>
+
+        <figure>
+          <img src="../assets/img/ph-backlit-leaves.svg" alt="逆光下的树叶与透射光" width="1200" height="900" loading="lazy">
+          <figcaption>逆光是这两套系统差异最明显的地方：一台保留高光里的层次，一台直接把整张照片拉平。</figcaption>
+        </figure>
+
+        <h2 id="table">实际比较</h2>
+        <table>
+          <thead>
+            <tr><th>场景</th><th>手机</th><th>M4/3 相机</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>白天风景</td>
+              <td>直出观感好，宽容度靠合成堆出来</td>
+              <td>需要后期，但高光细节和色彩更可控</td>
+            </tr>
+            <tr>
+              <td>夜景手持</td>
+              <td><strong>强。</strong>多帧合成直接抹平差距</td>
+              <td>需要更慢的快门，ISO 一高就有噪点</td>
+            </tr>
+            <tr>
+              <td>人像虚化</td>
+              <td>边缘容易出错，虚化过渡不自然</td>
+              <td>真实光学，但 M4/3 虚化本身也不深</td>
+            </tr>
+            <tr>
+              <td>运动、飞行中的鸟</td>
+              <td>基本没戏，算法跟不上</td>
+              <td>靠追焦和连拍，能拍到的概率高得多</td>
+            </tr>
+            <tr>
+              <td>长焦</td>
+              <td>多数是裁切或小底长焦，画质衰减明显</td>
+              <td>光学长焦，代价是体积和重量</td>
+            </tr>
+            <tr>
+              <td>可控性</td>
+              <td>参数基本由算法决定</td>
+              <td>RAW、光圈、快门都归我</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2 id="conclusion">我的结论</h2>
+        <p>把这两个系统看成竞争对手，是搞错了对象。它们各自擅长的事情重叠得不多：</p>
+        <ul>
+          <li>手机解决的是<strong>"随时拍、拍完就能用、观感稳定"</strong>的问题</li>
+          <li>相机解决的是<strong>"我要控制画面的光学和曝光"</strong>的问题</li>
+        </ul>
+        <p>
+          所以我现在不纠结"谁更好"，而是按场景选择：随手记录、发消息、光线复杂的临时场合用手机；
+          要虚化、要长焦、要拍动的东西、打算认真修图的时候用相机。
+        </p>
+        <p>
+          另外一个我很在意的点是：手机的计算摄影让"照片"越来越接近<strong>渲染结果</strong>，
+          而相机记录的仍然更接近<strong>光学事实</strong>。两种都很有价值，
+          但我希望自己清楚手上这张图到底是怎么来的——这大概也是我对计算摄影这么感兴趣的原因。
+        </p>
+
+        <div class="article-foot">
+          <span class="chips">
+            <span class="tag">M4/3</span><span class="tag">计算摄影</span><span class="tag">景深</span><span class="tag">动态范围</span>
+          </span>
+          <a class="link-more" href="../photography.html">看照片</a>
+        </div>
+      </div>
+
+      <nav class="toc" data-toc aria-label="本页目录">
+        <div class="toc__title">目录</div>
+        <ol>
+          <li><a href="#why">为什么手机能拍好</a></li>
+          <li><a href="#depth">景深是光学</a></li>
+          <li><a href="#dr">动态范围的取舍</a></li>
+          <li><a href="#table">实际比较</a></li>
+          <li><a href="#conclusion">我的结论</a></li>
+        </ol>
+        <button class="chip mt-2" type="button" data-to-top>回到顶部</button>
+      </nav>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="../about.html">关于我</a> · <a href="../photography.html">摄影</a> ·
+          <a href="../tech.html">技术</a> · <a href="../ai.html">AI</a> · <a href="../life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

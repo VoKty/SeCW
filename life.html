@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生活 · 薛子宏的未完之章</title>
+<meta name="description" content="高三生活、校园、学习和一些没什么用的日常记录。写得不鸡汤。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="blog.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="blog.html">首页</a>
+      <a class="nav__link" href="photography.html">摄影</a>
+      <a class="nav__link" href="gear.html">装备</a>
+      <a class="nav__link" href="tech.html">技术</a>
+      <a class="nav__link" href="ai.html">AI</a>
+      <a class="nav__link" href="life.html" aria-current="page">生活</a>
+      <a class="nav__link" href="about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow" data-intro>Life</p>
+      <h1 data-intro style="--intro-delay:80ms">高三，和一些没什么用的日常</h1>
+      <p class="lede" data-intro style="--intro-delay:160ms">
+        这一页不打算写励志故事。我的状态确实有起伏：有连着两周很专注的时候，也有整晚对着书发呆的时候。
+        记下来只是为了让以后的我记得，这段时间到底是什么样子的。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 随手记 ============ -->
+  <section class="wrap section--tight">
+    <div class="section-head" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Notes</span>
+        <h2 class="h2">随手记</h2>
+      </div>
+      <span class="mono">共 6 条 · 不定期更新</span>
+    </div>
+
+    <div class="grid grid--3" data-stagger="60">
+      <article class="glass note-card" data-reveal>
+        <time>2026-09-30</time>
+        <p>把书桌收拾了一次，找出了三个 U 盘和两块硬盘。其中一块里居然有初三的作业，看了两眼就删了。</p>
+      </article>
+      <article class="glass note-card" data-reveal>
+        <time>2026-09-26</time>
+        <p>今天物理课讲电磁感应，老师画图的方式让我突然明白之前一直没想通的地方。有些东西确实需要换个人讲。</p>
+      </article>
+      <article class="glass note-card" data-reveal>
+        <time>2026-09-19</time>
+        <p>拍到了很好的云，但当时在骑车，只能单手掏手机。相机永远在那最想拍的一刻留在家里。</p>
+      </article>
+      <article class="glass note-card" data-reveal>
+        <time>2026-09-11</time>
+        <p>连续三天效率都不行。后来发现原因很蠢：我把手机放在桌上了。挪到床上之后立刻好转，这不是鸡汤，是物理隔离。</p>
+      </article>
+      <article class="glass note-card" data-reveal>
+        <time>2026-09-02</time>
+        <p>开学第一天，班主任说"高三没有假期"。我觉得更准确的说法是：高三的假期你得自己抢。</p>
+      </article>
+      <article class="glass note-card" data-reveal>
+        <time>2026-08-24</time>
+        <p>修好了那台旧电脑。它现在在家里当下载机和备份用的机器。旧硬件能继续干活这件事，总会让我开心一整天。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 一天 ============ -->
+  <section class="wrap section--tight">
+    <div class="glass glass--pad" data-reveal style="padding:clamp(1.5rem,4vw,2.5rem)">
+      <span class="eyebrow">A day</span>
+      <h2 class="h2 mt-1">普通的一天</h2>
+      <p class="lede mt-1">没有网课、没有自习到深夜的传说，就是这样。</p>
+      <ul class="loglist">
+        <li>
+          <time>06:30</time>
+          <strong>起床</strong>
+          <span>闹钟响三遍。第一遍知道是几点，第二遍开始计算还能睡多久，第三遍才起来。</span>
+        </li>
+        <li>
+          <time>07:20 — 17:30</time>
+          <strong>在学校</strong>
+          <span>正课、作业、课间。物理是我上课最不容易走神的科目，数学看内容。</span>
+        </li>
+        <li>
+          <time>18:30 — 21:30</time>
+          <strong>晚自习</strong>
+          <span>效率最高的一段。我会把任务拆成"解决三个题""弄懂一个知识点"这种小目标，完成感确实有用。</span>
+        </li>
+        <li>
+          <time>22:00 — 23:00</time>
+          <strong>自己的时间</strong>
+          <span>导照片、看技术文档、折腾系统、写点东西。这一小时是我一天里最期待的，但前提是当天任务做完了——所以它也算个奖励。</span>
+        </li>
+        <li>
+          <time>23:30</time>
+          <strong>睡前</strong>
+          <span>看看白天拍的照片，或者刷一会儿器材论坛。经常因为一个很小的问题查到一点多，第二天再后悔。</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 关于学习方式 ============ -->
+  <section class="wrap section--tight">
+    <div class="grid grid--2" data-stagger="70">
+      <div class="glass glass--pad" data-reveal>
+        <span class="eyebrow">Works</span>
+        <h2 class="h3 mt-1">对我有用的</h2>
+        <ul class="mt-1" style="color:var(--ink-2); font-size:.92rem">
+          <li>把任务拆到能在半小时内完成的粒度</li>
+          <li>先看一遍题目再决定要不要立刻做，避免在一道题上耗掉一整晚</li>
+          <li>物理用推导和实验去理解，不靠背结论</li>
+          <li>错题只记"我错在哪一步"，不抄整道题</li>
+          <li>把手机放到看不见的地方</li>
+        </ul>
+      </div>
+      <div class="glass glass--pad" data-reveal>
+        <span class="eyebrow">Doesn't work</span>
+        <h2 class="h3 mt-1">对我没用的</h2>
+        <ul class="mt-1" style="color:var(--ink-2); font-size:.92rem">
+          <li>"你要努力"这类话。它不告诉我下一步做什么</li>
+          <li>精确到分钟的时间表。我做不到，做两天就废了</li>
+          <li>刷题数量排行榜</li>
+          <li>把喜欢的东西当成奖励无限拖延——最后两件都没做好</li>
+          <li>熬夜补效率。第二天一定还债</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pull mt-3" data-reveal>
+      我不指望自己变成一个很自律的人。我只希望把有限的注意力，尽量用在我真的在意的事情上。
+    </p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="about.html">关于我</a> · <a href="photography.html">摄影</a> ·
+          <a href="tech.html">技术</a> · <a href="ai.html">AI</a> · <a href="life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

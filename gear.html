@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>装备 · 薛子宏的未完之章</title>
+<meta name="description" content="Canon 1DX、Panasonic G7、DJI Action 4、自主装机、Hi-Fi 设备与 NAS 的使用记录：为什么买、用起来怎么样、现在还值不值。">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("blog.theme");
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--a"></span>
+  <span class="blob blob--b"></span>
+  <span class="blob blob--c"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" data-glow aria-hidden="true"></div>
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="blog.html" aria-label="薛子宏的未完之章 · 回到首页">
+      <span class="brand__mark">薛子宏</span>
+      <span class="brand__sub">未完之章 · Study · Capture · Build</span>
+    </a>
+    <nav class="nav" id="nav" data-nav aria-label="主导航">
+      <a class="nav__link" href="blog.html">首页</a>
+      <a class="nav__link" href="photography.html">摄影</a>
+      <a class="nav__link" href="gear.html" aria-current="page">装备</a>
+      <a class="nav__link" href="tech.html">技术</a>
+      <a class="nav__link" href="ai.html">AI</a>
+      <a class="nav__link" href="life.html">生活</a>
+      <a class="nav__link" href="about.html">关于</a>
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="展开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow" data-intro>Gear</p>
+      <h1 data-intro style="--intro-delay:80ms">设备清单，以及我为什么留它们在手上</h1>
+      <p class="lede" data-intro style="--intro-delay:160ms">
+        这一页不是"晒装备"。每一样东西我都写了四件事：为什么买、用起来怎么样、有什么缺点、现在还值不值得买。
+        大部分是二手，有一部分是修过的，也有一部分买完就后悔了。
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap">
+
+    <!-- 1DX -->
+    <article class="gear-entry" data-reveal>
+      <figure class="gear-figure">
+        <img src="assets/img/gear-1dx.svg" alt="Canon 1DX 机身示意图" width="1200" height="800" loading="lazy">
+      </figure>
+      <div class="gear-body">
+        <span class="mono">数码相机 · 2012 年发布</span>
+        <h3 class="h3 mt-1">Canon EOS-1D X</h3>
+        <div class="kv">
+          <div class="kv__row"><span class="kv__k">类型</span><span class="kv__v">135 全画幅单反，一体化竖拍手柄</span></div>
+          <div class="kv__row"><span class="kv__k">传感器</span><span class="kv__v">18.1MP CMOS <span class="unit">36 × 24mm</span></span></div>
+          <div class="kv__row"><span class="kv__k">连拍</span><span class="kv__v">最高 14 fps <span class="unit">（反光板固定）</span></span></div>
+          <div class="kv__row"><span class="kv__k">重量</span><span class="kv__v">约 1340 g <span class="unit">含电池</span></span></div>
+          <div class="kv__row"><span class="kv__k">入手状态</span><span class="kv__v">二手，快门数比较高</span></div>
+        </div>
+        <dl class="gear-notes">
+          <div class="gear-note">
+            <dt>为什么买</dt>
+            <dd>我想要一台真正为拍摄而生的机器，而不是一台"功能很多"的电子产品。1DX 是那种你把眼睛贴上去之后会自动安静下来的相机：取景器又大又亮，快门声很沉，对焦不会犹豫。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>用起来怎么样</dt>
+            <dd>高感比参数看起来好。ISO 3200 出 RAW 稍微修一下就能用，6400 勉强可以接受，前提是别硬拉阴影。对焦点虽然只有 61 个、还是老一代的方案，但拍运动时的黏着感比我预期强很多。机身重是缺点也是优点——配上 70-200 之后反而更稳。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>缺点</dt>
+            <dd>重，真的重。带它出门我会认真考虑今天到底拍不拍。屏幕素质一般，回放照片的观感比实际成片差。没有 Wi-Fi，导照片只能插卡。动态范围放到今天看确实不够，暗部一拉就有噪点。</dd>
+          </div>
+        </dl>
+        <p class="verdict">
+          <b>值，但要看你想要什么。</b>
+          如果你要的是参数表，加钱买微单。如果你想要一台不怕摔、拿起来就想拍照、二手价格又很友好的机器，那它依然成立。只是你得接受它的重量和三叶草式的老操作逻辑。
+        </p>
+      </div>
+    </article>
+
+    <!-- G7 -->
+    <article class="gear-entry" data-reveal>
+      <figure class="gear-figure">
+        <img src="assets/img/gear-g7.svg" alt="Panasonic Lumix G7 与 M4/3 镜头示意图" width="1200" height="800" loading="lazy">
+      </figure>
+      <div class="gear-body">
+        <span class="mono">微单 · 2015 年发布</span>
+        <h3 class="h3 mt-1">Panasonic Lumix DMC-G7</h3>
+        <div class="kv">
+          <div class="kv__row"><span class="kv__k">类型</span><span class="kv__v">M4/3 无反光镜机身</span></div>
+          <div class="kv__row"><span class="kv__k">传感器</span><span class="kv__v">16MP Live MOS <span class="unit">17.3 × 13mm</span></span></div>
+          <div class="kv__row"><span class="kv__k">视频</span><span class="kv__v">4K 30p / 1080p 60p</span></div>
+          <div class="kv__row"><span class="kv__k">重量</span><span class="kv__v">约 410 g <span class="unit">含电池与卡</span></span></div>
+          <div class="kv__row"><span class="kv__k">入手状态</span><span class="kv__v">二手套机，比我一个月的饭钱便宜</span></div>
+        </div>
+        <dl class="gear-notes">
+          <div class="gear-note">
+            <dt>为什么买</dt>
+            <dd>因为 1DX 太重。我需要一台能塞进书包、随手就拿出来的机器，而 M4/3 系统正好满足这一点：机身小、镜头便宜、二手市场里选择很多。它也是我敢拆敢折腾的那一台。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>用起来怎么样</dt>
+            <dd>白天画质完全够用，4K 视频的锐度甚至有点意外。25mm f/1.7 这颗镜头便宜得离谱，虚化和近摄都还挺能打。晚上就一般了，ISO 1600 已经开始难看，3200 基本只适合记录。电子取景器有延迟，追焦也就那样，拍运动基本靠运气加连拍。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>缺点</dt>
+            <dd>高感弱、宽容度窄、机身塑料感明显、电池续航一般。菜单逻辑需要一点时间适应，自动白平衡在复杂光线下经常要手动改。</dd>
+          </div>
+        </dl>
+        <p class="verdict">
+          <b>非常值，但前提是你知道它的边界。</b>
+          作为"第一台可以认真学的相机"或者"随身机"，它的性价比很难被打败。如果你主要拍夜景和运动，那就别勉强它。
+        </p>
+      </div>
+    </article>
+
+    <!-- Action 4 -->
+    <article class="gear-entry" data-reveal>
+      <figure class="gear-figure">
+        <img src="assets/img/gear-action4.svg" alt="DJI Osmo Action 4 示意图" width="1200" height="800" loading="lazy">
+      </figure>
+      <div class="gear-body">
+        <span class="mono">运动相机 · 2023 年发布</span>
+        <h3 class="h3 mt-1">DJI Osmo Action 4</h3>
+        <div class="kv">
+          <div class="kv__row"><span class="kv__k">传感器</span><span class="kv__v">1/1.3 英寸 <span class="unit">比上一代大不少</span></span></div>
+          <div class="kv__row"><span class="kv__k">视角</span><span class="kv__v">最高 155°</span></div>
+          <div class="kv__row"><span class="kv__k">视频</span><span class="kv__v">4K 120p / 1080p 240p</span></div>
+          <div class="kv__row"><span class="kv__k">增稳</span><span class="kv__v">RockSteady 3.0 + 地平线增稳</span></div>
+          <div class="kv__row"><span class="kv__k">用途</span><span class="kv__v">骑车、随手记录、当行车记录仪</span></div>
+        </div>
+        <dl class="gear-notes">
+          <div class="gear-note">
+            <dt>为什么买</dt>
+            <dd>因为有很多场景，另外两台相机是根本不敢拿出来的——骑车、下雨、水边、手上还拿着别的东西的时候。Action 4 解决的其实是"能不能拍到"的问题。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>用起来怎么样</dt>
+            <dd>增稳是真的强，跑起来画面也不怎么抖，代价是边缘会软、裁切会明显。夜景比想象好，但一开增稳，噪点和涂抹就上来了。磁吸卡扣很聪明，换配件几秒钟的事。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>缺点</dt>
+            <dd>宽容度一般、暗部容易糊成一团、电子增稳在低光下会牺牲不少细节。机身发热明显，4K120 录不久。这类机器的定位本来就是"记录"而不是"创作"。</dd>
+          </div>
+        </dl>
+        <p class="verdict">
+          <b>看你有没有"拍不到"的场景。</b>
+          有的话它几乎是唯一解。没有的话，它大概率会在抽屉里吃灰——这是我见到最多的结局。
+        </p>
+      </div>
+    </article>
+
+    <!-- PC -->
+    <article class="gear-entry" data-reveal>
+      <figure class="gear-figure">
+        <img src="assets/img/gear-pc.svg" alt="自组主机内部结构与性能分配示意图" width="1200" height="800" loading="lazy">
+      </figure>
+      <div class="gear-body">
+        <span class="mono">主机 · 陆续升级出来的</span>
+        <h3 class="h3 mt-1">R5 5600 + RTX 5060 + 32GB</h3>
+        <div class="kv">
+          <div class="kv__row"><span class="kv__k">CPU</span><span class="kv__v">AMD Ryzen 5 5600 <span class="unit">6C12T</span></span></div>
+          <div class="kv__row"><span class="kv__k">内存</span><span class="kv__v">32GB DDR4 <span class="unit">开虚拟机够用</span></span></div>
+          <div class="kv__row"><span class="kv__k">显卡</span><span class="kv__v">NVIDIA GeForce RTX 5060 <span class="unit">8GB</span></span></div>
+          <div class="kv__row"><span class="kv__k">系统</span><span class="kv__v">Windows + Linux 双系统</span></div>
+          <div class="kv__row"><span class="kv__k">用途</span><span class="kv__v">剪辑、本地模型、虚拟机、写代码</span></div>
+        </div>
+        <dl class="gear-notes">
+          <div class="gear-note">
+            <dt>为什么这样配</dt>
+            <dd>AM4 平台现在便宜得夸张，性能对我完全够。省下来的钱全放显卡上——因为视频编码和本地模型都吃 GPU。32GB 内存是刚需：同时开 After Effects、浏览器和虚拟机，16GB 会直接爆。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>用起来怎么样</dt>
+            <dd>剪 1080p 多轨毫无压力，4K 加特效也还能实时预览。本地模型跑 7B 量化没问题，14B 就开始难受，主要瓶颈是 8GB 显存。开一个 Kali 虚拟机 + 一个 Windows 虚拟机也不会卡。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>缺点</dt>
+            <dd>显存 8GB 是硬伤，跑模型和 AI 画图很快就会顶到墙。AM4 平台已经没有升级空间了，下一次要换就是板 U 内存全换。机箱是老款，风道一般，夏天压得住但不好看。</dd>
+          </div>
+        </dl>
+        <p class="verdict">
+          <b>现在配类似预算，我会更看重显存。</b>
+          显卡的算力够不够是渐进的，显存够不够是"能不能跑"的问题。这一点我是踩过坑才明白的。
+        </p>
+      </div>
+    </article>
+
+    <!-- Hi-Fi -->
+    <article class="gear-entry" data-reveal>
+      <figure class="gear-figure">
+        <img src="assets/img/gear-hifi.svg" alt="耳机与解码小尾巴、频响曲线示意图" width="1200" height="800" loading="lazy">
+      </figure>
+      <div class="gear-body">
+        <span class="mono">Hi-Fi · 一直在换</span>
+        <h3 class="h3 mt-1">耳机、小尾巴与那堆线</h3>
+        <div class="kv">
+          <div class="kv__row"><span class="kv__k">在听</span><span class="kv__v">一副动圈头戴 + 两副入耳</span></div>
+          <div class="kv__row"><span class="kv__k">前端</span><span class="kv__v">解码小尾巴 / 电脑直推 / 播放器</span></div>
+          <div class="kv__row"><span class="kv__k">关注点</span><span class="kv__v">调音、频响、声场、瞬态、驱动能力</span></div>
+          <div class="kv__row"><span class="kv__k">花费</span><span class="kv__v">比相机少，比同学买手机便宜</span></div>
+        </div>
+        <dl class="gear-notes">
+          <div class="gear-note">
+            <dt>为什么玩</dt>
+            <dd>因为它是一个能直接量化"差异"的领域。同一首歌、不同的器材，你听到的东西确实不一样，而且这种差异是有物理原因的：阻抗、灵敏度、频响、腔体、振膜。研究起来很上头。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>用起来怎么样</dt>
+            <dd>最有用的经验是三条：第一，耳机的调音风格比素质更影响你喜不喜欢它；第二，推力不够时"糊"和"闷"经常被误判成耳机不行；第三，音量对齐之后，很多"一耳朵差别"会缩小到接近没有。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>缺点</dt>
+            <dd>这个圈子的玄学成分很高，我尽量只谈能解释、能复现的部分。另外耳朵是消耗品，听太久真的会累，这一点比什么器材都重要。</dd>
+          </div>
+        </dl>
+        <p class="verdict">
+          <b>先买耳机，最后才考虑前端。</b>
+          对音色影响最大的是耳机本身，其次是佩戴和录音质量，再次才是解码和线材。我在这上面交过一点点学费。
+        </p>
+      </div>
+    </article>
+
+    <!-- NAS -->
+    <article class="gear-entry" data-reveal>
+      <figure class="gear-figure">
+        <img src="assets/img/gear-nas.svg" alt="NAS 盘位与网络拓扑示意图" width="1200" height="800" loading="lazy">
+      </figure>
+      <div class="gear-body">
+        <span class="mono">存储 · 拼出来的</span>
+        <h3 class="h3 mt-1">NAS 与备份</h3>
+        <div class="kv">
+          <div class="kv__row"><span class="kv__k">硬件</span><span class="kv__v">淘汰的旧平台 + 闲置硬盘</span></div>
+          <div class="kv__row"><span class="kv__k">服务</span><span class="kv__v">SMB 共享、照片备份、Docker</span></div>
+          <div class="kv__row"><span class="kv__k">备份</span><span class="kv__v">重要数据三份，两份本地一份异地</span></div>
+          <div class="kv__row"><span class="kv__k">教训</span><span class="kv__v">网线是千兆和百兆的差别所在</span></div>
+        </div>
+        <dl class="gear-notes">
+          <div class="gear-note">
+            <dt>为什么弄</dt>
+            <dd>因为照片越拍越多，硬盘开始放不下，而且我不相信"存在一块硬盘里"。相机卡丢过一次（还好只是课间操的照片），从那时候开始我才认真做备份。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>用起来怎么样</dt>
+            <dd>把旧硬件用起来这件事本身就很有意思：一台别人丢掉的机器，装完系统之后可以安安稳稳跑好几年。SMB 速度调好之后，直接从 NAS 上剪片子也能接受。</dd>
+          </div>
+          <div class="gear-note">
+            <dt>缺点</dt>
+            <dd>噪音、耗电、以及"维护自己的存储"这件事本身的时间成本。旧硬盘的故障率是个未知数，所以我不会把唯一一份数据放在上面。</dd>
+          </div>
+        </dl>
+        <p class="verdict">
+          <b>值，但先做备份，再谈 NAS。</b>
+          很多人先去折腾硬件，最后忘记了自己要解决的其实是"数据别丢"。备份方案比硬件型号重要得多。
+        </p>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============ 折腾过的旧硬件 ============ -->
+  <section class="section wrap">
+    <div class="section-head" data-reveal>
+      <div class="section-head__title">
+        <span class="eyebrow">Archive</span>
+        <h2 class="h2">折腾过、但已经不在手上的</h2>
+        <p class="lede" style="font-size:.95rem">这些东西教会我的事情，比现在手上的设备还多。</p>
+      </div>
+    </div>
+    <ul class="timeline" data-reveal>
+      <li>
+        <time>初中</time>
+        <div>
+          <h3>一台别人淘汰的老电脑</h3>
+          <p>第一次拆机、第一次装系统、第一次把内存条插反然后怀疑人生。现在想起来，我很多基础知识都是在那台机器上学的。</p>
+        </div>
+      </li>
+      <li>
+        <time>初三</time>
+        <div>
+          <h3>服务器级 CPU 与 ECC 内存</h3>
+          <p>图便宜买过一套洋垃圾平台，跑分很爽，功耗和噪音也很爽。结论：参数好看和好用在消费场景里是两件事。</p>
+        </div>
+      </li>
+      <li>
+        <time>高一</time>
+        <div>
+          <h3>魔改与超频</h3>
+          <p>改散热、刷 BIOS、降压超频。成功过，也把一块主板弄得不认硬盘过。现在我对"稳定"这两个字的尊重，就是那时候建立起来的。</p>
+        </div>
+      </li>
+      <li>
+        <time>高二</time>
+        <div>
+          <h3>一堆便宜的老镜头</h3>
+          <p>转接环、手动对焦、光圈环，全玩过一遍。最后留下了一颗最便宜的，因为它是唯一一颗我出门愿意带的。</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__note">
+          这里记录我拍过的照片、拆过的设备，以及一些折腾成功或失败的东西。
+          没有框架、没有构建步骤，就是一个手写的静态站。
+        </p>
+        <p class="footer__note">
+          <a href="about.html">关于我</a> · <a href="photography.html">摄影</a> ·
+          <a href="tech.html">技术</a> · <a href="ai.html">AI</a> · <a href="life.html">生活</a>
+        </p>
+      </div>
+      <div class="footer__meta">
+        <span>© <span data-year>2026</span> 薛子宏 · 未完之章</span>
+        <span>照片与设备图目前为占位示意图</span>
+        <span>于此记录，与世界相见</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>
