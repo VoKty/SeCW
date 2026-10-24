@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#eef7ef" />
+<title>写给文星</title>
+<style>
+  :root{
+    --bg:#eef7ef;
+    --bg2:#e2f2e6;
+    --green:#6f9f86;
+    --green-deep:#4c7a63;
+    --green-soft:#a8ccb4;
+    --ink:#33534a;
+    --ink-soft:#5d7d72;
+    --ink-faint:#8fa9a0;
+    --paper-line:rgba(111,159,134,.3);
+    --serif:"Songti SC","Noto Serif SC","Source Han Serif SC","STSong",Georgia,serif;
+    --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",system-ui,-apple-system,sans-serif;
+    /* iOS 的减速曲线：起步快、收尾慢，没有回弹过冲 */
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+  html,body{width:100%;height:100%;overscroll-behavior:none;}
+
+  body{
+    min-height:100%;
+    background:
+      radial-gradient(120% 90% at 12% 0%, #f8fdf9 0%, transparent 55%),
+      radial-gradient(100% 80% at 92% 8%, #e6f6ec 0%, transparent 60%),
+      linear-gradient(170deg,var(--bg) 0%, var(--bg2) 100%);
+    color:var(--ink);
+    font-family:var(--sans);
+    display:flex;align-items:center;justify-content:center;
+    padding:max(22px,env(safe-area-inset-top)) 24px max(22px,env(safe-area-inset-bottom));
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ============================================================
+     1. 背景斑点：严格对齐的圆点网格（正圆）
+        —— 只有一层网格，同一个平铺周期、同一个原点，
+           所有点落在同一套 x/y 线上：横成行、竖成列。
+           不要再叠不同 grid 尺寸的层，那就是"不整齐"的来源。
+     ============================================================ */
+  .dots{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+  /* 主网格：24px 一格，2px 正圆 */
+  .dots.layer1{
+    background-image:radial-gradient(circle at center, #a3d3b5 2px, transparent 2.15px);
+    background-size:24px 24px;
+    background-position:0 0;
+    opacity:.5;
+  }
+
+  /* 同网格的"隔行加密"：每 4 格补一颗更淡的小点，
+     位置全部落在 96px 周期的同一套交点上，仍然对齐 */
+  .dots.layer2{
+    background-image:radial-gradient(circle at center, #c3e3ce 1.2px, transparent 1.35px);
+    background-size:96px 96px;
+    background-position:12px 12px;
+    opacity:.6;
+  }
+
+  /* 极轻的明暗呼吸：只改透明度，位置与网格绝不动 */
+  .dots.breathe{animation:breathe 11s ease-in-out infinite;}
+  @keyframes breathe{
+    0%,100%{opacity:.4;}
+    50%{opacity:.6;}
+  }
+
+  /* ============================================================
+     2. 毛玻璃卡片（frosted glass，不做液态折射）
+        backdrop-filter 磨砂 + 半透明白底 + 1px 亮边 + 内阴影
+        底色压到 .38，让背景圆点能透过玻璃被"磨"出来
+     ============================================================ */
+  .stage{
+    position:relative;z-index:1;width:100%;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .glass{
+    position:relative;
+    width:100%;max-width:440px;
+    margin:auto 0;
+    padding:clamp(26px,6vw,40px) clamp(20px,5.2vw,34px);
+    border-radius:28px;
+    isolation:isolate;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.46) 0%, rgba(255,255,255,.34) 45%, rgba(255,255,255,.4) 100%);
+    -webkit-backdrop-filter:blur(12px) saturate(155%);
+    backdrop-filter:blur(12px) saturate(155%);
+    box-shadow:
+      0 24px 60px -24px rgba(60,110,90,.5),
+      0 6px 18px -8px rgba(60,110,90,.18),
+      inset 0 1px 0 rgba(255,255,255,.95),
+      inset 0 -1px 1px rgba(255,255,255,.45),
+      inset 0 0 0 1px rgba(255,255,255,.55);
+    border:1px solid rgba(255,255,255,.85);
+    /* 入场：只做 opacity + 极小位移，用 iOS 的减速曲线。
+       不再用 scale/回弹——缩放会让毛玻璃的边缘发抖，不高级。 */
+    animation:glassIn .9s var(--ease) both;
+    will-change:opacity,transform;
+  }
+  @keyframes glassIn{
+    from{opacity:0;transform:translate3d(0,12px,0);}
+    to{opacity:1;transform:none;}
+  }
+
+  /* 顶部一条绿色细带，给玻璃一点颜色倾向 */
+  .glass::after{
+    content:"";position:absolute;left:16%;right:16%;top:0;height:2px;
+    border-radius:2px;
+    background:linear-gradient(90deg,transparent,var(--green-soft),transparent);
+    opacity:.9;
+  }
+
+  /* 卡片内容层：每次换页只替换这里 */
+  #body{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;}
+
+  /* 内容出场：只做透明 + 8px 的位移，间隔 55ms，先快后慢收尾。
+     位移小、时长够（0.72s），看起来是"浮"上来而不是"弹"上来。 */
+  .reveal{
+    animation:revealUp .72s var(--ease) both;
+    animation-delay:calc(var(--d,0) * 55ms);
+  }
+  @keyframes revealUp{
+    from{opacity:0;transform:translate3d(0,8px,0);}
+    to{opacity:1;transform:none;}
+  }
+
+  /* 换页退场：只淡出，不缩放 */
+  #body.out{
+    animation:bodyOut .2s var(--ease) both;
+  }
+  @keyframes bodyOut{
+    to{opacity:0;transform:translate3d(0,-6px,0);}
+  }
+
+  /* ============================================================
+     3. 文字排版（沿用上一版）
+     ============================================================ */
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:5px 14px;border-radius:999px;
+    background:rgba(255,255,255,.78);
+    border:1px solid rgba(111,159,134,.26);
+    color:var(--green-deep);
+    font-size:12px;letter-spacing:.26em;text-indent:.26em;line-height:1.5;
+    box-shadow:0 2px 8px -2px rgba(76,122,99,.18), inset 0 1px 0 rgba(255,255,255,.9);
+  }
+  .badge i{display:block;width:5px;height:5px;border-radius:50%;background:var(--green-soft);}
+
+  .title{
+    margin-top:20px;
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(23px,6.1vw,32px);
+    line-height:1.55;letter-spacing:.04em;
+    color:var(--ink);
+  }
+
+  .letterhead{
+    margin-top:22px;
+    display:flex;align-items:baseline;justify-content:center;gap:.2em;
+    font-family:var(--serif);
+    font-size:clamp(14px,3.8vw,15.5px);
+    letter-spacing:.14em;color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .name{
+    font-size:1.7em;font-weight:700;line-height:1.3;
+    letter-spacing:.1em;text-indent:.1em;
+    color:var(--green-deep);
+    padding:0 .1em 3px;
+    border-bottom:1.5px solid var(--green-soft);
+  }
+
+  .paper-rule{
+    width:min(70%,240px);height:1px;margin-top:20px;
+    background:linear-gradient(90deg,transparent,var(--paper-line),transparent);
+  }
+  .salutation{
+    margin-top:18px;
+    font-family:var(--serif);
+    font-size:clamp(14px,3.9vw,16px);
+    letter-spacing:.32em;text-indent:.32em;
+    color:var(--green);
+  }
+
+  .subs{margin-top:20px;display:flex;flex-direction:column;align-items:center;width:100%;}
+  .subs > span{
+    display:block;
+    font-size:clamp(14.5px,4.1vw,16.5px);
+    line-height:2;letter-spacing:.03em;
+    color:var(--ink);
+  }
+  .subs .gap{height:.55em;}
+  .subs .em{color:var(--green-deep);font-weight:700;}
+  .subs .em2{
+    color:var(--green-deep);font-weight:700;
+    border-bottom:1.5px solid var(--green-soft);
+    padding-bottom:1px;
+  }
+  .subs .sig{margin-top:14px;font-size:12.5px;letter-spacing:.24em;color:var(--ink-faint);}
+
+  /* ============================================================
+     4. 按钮：iPhone 那种胶囊 + 按压回弹
+     ============================================================ */
+  .btns{
+    display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+    margin-top:26px;width:100%;
+  }
+  .btn{
+    position:relative;
+    min-height:44px;
+    padding:10px 22px;
+    border-radius:999px;
+    border:1.5px solid rgba(111,159,134,.32);
+    background:rgba(255,255,255,.72);
+    color:var(--green-deep);
+    font-family:var(--sans);
+    font-size:clamp(12.5px,3.4vw,13.5px);
+    font-weight:600;
+    letter-spacing:.1em;text-indent:.1em;
+    line-height:1.3;white-space:nowrap;
+    cursor:pointer;
+    -webkit-backdrop-filter:blur(8px);
+    backdrop-filter:blur(8px);
+    box-shadow:
+      0 6px 16px -8px rgba(76,122,99,.45),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    /* 只有背景/阴影走渐变，transform 交给按压缩放 */
+    transition:
+      background .25s var(--ease),
+      border-color .25s var(--ease),
+      box-shadow .25s var(--ease),
+      transform .32s var(--ease);
+    touch-action:manipulation;
+    overflow:hidden;
+  }
+  /* 按下时闪一下的高光（类似 iOS 的水波） */
+  .btn::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:radial-gradient(circle at center, rgba(255,255,255,.85), transparent 60%);
+    opacity:0;transform:scale(.55);
+    transition:opacity .45s var(--ease), transform .45s var(--ease);
+    pointer-events:none;
+  }
+  .btn.tap::after{opacity:.85;transform:scale(1.35);transition-duration:.12s,.26s;}
+
+  .btn.primary{
+    background:linear-gradient(180deg,#7fb094 0%,var(--green) 55%,#5f9379 100%);
+    border-color:rgba(76,122,99,.5);
+    color:#fff;
+    box-shadow:
+      0 12px 26px -12px rgba(76,122,99,.85),
+      0 2px 0 rgba(255,255,255,.18) inset,
+      inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .btn.primary:hover{filter:brightness(1.04);}
+  .btn.ghost{background:rgba(255,255,255,.42);color:var(--ink-soft);font-weight:500;}
+
+  /* 按压：只缩到 0.98，收回用 iOS 减速曲线——不弹、不抖 */
+  .btn:active,.btn.press{transform:scale(.98);}
+  @media (hover:hover){
+    .btn:hover{border-color:var(--green);}
+    .btn.ghost:hover{background:rgba(255,255,255,.7);}
+  }
+
+  .fin{
+    margin-top:22px;
+    font-size:10.5px;letter-spacing:.5em;text-indent:.5em;
+    color:var(--ink-faint);
+  }
+
+  .stamp{
+    position:absolute;right:16px;top:14px;
+    width:26px;height:26px;border-radius:50%;     /* 圆形，和斑点呼应 */
+    border:1.5px dashed rgba(111,159,134,.42);
+    display:grid;place-items:center;
+    color:var(--green-soft);font-size:11px;
+    z-index:3;
+    /* 印章：极轻的旋转 + 淡入，不要"啪"地弹出来 */
+    animation:stampIn 1.1s var(--ease) .25s both;
+  }
+  @keyframes stampIn{
+    from{opacity:0;transform:rotate(-14deg);}
+    to{opacity:1;transform:rotate(6deg);}
+  }
+
+  /* 触屏设备：hover 相关的高光不要抖动 */
+  @media (hover:none){
+    .btn:hover{border-color:rgba(111,159,134,.32);}
+  }
+
+  @media (max-width:360px){
+    body{padding-left:14px;padding-right:14px;}
+    .glass{border-radius:22px;}
+    .badge{font-size:11px;letter-spacing:.2em;text-indent:.2em;}
+    .subs > span{font-size:14px;line-height:1.9;}
+    .btn{min-height:42px;padding:9px 16px;}
+  }
+
+  /* ============================================================
+     5. 开场：信封线稿画出来 → 封口翻开 → 卡片接住
+        全部是 opacity / transform / 模糊，统一减速曲线，没有回弹。
+        总长约 2.6s，点屏幕或按任意键可跳过。
+     ============================================================ */
+  #intro{
+    position:fixed;inset:0;z-index:50;
+    display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(90% 70% at 50% 45%, #fbfefc 0%, #eef7ef 55%, #e6f3ea 100%);
+    pointer-events:none;
+    animation:introOut .5s var(--ease) 2.15s both;
+  }
+  @keyframes introOut{
+    to{opacity:0;visibility:hidden;}
+  }
+
+  .env{
+    width:88px;height:64px;
+    overflow:visible;
+    animation:envLift .55s var(--ease) 1.78s both;
+  }
+  @keyframes envLift{
+    to{opacity:0;transform:translate3d(0,-10px,0) scale(1.04);}
+  }
+
+  /* 三条线依次画出来：外框 → 折线 → 封口 */
+  .env .ln{
+    fill:none;
+    stroke:var(--green-soft);
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:240;
+    stroke-dashoffset:240;
+    animation:draw .62s var(--ease) both;
+  }
+  .env .ln-1{animation-delay:.15s;}
+  .env .ln-2{animation-delay:.52s;}
+  .env .ln-3{animation-delay:.86s;}
+
+  @keyframes draw{
+    to{stroke-dashoffset:0;}
+  }
+
+  /* 信封内的浅绿底色：从左往右轻轻展开 */
+  .env .fill{
+    fill:rgba(168,204,180,.22);
+    transform-box:fill-box;
+    transform-origin:left center;
+    transform:scaleX(0);
+    animation:fillIn .5s var(--ease) .95s both;
+  }
+  @keyframes fillIn{
+    to{transform:scaleX(1);}
+  }
+
+  /* 封口三角：以底边为轴翻上去 */
+  .env .flap{
+    fill:rgba(168,204,180,.3);
+    stroke:var(--green-soft);
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transform-box:fill-box;
+    transform-origin:center top;
+    animation:flapOpen .5s cubic-bezier(.4,0,.2,1) 1.32s both;
+  }
+  @keyframes flapOpen{
+    to{transform:perspective(240px) rotateX(-168deg);opacity:.25;}
+  }
+
+  /* 开场期间：卡片先不出场，背景圆点跟着一起渐显 */
+  html.intro-running .glass{animation-play-state:paused;}
+  html.intro-running .reveal{animation-play-state:paused;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     开场：信封线稿。三条线依次画出，封口三角翻上去，
+     然后整只信封上移淡出，卡片接住。
+     这一层 pointer-events:none，永远不会挡住点击。
+     ============================================================ -->
+<div id="intro" aria-hidden="true">
+  <svg class="env" viewBox="0 0 88 64" xmlns="http://www.w3.org/2000/svg">
+    <rect class="fill" x="4" y="4" width="80" height="56" rx="5"></rect>
+    <rect class="ln ln-1" x="4" y="4" width="80" height="56" rx="5"></rect>
+    <path class="ln ln-2" d="M4 8 L44 38 L84 8"></path>
+    <path class="flap" d="M4 4 L44 34 L84 4 Z"></path>
+  </svg>
+</div>
+
+<!-- 背景：对齐的正圆点网格 -->
+<div class="dots layer1" aria-hidden="true"></div>
+<div class="dots layer2 breathe" aria-hidden="true"></div>
+
+<main class="stage">
+  <article class="glass" id="letter">
+    <div class="stamp" aria-hidden="true">✿</div>
+    <div id="body"></div>
+  </article>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var PAGES = [
+    {
+      badge:"序",
+      title:"有些话，攒了一整个夏天",
+      subs:[ '一直没找到合适的时候，<span class="em">说出口</span>。' ],
+      next:{ label:"Let Me Try", page:1 }
+    },
+    {
+      letterhead:true,
+      salutation:"见字如面",
+      subs:[
+        "我们说过的话，其实数得清。",
+        "大多是在走廊点头，",
+        "或者在群里互相点个赞。",
+        {gap:true},
+        "所以这封信来得很突然，",
+        "我自己也知道。",
+        {gap:true},
+        "可有些话再不写下来，",
+        "就会一直烂在心里。"
+      ],
+      next:{ label:"Please Read On", page:2 },
+      back:{ label:"回上一页", page:0 }
+    },
+    {
+      badge:"心意",
+      title:"想让你知道的事",
+      subs:[
+        "每次路过你们班门口，",
+        "我都会不自觉放慢脚步。",
+        {gap:true},
+        "你讲题时会把笔转两圈，",
+        "笑起来会先低头。",
+        "这些小动作，我记了很久。",
+        {gap:true},
+        '喜欢这件事，我<span class="em">承认了</span>，',
+        "只是从前没说。"
+      ],
+      next:{ label:"One Last Page", page:3 },
+      back:{ label:"回上一页", page:1 }
+    },
+    {
+      badge:"以后",
+      title:"不用急着回答",
+      subs:[
+        "我没想过要一个结果。",
+        {gap:true},
+        "明天在走廊遇见，",
+        "你可以假装什么也没发生，",
+        "我不会多问一句。",
+        {gap:true},
+        "只是希望你偶尔会想起，",
+        '曾经有人认真喜欢过你，<span class="em2">一年</span>。'
+      ],
+      next:{ label:"Close the Letter", page:4 },
+      back:{ label:"回上一页", page:2 }
+    },
+    {
+      badge:"最后",
+      title:"愿你走的路<br>都比想的宽",
+      subs:[
+        "愿你以后每次晚自习回宿舍，",
+        "都有人顺手替你提那袋书。",
+        "愿你想去的地方，都能去成。",
+        {sig:"— 一个总在最后一排的人"}
+      ],
+      next:{ label:"Read Again", page:0 },
+      fin:"FIN"
+    }
+  ];
+
+  var LETTERHEAD_HTML =
+    '<div class="letterhead"><span>写</span><span>给</span><span class="name">文星</span></div>' +
+    '<div class="paper-rule"></div>';
+
+  var host  = document.getElementById("body");
+  var busy  = false;
+  var d = 0;   /* 出场延迟计数器 */
+
+  function cls(extra){ return ' class="reveal' + (extra ? " " + extra : "") + '" style="--d:' + (d++) + '"'; }
+
+  function build(page){
+    var p = PAGES[page];
+    var html = "";
+    d = 0;
+
+    if (p.badge) html += '<div' + cls("badge") + '><i></i>' + p.badge + '<i></i></div>';
+    if (p.letterhead) html += LETTERHEAD_HTML;
+    if (p.salutation) html += '<div' + cls("salutation") + '>' + p.salutation + "</div>";
+    if (p.title) html += '<h1' + cls("title") + '>' + p.title + "</h1>";
+
+    html += '<div class="subs">';
+    for (var i = 0; i < p.subs.length; i++){
+      var it = p.subs[i];
+      if (typeof it === "string") html += '<span' + cls() + '>' + it + "</span>";
+      else if (it.gap) html += '<span class="gap"></span>';
+      else if (it.sig) html += '<span' + cls("sig") + '>' + it.sig + "</span>";
+    }
+    html += "</div>";
+
+    html += '<div' + cls("btns") + '>';
+    if (p.back) html += '<button class="btn ghost" data-page="' + p.back.page + '">' + p.back.label + "</button>";
+    if (p.next) html += '<button class="btn primary" data-page="' + p.next.page + '">' + p.next.label + "</button>";
+    html += "</div>";
+
+    if (p.fin) html += '<div' + cls("fin") + '>' + p.fin + "</div>";
+
+    return html;
+  }
+
+  function go(page){
+    if (busy) return;
+    busy = true;
+
+    /* 退场：只淡出 + 6px 上移，0.2s。不缩放，卡片边缘就不会抖 */
+    host.classList.add("out");
+
+    setTimeout(function(){
+      host.innerHTML = build(page);
+      /* 重新触发一次 reveal：先移除再强制重排再加回 */
+      host.classList.remove("out");
+
+      setTimeout(function(){ busy = false; }, 400);
+    }, 200);
+  }
+
+  /* 事件委托：按钮每页都是新的 */
+  document.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-page]") : null;
+    if (!b) return;
+    e.stopPropagation();
+
+    /* 水波高光 */
+    b.classList.add("tap");
+    setTimeout(function(){ b.classList.remove("tap"); }, 420);
+
+    /* 轻微震动（支持的设备上才有） */
+    if (navigator.vibrate) navigator.vibrate(8);
+
+    go(parseInt(b.getAttribute("data-page"), 10) || 0);
+  });
+
+  /* ============================================================
+     开场编排
+     0.15 / 0.52 / 0.86s 三条线依次画出
+     0.95s 底色从左展开
+     1.32s 封口翻开
+     1.78s 信封上移淡出
+     1.90s 卡片开始浮起（.glass 的入场动画结束暂停后接着跑）
+     2.15s 开场层开始淡出
+     —— 点屏幕 / 按任意键可以直接跳过，不强制等待
+     ============================================================ */
+  var root  = document.documentElement;
+  var intro = document.getElementById("intro");
+  var WARM  = 1950;      /* 卡片开始入场的时刻，和信封淡出重叠约 0.2s */
+  var TOTAL = 2650;
+  var introDone = false;
+  var warmTimer = 0, endTimer = 0;
+
+  function warmCard(){
+    root.classList.remove("intro-running");
+  }
+
+  function finishIntro(){
+    if (introDone) return;
+    introDone = true;
+    root.classList.remove("intro-running");
+    clearTimeout(warmTimer);
+    clearTimeout(endTimer);
+    /* 开场的动画全部停掉，再让整层藏起来——不占图层、不耗 GPU */
+    intro.style.animation = "none";
+    intro.style.opacity = "0";
+    intro.style.visibility = "hidden";
+    intro.style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  /* 卡片与内容先挂起在出场动画的第 0 帧 */
+  root.classList.add("intro-running");
+  document.body.style.overflow = "hidden";
+
+  /* 首帧渲染完再排时间，避免慢设备上时间轴整体前移 */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      if (introDone) return;
+      warmTimer = setTimeout(warmCard, WARM);
+      endTimer  = setTimeout(finishIntro, TOTAL);
+    });
+  });
+
+  /* 跳过：开场层是 pointer-events:none，所以监听整个文档 */
+  function skip(){
+    if (introDone) return;
+    /* 先让卡片接着跑，再收掉开场层，两者不打架 */
+    warmCard();
+    finishIntro();
+  }
+  document.addEventListener("pointerdown", skip, { passive:true });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Tab" || e.key === "Shift") return;   /* 不用键盘导航打断开场 */
+    skip();
+  });
+
+  go(0);
+})();
+</script>
+</body>
+</html>
