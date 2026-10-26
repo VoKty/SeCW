@@ -1,0 +1,6204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>高三1班的一天</title>
+<style>
+:root{
+  --bg-top:#0B0E1A; --bg-bottom:#131A2E; --bg-deep:#1B1030;
+  --card:rgba(26,33,56,.95);
+  --neon:#38F2C8; --neon-pink:#FF4FA3; --neon-yellow:#FFD84D; --neon-blue:#4DA3FF;
+  --text-main:#EAF2FF; --text-dim:#9AA8C4;
+  --tile:#151D30; --stroke:#232C46; --choice:#161E33;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:Roboto,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg-top);color:var(--text-main);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+#app{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg-bottom) 50%,var(--bg-deep) 100%);
+  padding-top:var(--safe-top);padding-bottom:var(--safe-bottom);
+}
+.hidden{display:none!important}
+.scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;flex:1 1 auto}
+
+/* ---------- 首页 ---------- */
+.header{padding:14px 18px 6px;flex:0 0 auto;text-align:center}
+.title{display:inline-block;font-size:27px;font-weight:900;letter-spacing:3px;color:var(--neon);
+  text-shadow:0 0 18px rgba(56,242,200,.35)}
+.school{color:var(--text-dim);font-size:12.5px;line-height:1.5;margin-top:4px}
+.meta-line{color:var(--neon-pink);font-size:12px}
+
+.tabs{display:flex;padding:6px 14px;flex:0 0 auto}
+.tab{flex:1 1 0;margin:0 3px;padding:9px 0;text-align:center;border-radius:10px;
+  font-size:13.5px;font-weight:500;color:var(--text-dim);
+  background:var(--tile);border:1px solid var(--stroke);cursor:pointer;
+  transition:background .18s,border-color .18s,color .18s}
+.tab.on{background:rgba(56,242,200,.16);border-color:rgba(56,242,200,.7);
+  color:var(--neon);font-weight:800}
+
+.list{padding:4px 14px 14px}
+.stu{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:8px;
+  background:var(--tile);border:1px solid var(--stroke);border-radius:12px;cursor:pointer;
+  transition:background .15s,border-color .15s}
+.stu.on{background:rgba(56,242,200,.13);border:1.5px solid var(--neon)}
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:13px;flex:0 0 32px}
+.avatar.male{background:rgba(77,163,255,.2);color:var(--neon-blue)}
+.avatar.female{background:rgba(255,79,163,.2);color:var(--neon-pink)}
+.stu-name{flex:1 1 auto;font-size:15px;font-weight:700;color:var(--text-main);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stu.on .stu-name{color:var(--neon)}
+.tag{padding:2px 8px;border-radius:6px;background:var(--stroke);
+  color:var(--text-dim);font-size:11px;white-space:nowrap}
+.star{color:var(--neon-yellow);font-size:15px;margin-left:6px;line-height:1}
+
+.panel{background:var(--card);border:1px solid rgba(56,242,200,.35);border-radius:18px;
+  box-shadow:0 0 24px 1px rgba(56,242,200,.12)}
+.cls{margin-bottom:10px;overflow:hidden}
+.cls-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer}
+.cls-head .chev{margin-left:auto;color:var(--neon);transition:transform .2s;font-size:13px}
+.cls.open .chev{transform:rotate(180deg);color:var(--neon-pink)}
+.cls-title{font-size:15px;font-weight:800;color:var(--text-main)}
+.cls-sub{font-size:11.5px;color:var(--text-dim);margin-top:2px}
+.cls-body{display:none;padding:0 12px 10px}
+.cls.open .cls-body{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chipname{padding:4px 8px;border-radius:7px;font-size:12px}
+.chipname.male{background:rgba(77,163,255,.1);color:#BBD8FF}
+.chipname.female{background:rgba(255,79,163,.1);color:#FFC4DF}
+
+.teacher{margin-bottom:10px;padding:14px}
+.t-row{display:flex;align-items:center;gap:8px}
+.t-subject{padding:3px 8px;border-radius:6px;background:rgba(56,242,200,.16);
+  color:var(--neon);font-size:11.5px}
+.t-name{font-size:16px;font-weight:800;color:var(--text-main)}
+.t-title{color:var(--neon-pink);font-size:11.5px}
+.t-persona{color:var(--text-dim);font-size:12.6px;line-height:1.7;margin-top:8px}
+
+.startbar{padding:6px 16px 14px;flex:0 0 auto}
+.btn-neon{display:flex;align-items:center;justify-content:center;width:100%;height:54px;
+  border:none;border-radius:16px;background:var(--neon);color:#06121A;
+  font-size:15.5px;font-weight:900;letter-spacing:.5px;cursor:pointer;
+  font-family:inherit;transition:filter .15s}
+.btn-neon:active{filter:brightness(.92)}
+
+/* ---------- 游戏页 ---------- */
+.ghead{padding:8px 10px 2px 14px;flex:0 0 auto}
+.ghead-row{display:flex;align-items:center;gap:8px}
+.timebox{padding:4px 9px;border-radius:8px;
+  background:linear-gradient(90deg,var(--neon),var(--neon-blue));
+  color:#06121A;font-weight:900;font-size:13px;white-space:nowrap}
+.place{flex:1 1 auto;font-size:13.5px;font-weight:700;color:var(--text-main);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.iconbtn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:17px;cursor:pointer;flex:0 0 40px}
+.iconbtn:active{background:rgba(255,255,255,.08)}
+.bar{height:3px;border-radius:6px;background:#1B2338;overflow:hidden;margin-top:2px}
+.bar>i{display:block;height:100%;background:var(--neon-pink);
+  transition:width .3s cubic-bezier(.2,.7,.3,1)}
+
+/* 属性栏 */
+.statsbar{margin:4px 12px 6px;padding:6px 8px;background:rgba(14,20,36,.8);
+  border:1px solid rgba(56,242,200,.25);border-radius:14px;flex:0 0 auto}
+.statsbar.full{padding:10px 12px}
+.statsbar-title{display:flex;align-items:center;gap:6px;margin-bottom:8px;
+  color:rgba(56,242,200,.9);font-size:12.5px;font-weight:700;letter-spacing:1.5px}
+.stat-grid{display:flex;flex-wrap:wrap;gap:8px}
+.stat{flex:0 0 calc((100% - 16px)/3);min-width:0}
+.statsbar.full .stat{flex:0 0 calc((100% - 16px)/3)}
+@media (max-width:560px){.statsbar.full .stat{flex:0 0 calc((100% - 8px)/2)}}
+.stat-top{display:flex;align-items:center;gap:4px;font-size:10.5px}
+.stat-emoji{font-size:11px}
+.stat-label{flex:1 1 auto;color:var(--text-dim);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.stat-val{font-weight:800;font-size:11.5px}
+.stat-track{height:4px;border-radius:4px;background:var(--stroke);
+  overflow:hidden;margin-top:3px}
+.stat-track>i{display:block;height:100%;transition:width .35s cubic-bezier(.2,.7,.3,1)}
+.statsbar.full .stat-top{font-size:12px}
+.statsbar.full .stat-emoji{font-size:13px}
+.statsbar.full .stat-val{font-size:13.5px}
+.statsbar.full .stat-track{height:5.5px}
+
+/* 事件卡 */
+.glist{padding:4px 14px 24px}
+.event-card{padding:16px}
+.ec-row{display:flex;align-items:center;gap:8px}
+.period{padding:3px 8px;border-radius:6px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.ec-title{flex:1 1 auto;font-size:18px;font-weight:900;letter-spacing:.6px;
+  color:var(--text-main)}
+.ec-who{display:flex;align-items:center;gap:8px;margin-top:10px}
+.ec-who .avatar{width:30px;height:30px;flex:0 0 30px;font-size:12px}
+.ec-who-t{flex:1 1 auto;color:var(--neon-blue);font-size:12.5px}
+.ec-text{margin-top:12px;font-size:16.2px;line-height:1.92;color:var(--text-main);
+  white-space:pre-wrap;word-break:break-word}
+.ec-speaker{display:flex;align-items:center;gap:5px;margin-top:10px;
+  color:var(--text-dim);font-size:12px}
+
+/* 选项 */
+.choice{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;margin-bottom:10px;
+  background:var(--choice);border:1.1px solid rgba(56,242,200,.32);border-radius:14px;
+  cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
+.choice:active{transform:scale(.995)}
+.choice.dis{opacity:.55;pointer-events:none}
+.c-idx{width:22px;height:22px;flex:0 0 22px;border-radius:7px;display:flex;
+  align-items:center;justify-content:center;background:rgba(56,242,200,.16);
+  color:var(--neon);font-size:12px;font-weight:900}
+.c-body{flex:1 1 auto;min-width:0}
+.c-text{font-size:14.8px;line-height:1.45;font-weight:600;color:var(--text-main)}
+.c-eff{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.c-eff>span{padding:2px 7px;border-radius:6px;font-size:10.5px;font-weight:700}
+.c-chev{color:var(--text-dim);font-size:15px;line-height:22px}
+
+.fade-in{animation:fade .42s ease-out}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* Delta toast */
+.tost{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.tost>span{padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700;
+  border:1px solid}
+
+.note{margin-top:8px;color:var(--text-dim);font-size:12px}
+
+/* ---------- 底部弹层 ---------- */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;
+  align-items:flex-end;z-index:50;animation:maskin .2s ease-out}
+@keyframes maskin{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;max-height:88vh;display:flex;flex-direction:column;
+  background:#0E1424;border-radius:26px 26px 0 0;border-top:1.4px solid var(--neon);
+  animation:sheetin .25s cubic-bezier(.2,.8,.3,1)}
+@keyframes sheetin{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.sheet.log{background:#111828;border-radius:22px 22px 0 0;border-top:none;height:72vh}
+.sheet-hd{flex:0 0 auto;padding:12px 0 0}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--text-dim);margin:0 auto}
+.sheet-title{padding:14px;font-size:17px;font-weight:800;text-align:left}
+.sheet-scroll{overflow-y:auto;padding:0 20px 26px;flex:1 1 auto}
+.log .sheet-scroll{padding:0 16px 26px}
+
+/* 日志 */
+.log-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.log-dot{width:9px;height:9px;border-radius:50%;background:var(--neon);flex:0 0 9px}
+.log-line{width:2px;height:34px;background:rgba(56,242,200,.25);margin-top:2px}
+.log-t1{font-size:13.5px;font-weight:700}
+.log-t2{font-size:12px;color:var(--text-dim)}
+
+/* 结算 */
+.ending{display:flex;flex-direction:column;align-items:center;text-align:center}
+.ending-emoji{font-size:52px;line-height:1.2}
+.ending-kicker{color:var(--text-dim);font-size:12px;letter-spacing:3px;margin-top:6px}
+.ending-title{font-size:26px;font-weight:900;color:var(--neon);letter-spacing:2px;
+  margin-top:6px;text-shadow:0 0 18px rgba(56,242,200,.35)}
+.ending-sub{color:var(--neon-pink);font-size:13px;margin-top:4px}
+.badge{margin-top:10px;padding:4px 10px;border-radius:20px;
+  border:1px solid rgba(255,216,77,.5);background:rgba(255,216,77,.12);
+  color:var(--neon-yellow);font-size:12px}
+.desc{width:100%;padding:14px;background:var(--tile);border-radius:14px;
+  border:1px solid rgba(56,242,200,.2);font-size:13.6px;line-height:1.8;
+  color:var(--text-main);text-align:left;white-space:pre-wrap;margin-top:16px}
+.score-row{display:flex;gap:8px;margin-top:12px;width:100%}
+.score{flex:1 1 0;padding:10px 0;border-radius:12px;text-align:center;border:1px solid}
+.score-v{font-size:17px;font-weight:900}
+.score-l{font-size:11px;color:var(--text-dim);margin-top:2px}
+.quotes{margin-top:14px;width:100%;text-align:left}
+.quotes h4{margin:0;color:var(--neon);font-size:13px;font-weight:700}
+.quotes p{margin:6px 0 0;color:var(--text-dim);font-size:12.5px;line-height:1.5}
+.again{width:100%;height:50px;border:none;border-radius:14px;background:var(--neon);
+  color:#06121A;font-size:16px;font-weight:900;cursor:pointer;margin-top:18px;
+  font-family:inherit}
+
+/* 加载/错误 */
+.center{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:16px;padding:24px}
+.spinner{width:46px;height:46px;border-radius:50%;
+  border:3px solid rgba(56,242,200,.2);border-top-color:var(--neon);
+  animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-t{color:var(--text-dim);letter-spacing:2px}
+.err-t{font-size:20px;font-weight:800}
+.err-d{color:var(--text-dim);font-size:12px;text-align:center;word-break:break-all}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script id="data-events" type="application/json">{
+ "meta": {
+  "title": "苏州田家炳实验高级中学·新市路校区·高三1班的一天",
+  "startEvent": "morning_start",
+  "initial": {
+   "swagger": 35,
+   "teacherFavor": 50,
+   "love": 10,
+   "homework": 25,
+   "stamina": 80,
+   "caughtRisk": 10
+  },
+  "npcs": {
+   "邢钟铭": "male",
+   "文星": "male",
+   "尤正鑫": "male",
+   "薛子宏": "male",
+   "陈雨彤": "female",
+   "王子同": "male",
+   "沈冰雨": "female",
+   "霍子琪": "female",
+   "王苏妍": "female",
+   "蔡晨锐": "male",
+   "陈可馨": "female",
+   "蔡永华": "male",
+   "王佳钰": "female",
+   "沈钰青": "female",
+   "陆乔伊": "female",
+   "黄鹏": "male",
+   "杨璐嘉": "female",
+   "施华靖": "male",
+   "申雨辰": "male",
+   "李宇轩": "male",
+   "孙苏海": "male",
+   "吴家会": "male",
+   "吴诗溢": "female",
+   "吴志全": "male",
+   "吴冠儒": "male",
+   "蔡婧怡": "female",
+   "贾雯": "female",
+   "张业博": "male",
+   "谢陈悦": "female",
+   "夏晨曦": "female",
+   "鲁翊菲": "female",
+   "刘宇昊": "male",
+   "季心月": "female",
+   "蔡蕊": "female",
+   "周琳娜": "female",
+   "黄文康": "male",
+   "赵紫涵": "female",
+   "孙安妮": "female",
+   "杨雨晴": "female",
+   "霍欣怡": "female",
+   "袁晓天": "male",
+   "刘自豪": "male",
+   "韦可涵": "female",
+   "沈鑫": "male",
+   "许思远": "male",
+   "丁俪芸": "female",
+   "宿管阿姨": "female"
+  },
+  "endings": {
+   "king": "牛逼之王：swagger 高企，全班都记得你今天说的话",
+   "love": "恋爱大师：天桥晚霞、纸条、公交站，一天里攒够了三年的心动",
+   "grind": "卷王之王：作业与体力都被压榨到底，但每一步都算数",
+   "focus": "班主任重点关照：陶德泉的小本子上有你单独的一页",
+   "mediocre": "平平无奇：没被抓，也没被表扬，高三的大多数日子",
+   "hidden": "隐藏·平平无奇但嘴硬：什么都没捞着，但嘴上从没认输"
+  },
+  "attrRanges": {
+   "swagger": [
+    0,
+    100
+   ],
+   "teacherFavor": [
+    0,
+    100
+   ],
+   "love": [
+    0,
+    100
+   ],
+   "homework": [
+    0,
+    100
+   ],
+   "stamina": [
+    0,
+    100
+   ],
+   "caughtRisk": [
+    0,
+    100
+   ]
+  },
+  "periods": [
+   "早读",
+   "上午",
+   "午休",
+   "下午",
+   "晚自习",
+   "放学"
+  ],
+  "teachers": {
+   "陶德泉": "物理老师 / 班主任",
+   "张彤": "语文老师",
+   "杨梦": "数学老师",
+   "尤晓涵": "英语老师",
+   "马媛": "化学老师",
+   "刘军伟": "地理老师"
+  }
+ },
+ "startEvent": "morning_start",
+ "endings": {
+  "king": "牛逼之王：swagger 高企，全班都记得你今天说的话",
+  "love": "恋爱大师：天桥晚霞、纸条、公交站，一天里攒够了三年的心动",
+  "grind": "卷王之王：作业与体力都被压榨到底，但每一步都算数",
+  "focus": "班主任重点关照：陶德泉的小本子上有你单独的一页",
+  "mediocre": "平平无奇：没被抓，也没被表扬，高三的大多数日子",
+  "hidden": "隐藏·平平无奇但嘴硬：什么都没捞着，但嘴上从没认输"
+ },
+ "events": [
+  {
+   "id": "morning_start",
+   "time": "06:20",
+   "place": "狮山脚下·卧室",
+   "period": "早读",
+   "title": "闹钟第七次响了",
+   "speaker": "{player}",
+   "text": "06:20。苏州的天还没亮干净，狮山那边灰蒙蒙一片，你手机第七次震动，屏幕上写着「起床，儿子」——你妈发给你的，时间是五点四十。\n窗外清洁工已经在石泉街拖地了。桌上的物化地卷子摊成一张毯子，最后一道电磁感应的答案还是个问号，作文提纲写了一半：「我心中的光」。\n你{player}，高三1班，距高考还有二百一十七天。",
+   "character": null,
+   "choices": [
+    {
+     "text": "起床，用三分钟解决刷牙洗脸穿袜子，赌今天不迟到",
+     "next": "on_the_way",
+     "effects": {
+      "stamina": -8
+     },
+     "note": "你跑得像被城管追，但至少醒了。"
+    },
+    {
+     "text": "先刷五分钟B站醒醒神，反正来得及",
+     "next": "catch_bus_late",
+     "effects": {
+      "swagger": 2,
+      "stamina": 3,
+      "caughtRisk": 5
+     },
+     "note": "视频一时爽……火葬场。"
+    },
+    {
+     "text": "不洗脸了，直接用电饭煲里的剩饭捏个饭团带走",
+     "next": "on_the_way",
+     "effects": {
+      "homework": 2,
+      "stamina": 4
+     },
+     "note": "物理意义上吃饱了，精神意义上没有。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "on_the_way",
+   "time": "06:48",
+   "place": "新市路·早高峰",
+   "period": "早读",
+   "title": "新市路堵成一锅粥",
+   "speaker": "{player}",
+   "text": "姑苏区的新市路在早高峰的形态，是一种介于停车场和菜市场之间的生物。你妈的电瓶车在车流里漂移，前面那个大哥的电动车后座绑着两箱生姜，生姜的汁一路甩到你校服裤子上。\n7:30是死线。陶德泉站在学校门口查迟到的样子，比交警还像交警。",
+   "character": null,
+   "choices": [
+    {
+     "text": "跳下车自己跑，把电瓶车丢给你妈（她骂你但心里松了口气）",
+     "next": "school_gate_check",
+     "effects": {
+      "teacherFavor": 2,
+      "stamina": -6
+     },
+     "note": "跑步，是你今天第一个正确决定。"
+    },
+    {
+     "text": "贴着公交专用道逆向冲过去，卡着绿灯钻",
+     "next": "catch_bus_late",
+     "effects": {
+      "swagger": 3,
+      "stamina": -10,
+      "caughtRisk": 8
+     },
+     "note": "省了三分钟，用了全部运气。"
+    },
+    {
+     "text": "在早餐摊顺手买一份王阿姨的蛋饼，路上吃",
+     "next": "school_gate_check",
+     "effects": {
+      "stamina": 5,
+      "caughtRisk": 4
+     },
+     "note": "蛋饼是真的香，迟到是真的险。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "catch_bus_late",
+   "time": "07:18",
+   "place": "田家炳实验高中·校门",
+   "period": "早读",
+   "title": "7:36",
+   "speaker": "陶德泉",
+   "text": "7:36。你冲向校门的瞬间，陶德泉从保安室的阴影里走出来，像BOSS刷新。\n「{player}，你这已经是本周第二次了。上礼拜说电瓶车坏了，昨天说睡过头，你有意思吗？高三了，你还想跟这个世界的规则讨价还价？\n他从兜里掏出一个小本子，那本子上密密麻麻记着全班抄作业、迟到、玩手机的台账。他说那是「物理笔记」。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "低头认错，诚恳地把蛋黄酱舔干净然后道歉",
+     "next": "school_gate_check",
+     "effects": {
+      "swagger": -4,
+      "teacherFavor": 6,
+      "stamina": -2
+     },
+     "note": "陶德泉最吃这套，可惜你有点恶心。"
+    },
+    {
+     "text": "狡辩：我说的是真的，但我承认我倒霉",
+     "next": "school_gate_check",
+     "effects": {
+      "swagger": 3,
+      "teacherFavor": -5
+     },
+     "note": "「倒霉」是苏州人最难听懂的两个字。"
+    },
+    {
+     "text": "强装镇定：老师我刚在路上背了二十个英语单词",
+     "next": "school_gate_check",
+     "effects": {
+      "swagger": 2,
+      "teacherFavor": 3,
+      "homework": 3
+     },
+     "note": "他信了七成，因为他喜欢听这个。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "school_gate_check",
+   "time": "07:24",
+   "place": "田家炳实验高中·校门",
+   "period": "早读",
+   "title": "踩线七点二十四",
+   "speaker": "{player}",
+   "text": "7:24，你成功卡在死线前六分钟。保安老李举着手机拍迟到名单，看到你摆摆手：「快跑快跑。」\n校门口那棵樟树底下，几个1班男生正在做最后的作业补写，笔尖摩擦纸张的声音像一群蟋蟀。远处1班教室的灯已经亮了——陶德泉在。",
+   "character": null,
+   "choices": [
+    {
+     "text": "火速加入樟树底下的补作业互助小组（抄文星的）",
+     "next": "class_room_sit_appear",
+     "effects": {
+      "homework": 8,
+      "caughtRisk": 10
+     },
+     "note": "高三的团结，都写在作业本上。"
+    },
+    {
+     "text": "直接上楼进教室，坐好装乖",
+     "next": "class_room_sit_appear",
+     "effects": {
+      "teacherFavor": 4,
+      "stamina": -2
+     },
+     "note": "最稳的路往往最无聊，但最不亏。"
+    },
+    {
+     "text": "在门口小卖部买罐冰红茶，顺便听老板娘八卦",
+     "next": "class_room_sit_appear",
+     "effects": {
+      "swagger": 2,
+      "stamina": 3
+     },
+     "note": "情报是有价格的，三块五。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "copy_homework",
+   "time": "07:26",
+   "place": "高三1班教室·后排",
+   "period": "早读",
+   "title": "抄作业的第三种姿势",
+   "speaker": "文星",
+   "text": "1班后排，高三的江湖中心。文星的作业本永远在桌上，像传国玉玺。\n他头也不抬地把本子推过来：「物理选择BFDA，填空2.4牛，最后一题空白，你随便写个公式老师也不看。」\n你抓着笔，忽然意识到你还不知道他改没改过版本。",
+   "character": "文星",
+   "choices": [
+    {
+     "text": "照抄，一个字都不改，信文星就是信天命",
+     "next": "early_reading",
+     "effects": {
+      "swagger": -3,
+      "homework": 18,
+      "caughtRisk": 18
+     },
+     "note": "抄得太快，你连字迹都没变。"
+    },
+    {
+     "text": "抄一半自己改几个数，躲避雷同检测",
+     "next": "early_reading",
+     "effects": {
+      "swagger": 3,
+      "homework": 12,
+      "caughtRisk": 8
+     },
+     "note": "高级抄手，永远不会两支笔同速。"
+    },
+    {
+     "text": "装作自己是学习委员，连借三本作业交叉比对",
+     "next": "early_reading",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": -2,
+      "homework": 20,
+      "caughtRisk": 14
+     },
+     "note": "这叫学术引用。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "morning_phone_spotted",
+   "time": "07:31",
+   "place": "高三1班教室·最后一排",
+   "period": "早读",
+   "title": "手机贴在腿上",
+   "speaker": "陶德泉",
+   "text": "你的手机还在校服裤兜里，现在是7:28。陶德泉每天早上会在早读开始前绕教室一圈，像一个手持雷达到处扫描的巡洋舰。\n（提醒：1班规矩，手机进教室，必「自首」。）",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "趁他没走到最后一排，塞进沈鑫的空笔袋里",
+     "next": "early_reading",
+     "effects": {
+      "swagger": 4,
+      "caughtRisk": 12
+     },
+     "note": "转移风险，等于没有风险。"
+    },
+    {
+     "text": "直接交到讲台的「手机监狱」箱子里，明哲保身",
+     "next": "early_reading",
+     "effects": {
+      "swagger": -4,
+      "teacherFavor": 8,
+      "caughtRisk": -6
+     },
+     "note": "乖乖牌，从早读开始。"
+    },
+    {
+     "text": "调成静音塞进袜子里，赌他今天不搜袜子",
+     "next": "early_reading",
+     "effects": {
+      "swagger": 5,
+      "stamina": -3,
+      "caughtRisk": 16
+     },
+     "note": "这招很老，但很冷。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "early_reading",
+   "time": "07:35",
+   "place": "高三1班教室",
+   "period": "早读",
+   "title": "早读：背诵的物理声学实验",
+   "speaker": "陶德泉",
+   "text": "7:30，早读。语文还是英语？都不是，今天早读被陶德泉征用了，因为明天有物理小测。\n「电磁感应这一块，你们再背不下去，我这就把你们一个个送到隔壁1班以外的班去，让你们冷静冷静。」\n四十多个人的声音叠在一起，像一群被踩了尾巴的鸽子在念楞次定律。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "大声跟着念，喊得比谁都响，用音量掩盖无知",
+     "next": "morning_flag",
+     "effects": {
+      "teacherFavor": 5,
+      "homework": 5,
+      "stamina": -6
+     },
+     "note": "声势浩大，内容空洞，高三的真相。"
+    },
+    {
+     "text": "小声划水，把物理书立在桌上看语文素材",
+     "next": "morning_flag",
+     "effects": {
+      "swagger": 3,
+      "teacherFavor": -3,
+      "homework": 3
+     },
+     "note": "两边都兼顾了，两边都不行。"
+    },
+    {
+     "text": "闭眼默背，把楞次定律编成一首顺口溜",
+     "next": "morning_flag",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 10,
+      "stamina": -8
+     },
+     "note": "「来拒去留，磁通量不回头」。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "morning_flag",
+   "time": "08:00",
+   "place": "操场·升旗台",
+   "period": "早读",
+   "title": "升旗仪式的超长青春",
+   "speaker": "{player}",
+   "text": "升旗仪式。田家炳实验高级中学的操场，红白地砖，隔壁就是平江路方向吹来的风。\n主持人宣布：本周国旗下讲话主题为——「在平凡的每一天里，创造不平凡」。\n九班队伍里有人喊「新市路校区又没有社团！」，校长在台上咳了一声，全场掌声雷动，那掌声很明显是松了一口气的掌声。",
+   "character": null,
+   "choices": [
+    {
+     "text": "站直了听完整场讲话，把自己演成道德标杆",
+     "next": "first_period",
+     "effects": {
+      "teacherFavor": 6,
+      "stamina": -6
+     },
+     "note": "你晒出了信仰。"
+    },
+    {
+     "text": "和蔡晨锐在队伍最后一排小声斗嘴，赌谁先笑",
+     "next": "first_period",
+     "effects": {
+      "swagger": 5,
+      "stamina": -2,
+      "caughtRisk": 8
+     },
+     "note": "你赢了，代价是差点被年级组长拎出去。"
+    },
+    {
+     "text": "低头偷看口袋里的手机，用余光标着班主任的方位",
+     "next": "first_period",
+     "effects": {
+      "swagger": 4,
+      "caughtRisk": 15
+     },
+     "note": "高风险，高刺激，高三唯一的毒品。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "first_period",
+   "time": "08:20",
+   "place": "高三1班教室",
+   "period": "上午",
+   "title": "第一节课：物理·楞次定律",
+   "speaker": "陶德泉",
+   "text": "陶德泉讲课有个特点：他不写字，他只说话，说得极快，像在把物理从脑子直接灌进你的脑子。\n「磁通量增加，感应电流的磁场就要阻碍它增加——所以叫来拒去留。来就是拒，去就是留，世界上所有事情都是这样：你越想要，它越躲你。」\n你愣了两秒，怀疑他在讲物理还是在讲人生。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "疯狂记笔记，把物理和人生都抄下来",
+     "next": "physics_quiz",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 10,
+      "stamina": -6
+     },
+     "note": "笔记很满，人生很空。"
+    },
+    {
+     "text": "抬头盯着他，在关键时刻点头，给足他情绪价值",
+     "next": "physics_quiz",
+     "effects": {
+      "swagger": 2,
+      "teacherFavor": 8
+     },
+     "note": "物理老师也需要观众。"
+    },
+    {
+     "text": "偷偷在草稿纸上画他的卡通形象，画得极像",
+     "next": "physics_quiz",
+     "effects": {
+      "swagger": 8,
+      "teacherFavor": -3,
+      "caughtRisk": 10
+     },
+     "note": "这幅画后来在班级群里活了三天。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "physics_quiz",
+   "time": "09:05",
+   "place": "高三1班教室",
+   "period": "上午",
+   "title": "物理小测·陶式嘲讽",
+   "speaker": "陶德泉",
+   "text": "小测卷子发下来，四十张纸的摩擦声。你这排的牛顿一道题卡了六分钟。\n陶德泉背着手走下来，在你背后停下，用那种毫无情绪的声音说——\n「{player}，你这个受力分析画得像平江路的地图。力的方向、大小、作用点，物理三要素，你写了两个——还有一个是「赌」。优秀，非常优秀。」",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "低头认了，认认真真重新画一遍受力分析",
+     "next": "exam_rank_v1",
+     "effects": {
+      "swagger": -6,
+      "teacherFavor": 4,
+      "homework": 12,
+      "stamina": -4
+     },
+     "note": "挨骂挨得挺值。"
+    },
+    {
+     "text": "硬刚：老师我觉得这样画是成立的，只是我画得丑",
+     "next": "exam_rank_v1",
+     "effects": {
+      "swagger": 9,
+      "teacherFavor": -4,
+      "homework": 3
+     },
+     "note": "他居然笑了一下，然后继续骂。"
+    },
+    {
+     "text": "找机会偷看黄鹏的第三大题，抄个思路",
+     "next": "exam_rank_v1",
+     "effects": {
+      "swagger": 4,
+      "homework": 14,
+      "caughtRisk": 16
+     },
+     "note": "赌徒总会再赌一次。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "copy_tests",
+   "time": "10:20",
+   "place": "高三1班教室·走廊",
+   "period": "上午",
+   "title": "小测成绩·「优秀」",
+   "speaker": "陶德泉",
+   "text": "成绩出来得比人心还快。陶德泉把卷子按分数排成三列，摆在讲台上，让全班自己上去拿。\n这就是田家炳实验高中的艺术：不公布排名，但让排名物理地站在那儿。\n你看到自己的名字在中间一列的中段，旁边红笔写着「及格线附近反复横跳」。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "当众叹气，把卷子塞进抽屉深处，假装豁达",
+     "next": "chinese_writing",
+     "effects": {
+      "swagger": 3,
+      "homework": -3
+     },
+     "note": "抽屉是高三学生唯一的隐私。"
+    },
+    {
+     "text": "拿着卷子去问陶德泉这道题到底怎么想",
+     "next": "chinese_writing",
+     "effects": {
+      "teacherFavor": 9,
+      "homework": 8,
+      "stamina": -6
+     },
+     "note": "主动挨骂，是一种高级投资。"
+    },
+    {
+     "text": "把卷子折成纸飞机，飞向垃圾桶（没进，尴尬）",
+     "next": "chinese_writing",
+     "effects": {
+      "swagger": -5,
+      "stamina": -2,
+      "caughtRisk": 6
+     },
+     "note": "全班笑了一秒。你红了三分钟。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "chinese_writing",
+   "time": "10:55",
+   "place": "高三1班教室",
+   "period": "上午",
+   "title": "语文课·张彤的人生哲学",
+   "speaker": "张彤",
+   "text": "张彤穿一件米色风衣，讲课像在念散文。她在黑板上写下作文题：\n「以「等待」为题，写一篇不少于八百字的议论文。」\n她说：「同学们，我教了十六年语文，最怕看见的不是不会写，是敷衍。你们这个年纪，写等待，写的都是晚自习等放学，我知道，但你们要再往里挖一层——你等的到底是什么呢？」",
+   "character": "张彤",
+   "choices": [
+    {
+     "text": "认真写：等一个具体的分数，和一个不确定的将来",
+     "next": "math_rampage",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 12,
+      "stamina": -8
+     },
+     "note": "张彤看得眼睛有点湿。"
+    },
+    {
+     "text": "炫技文学：写观前街的雨、金鸡湖的灯和人生的留白",
+     "next": "math_rampage",
+     "effects": {
+      "swagger": 12,
+      "teacherFavor": 4,
+      "homework": 4
+     },
+     "note": "张彤当场念了出来：「有灵气。」"
+    },
+    {
+     "text": "抄一篇范文，改三个词，把「苏州」改成「故乡」",
+     "next": "math_rampage",
+     "effects": {
+      "swagger": -2,
+      "homework": 8,
+      "caughtRisk": 10
+     },
+     "note": "范文的杀伤力在于它太像范文。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "math_rampage",
+   "time": "11:40",
+   "place": "高三1班教室",
+   "period": "上午",
+   "title": "数学课·杨梦连珠炮",
+   "speaker": "杨梦",
+   "text": "杨梦走进来的脚步声，全班会条件反射地收手机。她把卷子往讲台上一摔——\n「导数这道题！我讲第三遍了！还有五个人跟我空着！你们是把脑子留在家里的冰箱里了吗？站起来！谁空着的给我站起来！\n我就问一句：你们这群人，是不是觉得高考是隔壁苏高中的人去考，你们不用考？」",
+   "character": "杨梦",
+   "choices": [
+    {
+     "text": "第一个站起来，主动受罚，用气势博同情",
+     "next": "lunch_rush",
+     "effects": {
+      "swagger": 8,
+      "teacherFavor": -2,
+      "stamina": -10
+     },
+     "note": "杨梦最烦装，第二烦不装。"
+    },
+    {
+     "text": "低头装死，把自己缩成一粒尘埃",
+     "next": "lunch_rush",
+     "effects": {
+      "swagger": -3,
+      "stamina": -4,
+      "caughtRisk": 4
+     },
+     "note": "没被点名，是今天第一个奇迹。"
+    },
+    {
+     "text": "小声吐槽「我空着是因为没空」，被旁边人出卖",
+     "next": "lunch_rush",
+     "effects": {
+      "swagger": 5,
+      "teacherFavor": -6,
+      "stamina": -8
+     },
+     "note": "全班笑场，杨梦没笑。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "lunch_rush",
+   "time": "12:05",
+   "place": "食堂·一楼窗口",
+   "period": "午休",
+   "title": "食堂抢饭·百米决赛",
+   "speaker": "蔡晨锐",
+   "text": "下课铃一响，整栋楼开始震动。跑饭是项运动，比体育中考还严肃。\n蔡晨锐边跑边冲你喊：「{player}！今天有红烧大排！昨天是糖醋，前天是红烧，今天是大排！这是命运啊！」\n从高三楼到食堂，四百米，中间要过三个拐角，一个台阶，还有一个拿着拖把的阿姨。",
+   "character": "蔡晨锐",
+   "choices": [
+    {
+     "text": "全力奔跑，用田径姿势插队，抢到最后一份大排",
+     "next": "canteen_politics",
+     "effects": {
+      "swagger": 7,
+      "stamina": -14
+     },
+     "note": "大排是今天的奖牌。"
+    },
+    {
+     "text": "放弃红烧大排，去吃没人排队的素菜窗口",
+     "next": "canteen_politics",
+     "effects": {
+      "teacherFavor": 2,
+      "stamina": -2
+     },
+     "note": "排队哲学：慢即是快。"
+    },
+    {
+     "text": "在楼梯口假装摔倒，博取同情插队",
+     "next": "canteen_politics",
+     "effects": {
+      "swagger": -6,
+      "stamina": -4,
+      "caughtRisk": 6
+     },
+     "note": "演技很好，被拖把阿姨当场戳穿。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "canteen_politics",
+   "time": "12:18",
+   "place": "食堂·餐盘回收处",
+   "period": "午休",
+   "title": "食堂餐桌上的班级政治",
+   "speaker": "吴冠儒",
+   "text": "抢饭完之后是更凶险的环节：抢座位。\n1班的桌子被分成几个派系：靠窗是卷王区（吃完立刻写题），中间是段子区，靠门是随时可以溜走区。\n吴冠儒把餐盘一放，说：「{player}，听说这次数学第17题有人做出来了，不是前五名，也不是前十名。」",
+   "character": "吴冠儒",
+   "choices": [
+    {
+     "text": "立刻加入八卦，追问那个人是谁",
+     "next": "canteen_drink",
+     "effects": {
+      "swagger": 4,
+      "love": 2,
+      "stamina": -2
+     },
+     "note": "高中最快的情报传递方式不是网络，是筷子。"
+    },
+    {
+     "text": "闷头吃饭，吃完立刻去教室写两道题",
+     "next": "canteen_drink",
+     "effects": {
+      "swagger": -3,
+      "homework": 10,
+      "stamina": 4
+     },
+     "note": "卷王，从不参加讨论。"
+    },
+    {
+     "text": "点评说其实那题很简单，只是思路没找对",
+     "next": "canteen_drink",
+     "effects": {
+      "swagger": 8,
+      "teacherFavor": -2,
+      "homework": 4
+     },
+     "note": "说出这句话的代价，是下午被叫去做题。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "canteen_drink",
+   "time": "12:30",
+   "place": "小卖部·饮料机",
+   "period": "午休",
+   "title": "饮料机吞币事件",
+   "speaker": "{player}",
+   "text": "小卖部旁边的新饮料机是学校今年唯一的新设备，据说花了三万块，能刷脸支付。\n你投进去三块钱，机器说「请稍候」，然后就没有然后了。屏幕上的倒计时从10开始，跳到1，再跳回10。\n一个高一的学弟在旁边排着队，眼神逐渐绝望。",
+   "character": null,
+   "choices": [
+    {
+     "text": "用力拍两下机器，赌物理的方式解决物理的问题",
+     "next": "canteen_extra",
+     "effects": {
+      "swagger": 6,
+      "stamina": -3
+     },
+     "note": "机器吐了！但也吐了你一身汽水。"
+    },
+    {
+     "text": "找宿管阿姨报修，认真填单子",
+     "next": "canteen_extra",
+     "effects": {
+      "swagger": -2,
+      "teacherFavor": 3
+     },
+     "note": "阿姨说：这机器上礼拜就坏了三次。"
+    },
+    {
+     "text": "直接放弃，把三块钱当学费，去小卖部买老冰棍",
+     "next": "canteen_extra",
+     "effects": {
+      "stamina": 5
+     },
+     "note": "消费升级，人生降级。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "toilet_slack",
+   "time": "12:58",
+   "place": "教学楼·二楼厕所",
+   "period": "午休",
+   "title": "厕所摸鱼保护区",
+   "speaker": "沈鑫",
+   "text": "教学楼二楼的厕所是高三1班的秘密避难所。这里的信号是所有楼层里最好的。\n沈鑫已经在最里面那格蹲了十五分钟，抱着手机刷短视频，声音调得极小，像在搞地下工作。\n「你来了？快，我这有三格电，够看两条。」",
+   "character": "沈鑫",
+   "choices": [
+    {
+     "text": "挤进去一起刷，把身体和灵魂都交给这个隔间",
+     "next": "gossip_group",
+     "effects": {
+      "swagger": 5,
+      "stamina": 4,
+      "caughtRisk": 12
+     },
+     "note": "十五分钟的快乐，值一整节课的罚站。"
+    },
+    {
+     "text": "只借一格看班级群消息，随时准备撤离",
+     "next": "gossip_group",
+     "effects": {
+      "swagger": 2,
+      "homework": 2,
+      "caughtRisk": 5
+     },
+     "note": "分寸感，是高三学生的最高素养。"
+    },
+    {
+     "text": "拒绝诱惑，回教室背书",
+     "next": "gossip_group",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 8,
+      "stamina": -4
+     },
+     "note": "圣人的路很难，但很熟。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "gossip_group",
+   "time": "13:10",
+   "place": "班级群·手机屏幕",
+   "period": "午休",
+   "title": "班级群八卦·高三1班情报局",
+   "speaker": "{player}",
+   "text": "1班班级群，四十六人，加上两个老师（一个在，一个假装不在）。\n群里突然刷屏：「听说元旦晚会这次要办！」\n紧接着：蔡永华：「真的假的？我们学校不是从来都不办活动的吗？」\n季心月：「去年说办，最后变成了一场讲座。」\n消息瞬间99+，从元旦聊到谁和谁一起回家，再聊到月考排名泄露。",
+   "character": "蔡永华",
+   "choices": [
+    {
+     "text": "立刻在群里发一条劲爆消息引爆全场（纯造谣，但很带感）",
+     "next": "afternoon_sports",
+     "effects": {
+      "swagger": 10,
+      "love": 2,
+      "caughtRisk": 12
+     },
+     "note": "谣言在高三班级群里的传播速度，超过光速。"
+    },
+    {
+     "text": "潜水观察，默默截图，把情报存进相册",
+     "next": "afternoon_sports",
+     "effects": {
+      "swagger": 3,
+      "homework": -2,
+      "caughtRisk": 5
+     },
+     "note": "情报人员的基本素养。"
+    },
+    {
+     "text": "在群里问一句「什么时候放假」，被集体嘲笑",
+     "next": "afternoon_sports",
+     "effects": {
+      "swagger": -3,
+      "love": 1
+     },
+     "note": "高三1班唯一不会被回答的问题。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "afternoon_sports",
+   "time": "13:35",
+   "place": "操场·跑道",
+   "period": "下午",
+   "title": "体育课·跑一千米",
+   "speaker": "陶德泉",
+   "text": "体育课，田家炳实验高中的操场跑道终于不再只用来升旗。\n体委宣布今天跑一千米，全班一片哀嚎。陶德泉站在跑道外，手里拿着那个小本子。\n「跑。谁掉队谁下午放学留下来跑步。高三体育课也是课，别以为我不知道你们想干嘛。」",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "全力冲进前三名，用体力换班主任印象分",
+     "next": "english_branch",
+     "effects": {
+      "teacherFavor": 8,
+      "stamina": -20,
+      "caughtRisk": -3
+     },
+     "note": "你在陶德泉的本子上画了个勾。"
+    },
+    {
+     "text": "配速保守跑完，不争第一也不垫底",
+     "next": "english_branch",
+     "effects": {
+      "swagger": 2,
+      "stamina": -10
+     },
+     "note": "中间路线，是绝大多数高三生的宿命。"
+    },
+    {
+     "text": "装腿抽筋，坐在跑道边刷手机",
+     "next": "english_branch",
+     "effects": {
+      "teacherFavor": -5,
+      "stamina": 2,
+      "caughtRisk": 14
+     },
+     "note": "演技崩塌，被抓。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "english_dictation",
+   "time": "14:20",
+   "place": "高三1班教室",
+   "period": "下午",
+   "title": "英语听写·尤晓涵的温柔刀",
+   "speaker": "尤晓涵",
+   "text": "尤晓涵的声音很好听，语速永远不快不慢。她说：「同学们，今天听写二十个，从必修三第四单元开始。」\n然后她说：「不过没关系，错了可以改，我可以再给你们一次机会——」\n最后一句话她说得很轻：「——但只有一次。」\n全班倒吸一口凉气。温柔的人说狠话，杀伤力最大。",
+   "character": "尤晓涵",
+   "choices": [
+    {
+     "text": "认真写，把不确定的都空着",
+     "next": "chem_experiment",
+     "effects": {
+      "teacherFavor": 5,
+      "homework": 10,
+      "stamina": -4
+     },
+     "note": "空着的都是命。"
+    },
+    {
+     "text": "用左手掩护，右手偷偷把书摊在抽屉里",
+     "next": "chem_experiment",
+     "effects": {
+      "swagger": 4,
+      "homework": 18,
+      "caughtRisk": 15
+     },
+     "note": "抽屉里的书页被翻得哗哗响。"
+    },
+    {
+     "text": "写不出来就开始编单词，创造英语新物种",
+     "next": "chem_experiment",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": -2,
+      "homework": -5
+     },
+     "note": "「environmentation」这个词，尤晓涵笑了。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "chem_experiment",
+   "time": "15:05",
+   "place": "实验楼·二楼化学实验室",
+   "period": "下午",
+   "title": "马媛的钠爆炸实验",
+   "speaker": "马媛",
+   "text": "马媛把一小块钠扔进装着水的烧杯，所有人都往后退，退了大约一米，然后又悄悄往前挪了半米。\n「都别怕！钠跟水反应很温和！」\n钠在水面上乱窜，烧杯里冒出白雾，最后「啪」一声。\n马媛笑得很开心：「看！这就是活力的证明。你们这群人整天坐着，比钠还没劲。」",
+   "character": "马媛",
+   "choices": [
+    {
+     "text": "离得远远的，但很认真地记录实验现象",
+     "next": "chem_experiment_re",
+     "effects": {
+      "homework": 10,
+      "stamina": -3
+     },
+     "note": "你写得比谁都细。"
+    },
+    {
+     "text": "凑到最前面看，学着马媛拿蓝色火焰吓唬女生",
+     "next": "chem_experiment_re",
+     "effects": {
+      "swagger": 6,
+      "stamina": -5,
+      "caughtRisk": 12
+     },
+     "note": "火焰是真的，你的手抖也是真的。"
+    },
+    {
+     "text": "把烧杯偷偷拿走，想自己再玩一次（危险）",
+     "next": "chem_experiment_re",
+     "effects": {
+      "swagger": 4,
+      "teacherFavor": -8,
+      "caughtRisk": 20
+     },
+     "note": "马媛一个眼神杀过来。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "chem_experiment_re",
+   "time": "15:26",
+   "place": "实验楼·二楼化学实验室",
+   "period": "下午",
+   "title": "钠实验的续集：差点点着",
+   "speaker": "马媛",
+   "text": "实验课本该结束了。有人（就是你旁边的薛子宏）把酒精灯挪到了氢气试管的旁边。\n「噗——」一声轻响，火焰卷上去，试管口喷出一团火。\n马媛以从未有过的速度冲过来拧掉酒精灯，回头对全班说：「谁想再试试？我可以帮你申请一个去别的学校试试的机会。」",
+   "character": "马媛",
+   "choices": [
+    {
+     "text": "第一个举手承认是我挪的",
+     "next": "geography_lecture",
+     "effects": {
+      "swagger": 8,
+      "teacherFavor": -4,
+      "caughtRisk": 8
+     },
+     "note": "马媛看你的眼光变了。"
+    },
+    {
+     "text": "和薛子宏互相推卸，装成集体事故",
+     "next": "geography_lecture",
+     "effects": {
+      "swagger": 3,
+      "caughtRisk": 10
+     },
+     "note": "没人被单独处理，但全班都被记了一笔。"
+    },
+    {
+     "text": "赶紧把桌上东西收干净，假装什么也没发生",
+     "next": "geography_lecture",
+     "effects": {
+      "teacherFavor": -2,
+      "homework": 2,
+      "caughtRisk": 6
+     },
+     "note": "装傻是万能的，但这次不灵。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "geography_lecture",
+   "time": "16:00",
+   "place": "高三1班教室",
+   "period": "下午",
+   "title": "地理课·刘军伟的科幻地理",
+   "speaker": "刘军伟",
+   "text": "刘军伟把地图投在幕布上，指着一条等高线说：\n「同学们，这不是山。这是地球的一块骨。苏州在太湖边上，你们以为苏州是平原？错。苏州是一块被人精心布置过的地图。」\n他讲着讲着讲到了季风、洋流、还有人类文明为什么都在北纬三十度，最后说：「你们今天要是学不会这个考点，你们就永远站在北纬三十度之外。」",
+   "character": "刘军伟",
+   "choices": [
+    {
+     "text": "把他的话全部记下来，当成考点背",
+     "next": "physics_second_round",
+     "effects": {
+      "homework": 12,
+      "stamina": -6
+     },
+     "note": "考点很玄学，但考试考。"
+    },
+    {
+     "text": "接话：老师，那苏州是不是更适合养鲈鱼",
+     "next": "physics_second_round",
+     "effects": {
+      "swagger": 8,
+      "teacherFavor": -2,
+      "love": 2
+     },
+     "note": "刘军伟愣了两秒，然后说：「说得对！」"
+    },
+    {
+     "text": "趴桌子睡觉，被刘军伟点了三次名",
+     "next": "physics_second_round",
+     "effects": {
+      "swagger": -4,
+      "stamina": 8,
+      "caughtRisk": 8
+     },
+     "note": "第三次时他改口叫你「这位北纬三十度以外的同学」。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "exam_rank_v1",
+   "time": "09:50",
+   "place": "高三1班教室·走廊公告栏",
+   "period": "上午",
+   "title": "月考成绩单贴出来了",
+   "speaker": "{player}",
+   "text": "17:00放学前的空档，走廊公告栏上贴出了月考成绩单。红色的名字一列，黑色的名字一列。\n你{player}，在黑板下数了三遍自己的名次，不太确定应该笑还是应该不说话。\n人群围了三层，最里层是1班，外面都是别班的，像围观一场处刑。",
+   "character": null,
+   "choices": [
+    {
+     "text": "站在成绩单前研究自己的各科分差，找出最该补的那一科",
+     "next": "copy_tests",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 10,
+      "stamina": -6
+     },
+     "note": "清醒的人最先累。"
+    },
+    {
+     "text": "假装不在意，路过时只瞟一眼，然后大声说「还行」",
+     "next": "copy_tests",
+     "effects": {
+      "swagger": 8,
+      "teacherFavor": -2,
+      "homework": -3
+     },
+     "note": "嘴硬是一门艺术。"
+    },
+    {
+     "text": "帮尤正鑫把成绩单上的名字看一遍，安慰他",
+     "next": "copy_tests",
+     "effects": {
+      "swagger": 2,
+      "love": 3,
+      "stamina": -3
+     },
+     "note": "你比他更难受，但你没说。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "parents_meeting_rehearsal",
+   "time": "16:20",
+   "place": "高三1班教室",
+   "period": "下午",
+   "title": "家长会彩排·致家长的一封信",
+   "speaker": "张彤",
+   "text": "张彤宣布：下周三家长会，学校要求每个人写一封给家长的信，然后在彩排上念出来。\n「不要写套话。不要写「感谢父母养育之恩」。你们要写点真的东西——如果你们写真的东西会被父母打，那你们就写半真半假。」\n全班沉默。这个班最擅长写半真半假。",
+   "character": "张彤",
+   "choices": [
+    {
+     "text": "认真写了一封掏心窝的信，写到一半自己不下去了",
+     "next": "class_cadre_predetermined",
+     "effects": {
+      "teacherFavor": 6,
+      "love": 2,
+      "homework": 8,
+      "stamina": -8
+     },
+     "note": "眼泪是写给自己的。"
+    },
+    {
+     "text": "写得很漂亮很感人，但全都是社交辞令",
+     "next": "class_cadre_predetermined",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": 3,
+      "homework": 4
+     },
+     "note": "张彤念完之后点头，没说话。"
+    },
+    {
+     "text": "写：「爸，我这次考砸了，但我装得很好，你也装得很好，我们互相体谅吧。」",
+     "next": "class_cadre_predetermined",
+     "effects": {
+      "swagger": 10,
+      "teacherFavor": 4,
+      "love": 2,
+      "homework": 2
+     },
+     "note": "张彤当场笑了，然后又沉默了。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "class_cadre_predetermined",
+   "time": "16:55",
+   "place": "高三1班教室",
+   "period": "下午",
+   "title": "班干部内定·公开的秘密",
+   "speaker": "陶德泉",
+   "text": "陶德泉宣布：「班干部换届，这次我们民主选举。」\n然后他念了一个名单。\n名单上的人，和上学期一摸一样。\n「有意见的举手。」\n没有一个人举手。全班安静得像物理实验的真空罩。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "举手，说我想当个副班长试试",
+     "next": "takeout_gate",
+     "effects": {
+      "swagger": 9,
+      "teacherFavor": -3,
+      "stamina": -2
+     },
+     "note": "陶德泉看了你三秒：「有想法，加油。名单不变。」"
+    },
+    {
+     "text": "乖巧鼓掌，给足了民主的面子",
+     "next": "takeout_gate",
+     "effects": {
+      "swagger": -3,
+      "teacherFavor": 5
+     },
+     "note": "民主，是一种很美的形式。"
+    },
+    {
+     "text": "小声和旁边人吐槽「建议改成任命制」",
+     "next": "takeout_gate",
+     "effects": {
+      "swagger": 5,
+      "caughtRisk": 4
+     },
+     "note": "被听到了一半，但没被追究。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "takeout_gate",
+   "time": "17:10",
+   "place": "校门·外卖门",
+   "period": "下午",
+   "title": "外卖门·保安拦截战",
+   "speaker": "蔡永华",
+   "text": "「放学」这个词在高三校历上是个动词，因为它意味着把一袋外卖从保安手里抢回来。\n校门口三米外，电动车挤成一团，黄色的、蓝色的、橙色的，像一场城市的色谱实验。\n蔡永华在群里发：「三杯奶茶已经到了，但老李把外卖放到地上了，他说「学校规定学生不能点外卖」。」",
+   "character": "蔡永华",
+   "choices": [
+    {
+     "text": "跟老李讲道理，讲到他心软",
+     "next": "broadcast_station",
+     "effects": {
+      "swagger": 2,
+      "teacherFavor": 3,
+      "stamina": 3
+     },
+     "note": "老李最后说：「下不为例。」他说了三百次下不为例。"
+    },
+    {
+     "text": "从侧门绕出去，翻过花坛接应外卖",
+     "next": "broadcast_station",
+     "effects": {
+      "swagger": 8,
+      "stamina": -8,
+      "caughtRisk": 16
+     },
+     "note": "动作片，真人版。"
+    },
+    {
+     "text": "放弃奶茶，把三杯都留给蔡永华，自己回家吃饭",
+     "next": "broadcast_station",
+     "effects": {
+      "love": 1,
+      "stamina": 2
+     },
+     "note": "放弃是一种美德，但奶茶是一种信仰。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "broadcast_station",
+   "time": "17:30",
+   "place": "行政楼三楼·校园广播站",
+   "period": "下午",
+   "title": "校园广播站·失守的麦克风",
+   "speaker": "季心月",
+   "text": "校园广播站每两周有一次播音，主持人是季心月。今天她感冒了，临时拉人代班。\n「{player}，你不是说你很会说话吗？来。」\n广播覆盖整个田家炳实验高中，包括校长办公室。",
+   "character": "季心月",
+   "choices": [
+    {
+     "text": "正经播报：下周天气、高三冲刺寄语，语气温吞",
+     "next": "basketball_court",
+     "effects": {
+      "swagger": -2,
+      "teacherFavor": 7
+     },
+     "note": "广播室的门一开，全校都认识你了。"
+    },
+    {
+     "text": "加了私货：念了一段给高三1班的加油稿，还点了自己的名字",
+     "next": "basketball_court",
+     "effects": {
+      "swagger": 10,
+      "teacherFavor": -4,
+      "caughtRisk": 8
+     },
+     "note": "全校笑了。陶德泉站在楼下听完了。"
+    },
+    {
+     "text": "播放了一首《夜曲》，广播站变成夜店",
+     "next": "basketball_court",
+     "effects": {
+      "swagger": 12,
+      "teacherFavor": -8,
+      "caughtRisk": 22
+     },
+     "note": "五分钟后总务处老师冲了上来。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "basketball_court",
+   "time": "17:45",
+   "place": "学校篮球场",
+   "period": "下午",
+   "title": "篮球场·三对三的战争",
+   "speaker": "刘自豪",
+   "text": "放学后的篮球场是田家炳实验高中唯一还没被高考占领的地方。\n刘自豪抱着篮球喊：「来，三对三，输的请奶茶！」\n蔡晨锐、袁晓天已经脱了外套。你看着操场那边的晚霞和这边的班主任走廊灯，知道你在做一个选择。",
+   "character": "刘自豪",
+   "choices": [
+    {
+     "text": "上场，打到天黑，把脑子里的导数丢到脑后",
+     "next": "rain_no_umbrella",
+     "effects": {
+      "swagger": 10,
+      "homework": -5,
+      "stamina": -18
+     },
+     "note": "打球的一小时，是高三的氧气。"
+    },
+    {
+     "text": "上场十分钟就走，赢个面子就行",
+     "next": "rain_no_umbrella",
+     "effects": {
+      "swagger": 4,
+      "stamina": -8
+     },
+     "note": "点到为止是关键。"
+    },
+    {
+     "text": "在场边做作业，边看球边算电磁感应",
+     "next": "rain_no_umbrella",
+     "effects": {
+      "swagger": -4,
+      "homework": 10,
+      "stamina": -3
+     },
+     "note": "两种人生，同一种孤独。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "rain_no_umbrella",
+   "time": "18:00",
+   "place": "新市路·雨天",
+   "period": "下午",
+   "title": "下雨，而且没带伞",
+   "speaker": "{player}",
+   "text": "苏州的雨，说下就下。校门口的地砖立刻变得像一张刚洗过的麻将牌。\n你没带伞。你没带伞，蔡晨锐也没带伞，张业博也没带伞，全班的男生一半没带伞。\n雨打在自行车棚的铁皮上，声音像一场迟到的掌声。",
+   "character": null,
+   "choices": [
+    {
+     "text": "冒雨从新市路冲回地铁站，全身湿透",
+     "next": "sky_bridge_hope",
+     "effects": {
+      "swagger": 6,
+      "stamina": -12,
+      "caughtRisk": 3
+     },
+     "note": "雨中奔跑，高三最中二的场景。"
+    },
+    {
+     "text": "等雨停，在门卫室和保安聊天",
+     "next": "sky_bridge_hope",
+     "effects": {
+      "teacherFavor": 3,
+      "love": 2,
+      "stamina": -3
+     },
+     "note": "保安讲了半辈子的人生。"
+    },
+    {
+     "text": "借蔡晨锐一把伞，两个人挤在一起走",
+     "next": "sky_bridge_hope",
+     "effects": {
+      "swagger": 3,
+      "love": 5,
+      "stamina": -2
+     },
+     "note": "苏式冬天，两个人一把伞刚刚好。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "sky_bridge_hope",
+   "time": "18:15",
+   "place": "天桥·桥头晚霞",
+   "period": "下午",
+   "title": "天桥上的苏州晚霞",
+   "speaker": "沈冰雨",
+   "text": "新市路的天桥上，你会看到苏州不加滤镜的一层粉——远处是高楼，中间是电线和行道树，最近的是天桥的栏杆，栏杆上贴着「禁止停车」的贴纸。\n沈冰雨站在桥头，书包挂在肩上，正在拍晚霞。\n「{player}，你来这边干嘛？看这个？苏州天天都这样，只是没人抬头。」",
+   "character": "沈冰雨",
+   "choices": [
+    {
+     "text": "和她一起抬头看了五分钟晚霞，什么也没说",
+     "next": "evening_reading_news",
+     "effects": {
+      "love": 10,
+      "homework": -2,
+      "stamina": 4
+     },
+     "note": "五分钟里你们谁都没说话，这是今天最好的五分钟。"
+    },
+    {
+     "text": "用物理解释晚霞为什么是红色（瑞利散射）",
+     "next": "evening_reading_news",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": 2,
+      "love": -3,
+      "homework": 3
+     },
+     "note": "说完你就后悔了。"
+    },
+    {
+     "text": "给她拍一张照，说这张能当校刊封面",
+     "next": "evening_reading_news",
+     "effects": {
+      "swagger": 5,
+      "love": 7,
+      "stamina": -2
+     },
+     "note": "她笑了，说：「你连构图都不会。」"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_reading_news",
+   "time": "18:30",
+   "place": "高三1班教室·晚读",
+   "period": "晚自习",
+   "title": "晚自习前·元旦节目的都市传说",
+   "speaker": "季心月",
+   "text": "晚读之前，班里传开了一个消息：\n学校今年真的打算办元旦晚会。真的。真的真的。\n蔡永华在群里连发九条：「学校近三年没办过活动，你们懂这意味什么吗？」\n季心月：“意味着我们必须排练。」全班沸腾了三十秒，然后陶德泉进来了。",
+   "character": "季心月",
+   "choices": [
+    {
+     "text": "报名领舞，哪怕只有两分钟的舞台",
+     "next": "new_year_rehearsal",
+     "effects": {
+      "swagger": 8,
+      "love": 4,
+      "stamina": -6
+     },
+     "note": "两分钟也够装一次逼。"
+    },
+    {
+     "text": "报名幕后，负责音响与调音",
+     "next": "new_year_rehearsal",
+     "effects": {
+      "swagger": 3,
+      "teacherFavor": 4
+     },
+     "note": "幕后的人，才不会被打回教室。"
+    },
+    {
+     "text": "什么都不报，安心学习",
+     "next": "new_year_rehearsal",
+     "effects": {
+      "swagger": -5,
+      "teacherFavor": 3,
+      "homework": 10
+     },
+     "note": "理智，但是不够。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "new_year_rehearsal",
+   "time": "18:50",
+   "place": "艺术楼·空教室",
+   "period": "晚自习",
+   "title": "元旦排练·都市传说成真",
+   "speaker": "季心月",
+   "text": "艺术楼三楼空教室，灯管一闪一闪。季心月搬来一台小音箱，说要排一首歌。\n节目形式还没定，全班讨论了三分钟，最后决定——边唱歌边跳，动作不重要，重要的是要有气势。\n「我们1班没有活动，但我们可以有传说中的活动。」",
+   "character": "季心月",
+   "choices": [
+    {
+     "text": "认真练，练到手臂酸，把动作练到整齐",
+     "next": "evening_selfstudy",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": 5,
+      "stamina": -12
+     },
+     "note": "整齐，是一种暴力美学。"
+    },
+    {
+     "text": "负责设计一个全场爆笑的见面礼梗",
+     "next": "evening_selfstudy",
+     "effects": {
+      "swagger": 12,
+      "love": 3,
+      "homework": -2
+     },
+     "note": "这个梗后来被全年级模仿。"
+    },
+    {
+     "text": "排练到一半溜出去，去找正在排练的另一位同学",
+     "next": "evening_selfstudy",
+     "effects": {
+      "swagger": 3,
+      "love": 6,
+      "caughtRisk": 8
+     },
+     "note": "你的排练项目，在走廊那边。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_selfstudy",
+   "time": "19:20",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "晚自习·安静的战场",
+   "speaker": "陶德泉",
+   "text": "晚自习的教室有一种奇特的声场：翻卷子的声音、笔尖的声音、窗外偶尔的车声。\n陶德泉坐镇讲台，戴着老花镜改卷，每隔十五分钟抬头扫视一次全场。\n你的物理卷子上，电磁感应那道题还是空的。你旁边有人在小声讨论「大招」。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "死磕电磁感应，不管会不会，先写完",
+     "next": "phone_check_night",
+     "effects": {
+      "homework": 14,
+      "stamina": -12
+     },
+     "note": "你在高三最该做的事上，做对了。"
+    },
+    {
+     "text": "先写语文，因为语文不用算，简单",
+     "next": "phone_check_night",
+     "effects": {
+      "swagger": 2,
+      "homework": 8,
+      "stamina": -4
+     },
+     "note": "舒服的事先做，是所有人的本能。"
+    },
+    {
+     "text": "趴在桌上假装睡，其实在等班主任出去",
+     "next": "phone_check_night",
+     "effects": {
+      "homework": -3,
+      "stamina": 8,
+      "caughtRisk": 6
+     },
+     "note": "等待，是这节课最大的技巧。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "phone_check_night",
+   "time": "19:50",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "查手机巡查·第二次",
+   "speaker": "陶德泉",
+   "text": "陶德泉站起来了。\n「手机都放桌角。」\n他的语气非常平静，平静得让人心慌。\n全班开始放手机。有人放了一个模型机，有人放了一台早就不用的旧手机。\n轮到你了，你的兜里有一台手机，桌角上已经有一台充当替身的旧机型。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "老老实实把手上的手机放上去，包括那台替身",
+     "next": "evening_move_seats",
+     "effects": {
+      "swagger": -3,
+      "teacherFavor": 8,
+      "caughtRisk": -8
+     },
+     "note": "干净清白，代价是白买了台二手。"
+    },
+    {
+     "text": "把替身放上去，真机塞进书里夹着",
+     "next": "evening_move_seats",
+     "effects": {
+      "swagger": 6,
+      "caughtRisk": 18
+     },
+     "note": "这一刻你的心跳比你跑一千米还快。"
+    },
+    {
+     "text": "趁他走到后排时，把真机扔给旁边的沈鑫",
+     "next": "evening_move_seats",
+     "effects": {
+      "swagger": 4,
+      "teacherFavor": -3,
+      "caughtRisk": 14
+     },
+     "note": "传球的手法过于明显。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "paper_note",
+   "time": "20:25",
+   "place": "高三1班教室·后排",
+   "period": "晚自习",
+   "title": "传纸条·纸上的心跳",
+   "speaker": "{player}",
+   "text": "一张对折的纸条从前面递过来，纸角有折痕，墨迹是手写的。\n「今天数学第17题你做出来了吗？」\n背面还有一行，字迹小了很多，要凑到灯下才能看清。\n你抬头，坐在第三排的人正在假装看窗外。",
+   "character": null,
+   "choices": [
+    {
+     "text": "认真回一张，把今天的晚霞也写进去",
+     "next": "opening_carry",
+     "effects": {
+      "love": 12,
+      "homework": 3,
+      "caughtRisk": 6
+     },
+     "note": "纸上的东西，比屏幕上的重。"
+    },
+    {
+     "text": "只写「做出来了」，故意不写细节，留个悬念",
+     "next": "opening_carry",
+     "effects": {
+      "swagger": 10,
+      "love": 4
+     },
+     "note": "装逼值永远是第一优先。"
+    },
+    {
+     "text": "把纸条收好不上交，也不回，装作没看到",
+     "next": "opening_carry",
+     "effects": {
+      "swagger": 2,
+      "love": -4
+     },
+     "note": "沉默也是一种回答，只是比较慢。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "opening_carry",
+   "time": "20:35",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "晚自习开黑·《王者荣耀》",
+   "speaker": "沈鑫",
+   "text": "沈鑫的手机在自己校服袖子里露了个角，屏幕亮着。\n「来一把，就一把。三分钟，然后我请全班喝奶茶。不，请3班的人喝。」\n教室很安静，陶德泉坐在讲台，低着头。你看到手机上已经弹出「邀请」。",
+   "character": "沈鑫",
+   "choices": [
+    {
+     "text": "上，五个人开黑，把声音开静音",
+     "next": "opening_caught",
+     "effects": {
+      "swagger": 12,
+      "homework": -8,
+      "stamina": -8,
+      "caughtRisk": 20
+     },
+     "note": "你们赢了，但也赌了。"
+    },
+    {
+     "text": "不上，继续写作业，偶尔看一眼战况",
+     "next": "opening_caught",
+     "effects": {
+      "homework": 8,
+      "stamina": -2,
+      "caughtRisk": 3
+     },
+     "note": "旁观者最安全。"
+    },
+    {
+     "text": "拒绝，但偷偷把你们的战况用嘴型播报给旁边人",
+     "next": "opening_caught",
+     "effects": {
+      "swagger": 5,
+      "love": 2,
+      "caughtRisk": 6
+     },
+     "note": "口型播报是一项新技能。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "opening_caught",
+   "time": "20:44",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "开黑被抓·陶德泉的静步",
+   "speaker": "陶德泉",
+   "text": "陶德泉从讲台上走下来，脚步极轻。他没有脚步声。\n他在你背后站了整整十秒，跟你一起看了一眼游戏界面。\n然后他说：「不错啊，这个位置，走位挺稳。」\n全班呼吸停止。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "当场认错，把手机交出去，认罚",
+     "next": "night_moral",
+     "effects": {
+      "swagger": -6,
+      "teacherFavor": -2,
+      "caughtRisk": 25
+     },
+     "note": "陶德泉点头：「态度可以。」记你一次。"
+    },
+    {
+     "text": "狡辩：这是同学让我帮忙登录一下游戏账号",
+     "next": "night_moral",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": -8,
+      "caughtRisk": 15
+     },
+     "note": "他不信，但他记下了你的演技。"
+    },
+    {
+     "text": "装死，把手机滑到桌子下面装傻",
+     "next": "night_moral",
+     "effects": {
+      "swagger": -4,
+      "caughtRisk": 20
+     },
+     "note": "手机掉地，全班清清楚楚听到了那一声响。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "night_patrol",
+   "time": "20:58",
+   "place": "高三1班教室·走廊",
+   "period": "晚自习",
+   "title": "班主任夜间巡查·最后一圈",
+   "speaker": "陶德泉",
+   "text": "21:05，陶德泉每天最后一条固定路线：从教室后门出去，沿走廊走一圈，再回到前门。\n这一圈大约四分钟，是全部高三学生的黄金四分钟。\n全班目光跟着他转，他走到拐角，影子被灯拉得极长，像一场审判的开场。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "抓住这四分钟，把没写的作业立刻补上两题",
+     "next": "evening_power_off",
+     "effects": {
+      "homework": 10,
+      "caughtRisk": 8
+     },
+     "note": "四分钟的作业，值十二分钟的心跳。"
+    },
+    {
+     "text": "用这四分钟立刻传纸条，把要说的话写完",
+     "next": "evening_power_off",
+     "effects": {
+      "love": 10,
+      "homework": -2,
+      "caughtRisk": 10
+     },
+     "note": "纸上的东西已经送出去了，心跳还在。"
+    },
+    {
+     "text": "什么也不做，抬头看着空教室的黑板，发一下呆",
+     "next": "evening_power_off",
+     "effects": {
+      "swagger": 2,
+      "stamina": 6
+     },
+     "note": "高三的空白，也是一种奢侈。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_dismiss",
+   "time": "21:20",
+   "place": "高三1班教室·放学",
+   "period": "放学",
+   "title": "21:20·放学铃",
+   "speaker": "陶德泉",
+   "text": "21:20，放学铃响。田家炳实验高中的走廊在三十秒内变成一条人类河流。\n陶德泉站在教室门口说：「回去早点休息，明天物理小测第二张。还有，别在学校门口逗留。」\n他说完，又补了一句：「家长会的信，我看了，写得不错。」然后他就走了。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "去校门口和朋友们道别，把最后的十分钟花在笑上",
+     "next": "farewell_lookback",
+     "effects": {
+      "swagger": 6,
+      "love": 6,
+      "stamina": -4
+     },
+     "note": "一天的结尾，值得花得慢一点。"
+    },
+    {
+     "text": "直接冲向公交站，抢一趟没那么挤的车",
+     "next": "farewell_lookback",
+     "effects": {
+      "homework": 4,
+      "stamina": -3
+     },
+     "note": "效率，是高三的习惯。"
+    },
+    {
+     "text": "一个人走回宿舍，安安静静",
+     "next": "farewell_lookback",
+     "effects": {
+      "homework": 6,
+      "stamina": 5
+     },
+     "note": "安静是今天最好的礼物。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_gate",
+   "time": "21:25",
+   "place": "新市路·校门口",
+   "period": "放学",
+   "title": "校门口·道别",
+   "speaker": "蔡晨锐",
+   "text": "校门口的路灯把每个人的影子拉成两三个自己。\n蔡晨锐在校门口等你：「今天大排不错吧？」\n文星在旁边说：「明天物理第二张。」\n有人已经开始打哈欠了，有人还在用最后一点力气聊游戏。",
+   "character": "蔡晨锐",
+   "choices": [
+    {
+     "text": "和他们站在路灯下聊十分钟，把今天的梗复盘一遍",
+     "next": "farewell_bus",
+     "effects": {
+      "swagger": 5,
+      "love": 4,
+      "stamina": -5
+     },
+     "note": "路灯下的十分钟，比一节课都长。"
+    },
+    {
+     "text": "挥挥手就走了，不多留一句话",
+     "next": "farewell_bus",
+     "effects": {
+      "swagger": 3,
+      "stamina": 2
+     },
+     "note": "潇洒，但有一点空。"
+    },
+    {
+     "text": "答应他们明天早上先把作业发到群里",
+     "next": "farewell_bus",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 6,
+      "stamina": -3
+     },
+     "note": "你答应了一句，可能要付出一个晚上。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_bus",
+   "time": "21:40",
+   "place": "新市路·公交站",
+   "period": "放学",
+   "title": "公交站的最后一班",
+   "speaker": "沈冰雨",
+   "text": "公交站台的灯忽明忽暗。站点牌子上的线路图被贴了一层层小广告，像一个时代的年轮。\n你等了六分钟，车还没来。\n站台另一边，有人也在等车，书包垂到膝盖，头靠着栏杆，正在看手机。",
+   "character": "沈冰雨",
+   "choices": [
+    {
+     "text": "走过去打个招呼，问她今天累不累",
+     "next": "farewell_bus_wait",
+     "effects": {
+      "love": 10,
+      "stamina": -2
+     },
+     "note": "你们聊到车来了都没有结束。"
+    },
+    {
+     "text": "只是站在那儿，什么也不说，看着对面的路",
+     "next": "farewell_bus_wait",
+     "effects": {
+      "love": 3,
+      "stamina": 4
+     },
+     "note": "有时候沉默比话还长。"
+    },
+    {
+     "text": "把手机上的时间给她看：21:47，然后说「这叫高三」",
+     "next": "farewell_bus_wait",
+     "effects": {
+      "swagger": 6,
+      "love": 5
+     },
+     "note": "她笑了。你今天第三次看到那个笑。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_bridge",
+   "time": "22:25",
+   "place": "觅渡桥·桥头",
+   "period": "放学",
+   "title": "桥头偶遇",
+   "speaker": "文星",
+   "text": "觅渡桥的桥头没有很多人。你走回家要过桥，桥下是水，桥上是晚风。\n文星从另一头走过来，手里拎着奶茶，袋子在风里晃。\n「{player}，一个人啊。」",
+   "character": "文星",
+   "choices": [
+    {
+     "text": "和他一起走回家，聊聊明天的作业和今天的地理学",
+     "next": "late_night_phone",
+     "effects": {
+      "swagger": 3,
+      "love": 4,
+      "stamina": -4
+     },
+     "note": "路走得远，人却轻了。"
+    },
+    {
+     "text": "停下来在桥头看了一会儿水，然后各走各的",
+     "next": "late_night_phone",
+     "effects": {
+      "swagger": 2,
+      "stamina": 5
+     },
+     "note": "苏州的水从来不看人，但人会看它。"
+    },
+    {
+     "text": "把今天的物理小测吐槽一遍，骂到自己笑出来",
+     "next": "late_night_phone",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": -2
+     },
+     "note": "吐槽是高三的休息方式。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_ritual",
+   "time": "22:05",
+   "place": "宿舍楼下·晚点名",
+   "period": "放学",
+   "title": "住校晚点名·宿管的广播",
+   "speaker": "宿管阿姨",
+   "text": "22:05，宿舍楼的喇叭响了：「高三的学生，晚点名了！」\n楼道里拖鞋声噼里啪啦。\n宿舍楼下的公示栏上写着「熄灯时间 22:40」，旁边贴着一张手写的纸：「谁再带外卖出宿舍，扣当天所有内务分——阿姨」。",
+   "character": "宿管阿姨",
+   "choices": [
+    {
+     "text": "正常点名，正常洗漱，准时躺下",
+     "next": "farewell_bridge",
+     "effects": {
+      "teacherFavor": 3,
+      "stamina": 12
+     },
+     "note": "自律的人生，第二天还有体力。"
+    },
+    {
+     "text": "点名之后爬起来，在走廊尽头背英语单词",
+     "next": "farewell_bridge",
+     "effects": {
+      "teacherFavor": 4,
+      "homework": 10,
+      "stamina": -10
+     },
+     "note": "走廊的声控灯，一背一句亮一次。"
+    },
+    {
+     "text": "关灯之后在被窝里刷手机到十二点",
+     "next": "farewell_bridge",
+     "effects": {
+      "swagger": 4,
+      "stamina": -15,
+      "caughtRisk": 10
+     },
+     "note": "第二天早读的你，会是今天的坟墓。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "totals",
+   "time": "23:59",
+   "place": "熄灯后的宿舍",
+   "period": "放学",
+   "title": "熄灯·一天结束前的黑板",
+   "speaker": "{player}",
+   "text": "23:59，熄灯。\n天花板上的灯灭了之后，你躺着，脑子里还在转：物理的楞次定律，数学的第17题，语文的「等待」，地理的北纬三十度。\n还有那句「家长会的信，我看了，写得不错」。\n今天就这样过去了。二百一十七天减去一天。",
+   "character": null,
+   "choices": [
+    {
+     "text": "闭上眼睛，总结一下今天，然后睡",
+     "next": "JUDGE",
+     "effects": {
+      "swagger": 4,
+      "stamina": 3
+     },
+     "note": "结算中……"
+    },
+    {
+     "text": "在心里给自己定一个明天必须完成的小目标",
+     "next": "JUDGE",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 8
+     },
+     "note": "结算中……"
+    },
+    {
+     "text": "继续在心里复盘今天每一个尴尬的瞬间，然后骂自己一句",
+     "next": "JUDGE",
+     "effects": {
+      "swagger": 2,
+      "stamina": -3
+     },
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_bus_wait",
+   "time": "21:52",
+   "place": "新市路·公交站台",
+   "period": "放学",
+   "title": "末班车迟迟不来",
+   "speaker": "{player}",
+   "text": "站台电子屏写着「末班 22:30」，实际到站时间永远是个谜。\n雨后的地面反着路灯，一辆电动车贴着公交道呼啸而过，溅起一小片水花。\n你看了下表，看了一眼站台另一边的人，又看回手机。高三的晚上，时间是以「还有几天」来计算的。",
+   "character": "沈冰雨",
+   "choices": [
+    {
+     "text": "走过去搭话，问她明天物理第二张小测复习了吗",
+     "next": "farewell_ritual",
+     "effects": {
+      "love": 8,
+      "homework": 3,
+      "stamina": -3
+     },
+     "note": "你们在站台聊了十五分钟。"
+    },
+    {
+     "text": "戴上耳机听歌，把自己从人群里切出去",
+     "next": "farewell_ritual",
+     "effects": {
+      "swagger": 2,
+      "love": -2,
+      "stamina": 6
+     },
+     "note": "孤独是免费的电量。"
+    },
+    {
+     "text": "决定不等了，直接走路回家",
+     "next": "farewell_ritual",
+     "effects": {
+      "swagger": 4,
+      "love": -3,
+      "stamina": -8
+     },
+     "note": "走路的人，比等车的人更自由。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "late_night_phone",
+   "time": "23:40",
+   "place": "卧室·台灯下",
+   "period": "放学",
+   "title": "妈妈的电话与一张没写完的卷子",
+   "speaker": "{player}",
+   "text": "23:40，你刚躺下，手机震了。是妈妈的电话。\n「今天物理小测怎么样？」\n「还行。」\n「还行是多少？」\n窗口外的狮山已经全黑了。你想说很多，最后只说了「我睡了」。挂掉电话，你发现桌上那张电磁感应的卷子还空着一半。",
+   "character": null,
+   "choices": [
+    {
+     "text": "爬起来，把那张卷子写完，哪怕只写两道",
+     "next": "parent_chat_call",
+     "effects": {
+      "homework": 12,
+      "stamina": -14
+     },
+     "note": "多写一道，多一分。"
+    },
+    {
+     "text": "把卷子塞进书包，明天早读再说",
+     "next": "parent_chat_call",
+     "effects": {
+      "homework": -4,
+      "stamina": 8
+     },
+     "note": "明天是另一个骗局。"
+    },
+    {
+     "text": "关灯躺下，对着天花板骂了一句「离谱」",
+     "next": "parent_chat_call",
+     "effects": {
+      "swagger": 6,
+      "stamina": 2
+     },
+     "note": "嘴硬的人，往往最能撑。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "parent_chat_call",
+   "time": "23:55",
+   "place": "卧室·床上",
+   "period": "放学",
+   "title": "父母会议·房间里的小型家长会",
+   "speaker": "陶德泉",
+   "text": "手机又震了，这次是班级群。陶德泉发了一条消息，语气很轻：\n「家长会的事，我已经和一部分家长沟通过了。有些同学，我们下周三见。」\n群里没人回。三分钟后，开始有人陆续撤回消息。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "私聊陶德泉：老师，我能提前说点什么吗",
+     "next": "totals",
+     "effects": {
+      "teacherFavor": 8,
+      "caughtRisk": 10
+     },
+     "note": "陶德泉回了一个「明早找我」。"
+    },
+    {
+     "text": "装作没看到，退出群聊",
+     "next": "totals",
+     "effects": {
+      "stamina": 4
+     },
+     "note": "有些消息看到了比没看到更累。"
+    },
+    {
+     "text": "给喜欢的那个同学发一句「别怕，有我」",
+     "next": "totals",
+     "effects": {
+      "love": 14,
+      "stamina": -4
+     },
+     "note": "半夜的一句话，能撑一整天。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "judge_king",
+   "time": "23:58",
+   "place": "心里·判定",
+   "period": "晚自习",
+   "title": "判定：装逼值结算",
+   "speaker": "{player}",
+   "text": "【判定：牛逼之王】\n你今天在物理小测被陶德泉当面嘲讽，在篮球场赢了三场，当着全班的面举手要当班干部，在天桥上说物理解释晚霞。\n装逼值，是高三唯一不需要家长签字的货币。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ending_king",
+     "effects": {},
+     "note": "结算中……"
+    },
+    {
+     "text": "我先谦虚一下（其实不谦虚）",
+     "next": "ENDING:king",
+     "effects": {
+      "swagger": 2
+     },
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "judge_love",
+   "time": "23:58",
+   "place": "心里·判定",
+   "period": "晚自习",
+   "title": "判定：恋爱进度结算",
+   "speaker": "{player}",
+   "text": "【判定：恋爱大师】\n你今天在天桥上陪一个人看了五分钟晚霞，传了一张纸条，公交站台上聊了十五分钟。\n在田家炳实验高中，这些时长加起来，已经算一场盛大的恋爱了。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ending_love",
+     "effects": {},
+     "note": "结算中……"
+    },
+    {
+     "text": "我先冷静一下",
+     "next": "ENDING:love",
+     "effects": {
+      "love": 1
+     },
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "judge_grind",
+   "time": "23:58",
+   "place": "心里·判定",
+   "period": "晚自习",
+   "title": "判定：作业完成度结算",
+   "speaker": "{player}",
+   "text": "【判定：卷王之王】\n你今天早上抄了半本作业，中午在餐桌都没坐下就把数学题写完，晚自习死磕电磁感应，熄灯后在走廊背了四十个单词。\n你不是天才，但这天你没有欠任何人任何东西。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ending_grind",
+     "effects": {},
+     "note": "结算中……"
+    },
+    {
+     "text": "我还能再写两道",
+     "next": "ENDING:grind",
+     "effects": {
+      "homework": 2
+     },
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "judge_focus",
+   "time": "23:58",
+   "place": "心里·判定",
+   "period": "晚自习",
+   "title": "判定：被抓风险结算",
+   "speaker": "{player}",
+   "text": "【判定：班主任重点关照】\n你今天被陶德泉抓了两次手机，一次迟到，开黑时他还站在你背后看完了你走位。\n他已经在那个小本子上，给你单独开了一页。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ending_focus",
+     "effects": {},
+     "note": "结算中……"
+    },
+    {
+     "text": "我不信，再算一遍",
+     "next": "ENDING:focus",
+     "effects": {},
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "judge_mediocre",
+   "time": "23:58",
+   "place": "心里·判定",
+   "period": "晚自习",
+   "title": "判定：平平无奇",
+   "speaker": "{player}",
+   "text": "【判定：平平无奇】\n你今天按时到校，认真听课，没被表扬，也没被抓。作业完成度一般，恋爱进度一般，装逼值一般。\n高三的一年有三百多天，今天只是其中一天。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ending_mediocre",
+     "effects": {},
+     "note": "结算中……"
+    },
+    {
+     "text": "其实这一天也挺好",
+     "next": "ENDING:mediocre",
+     "effects": {
+      "stamina": 2
+     },
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "judge_hidden",
+   "time": "23:58",
+   "place": "心里·判定",
+   "period": "晚自习",
+   "title": "判定：平平无奇，但嘴硬",
+   "speaker": "{player}",
+   "text": "【判定：隐藏结局·嘴硬】\n你今天什么都没捞着：体力耗尽，班主任好感不高，作业没写完，装逼值也没攒起来。\n但你还在嘴上说「这不怪我，这学校离谱」，而且说完自己都笑了。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ending_hidden",
+     "effects": {},
+     "note": "结算中……"
+    },
+    {
+     "text": "下次一定",
+     "next": "ENDING:hidden",
+     "effects": {
+      "swagger": 1
+     },
+     "note": "结算中……"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "ending_king",
+   "time": "23:59",
+   "place": "结算·牛逼之王",
+   "period": "晚自习",
+   "title": "结局：牛逼之王",
+   "speaker": "{player}",
+   "text": "【ENDING · 牛逼之王】\n你{player}，在苏州田家炳实验高级中学·新市路校区的这一天，成功达到了装逼值的高峰。\n在物理小测里被陶德泉点评为「优秀，非常优秀」；在篮球场上赢了三场；在天桥上把晚霞解释成瑞利散射；在班级群里造了一条全校都在传的谣。\n第二天早上，有人问你：「昨天那句是你说的吗？」\n你说：「是啊。」\n——虽然你的物理小测没过。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ENDING:king",
+     "effects": {},
+     "note": "牛逼之王，名不虚传。"
+    }
+   ],
+   "isEnding": true
+  },
+  {
+   "id": "ending_love",
+   "time": "23:59",
+   "place": "结算·恋爱大师",
+   "period": "晚自习",
+   "title": "结局：恋爱大师",
+   "speaker": "{player}",
+   "text": "【ENDING · 恋爱大师】\n你{player}，在苏州田家炳实验高级中学的这一天，谈了一场迟到的高中恋爱。\n天桥上的五分钟，传了十七张纸条，公交站台上加了微信，晚上在被窝里聊到十二点五十七分。\n你说你在田家炳实验高中，从没见过这样的晚霞。\n她说：「苏州天天都这样，只是没人抬头。」\n你说：「所以我要抬头。」\n然后你们两人一起被陶德泉在家长会上点名了。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ENDING:love",
+     "effects": {},
+     "note": "恋爱的代价，家长会见。"
+    }
+   ],
+   "isEnding": true
+  },
+  {
+   "id": "ending_grind",
+   "time": "23:59",
+   "place": "结算·卷王之王",
+   "period": "晚自习",
+   "title": "结局：卷王之王",
+   "speaker": "{player}",
+   "text": "【ENDING · 卷王之王】\n你{player}，把这一天过成了一张写满的卷子。\n早读背完楞次定律，物理小测硬是重画了一遍受力分析，中午吃完饭就回教室，晚自习把电磁感应啃了两遍，熄灯后在走廊背单词，背到声控灯亮一次你说一个词。\n陶德泉在你的名字后面画了一个圈。\n二百一十七天减去一天，你还剩二百一十六天。\n你没有后悔，你只是有点困。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ENDING:grind",
+     "effects": {},
+     "note": "卷，是唯一的确定性。"
+    }
+   ],
+   "isEnding": true
+  },
+  {
+   "id": "ending_focus",
+   "time": "23:59",
+   "place": "结算·班主任重点关照",
+   "period": "晚自习",
+   "title": "结局：班主任重点关照",
+   "speaker": "{player}",
+   "text": "【ENDING · 班主任重点关照】\n在田家炳实验高中，有一个词叫「重点关注」，指的是班主任陶德泉会在他的物理笔记本上，给你单开一页。\n今天，你{player}，成为了那一页。\n早上7:36迟到，晚自习开黑时他在你背后看了十秒游戏界面，还夸你走位稳；第二次查手机时你换了替身；广播站里放了《夜曲》。\n现在，你每天早上都会在校门口看到他。\n「来，{player}，」他说，「我们聊聊。」",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ENDING:focus",
+     "effects": {},
+     "note": "家长会，你已在名单上。"
+    }
+   ],
+   "isEnding": true
+  },
+  {
+   "id": "ending_mediocre",
+   "time": "23:59",
+   "place": "结算·平平无奇",
+   "period": "晚自习",
+   "title": "结局：平平无奇",
+   "speaker": "{player}",
+   "text": "【ENDING · 平平无奇】\n你{player}，今天什么也没发生。\n7:24到校，早读小声跟着念，物理课记了笔记，数学课低头装死，食堂排了队吃了红烧大排，晚自习写完作业，21:20放学，公交站等车。\n回家路上，天桥上有人抬头看晚霞，你没有抬头。\n这一天很好，很稳，很正常——高考要的就是正常。\n只是多年以后你会想：那天苏州的天要是再抬头看一眼就好了。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ENDING:mediocre",
+     "effects": {},
+     "note": "平平无奇，也是一种人生。"
+    }
+   ],
+   "isEnding": true
+  },
+  {
+   "id": "ending_hidden",
+   "time": "23:59",
+   "place": "结算·隐藏·嘴硬",
+   "period": "晚自习",
+   "title": "结局：隐藏·平平无奇但嘴硬",
+   "speaker": "{player}",
+   "text": "【ENDING · 平平无奇但嘴硬（隐藏）】\n你{player}，今天体力耗尽，班主任好感不高，作业只写了一半，装逼值也没攒起来。\n但你没有输。\n你在教室后排、天桥上、公交站、被窝里，一共说了十七次「离谱」，八次「绷不住了」，三次「这不怪我」，一次「明天一定」。\n陶德泉走过来问你：「你是在装什么？」\n你说：「我没装。」\n然后你笑了。\n苏州的天还是会亮，218天还要继续。",
+   "character": null,
+   "choices": [
+    {
+     "text": "查看结算",
+     "next": "ENDING:hidden",
+     "effects": {},
+     "note": "嘴硬的人，会一直嘴硬下去。"
+    }
+   ],
+   "isEnding": true
+  },
+  {
+   "id": "class_room_sit_appear",
+   "time": "07:26",
+   "place": "高三1班教室·门口",
+   "period": "早读",
+   "title": "课间十分钟·1班门口的安检",
+   "speaker": "陶德泉",
+   "text": "7:26，你走进高三1班。教室门口有一道「安检」：陶德泉的视线。\n前排的文星正在把物理小测的最后一道题抄到别人本子上，后排的沈鑫把手机在袖口里捋平，中间那一排全都低着头。\n「都坐好。」陶德泉说，「今天早读背楞次定律，背不下来的，放学留下。」",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "先溜到后排，把手里的东西处理干净再坐下",
+     "next": "class_room_sit",
+     "effects": {
+      "swagger": 3,
+      "caughtRisk": 6
+     },
+     "note": "先处理风险，再处理学业。"
+    },
+    {
+     "text": "直接坐到位置上，翻开书装成最乖的那个",
+     "next": "class_room_sit",
+     "effects": {
+      "swagger": -2,
+      "teacherFavor": 5
+     },
+     "note": "演技是高三必备技能。"
+    },
+    {
+     "text": "凑到文星旁边，用眼睛快速抄一遍物理最后一题",
+     "next": "class_room_sit",
+     "effects": {
+      "homework": 8,
+      "caughtRisk": 8
+     },
+     "note": "视线抄写，是1班独门绝技。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "class_room_sit",
+   "time": "07:29",
+   "place": "高三1班教室·座位",
+   "period": "早读",
+   "title": "落座·早读前的三十秒",
+   "speaker": "陶德泉",
+   "text": "你推开1班的门，早读铃还在响，陶德泉已经站在讲台前翻他的「物理笔记」小本子。\n教室里四十多个人，桌上摊着语文素材和物理必修三，空气里有粉笔灰和昨天没吃完的饼干味。\n有人冲你挤眼睛：班群消息你看到了吗？",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "先坐下，把手机在陶德泉抬头前处理掉",
+     "next": "morning_phone_spotted",
+     "effects": {
+      "stamina": -2
+     },
+     "note": "早读第一定律：手机是敌人。"
+    },
+    {
+     "text": "先把作业补上，别的都往后排",
+     "next": "copy_homework",
+     "effects": {
+      "homework": 5
+     },
+     "note": "作业就是分数，分数就是一切。"
+    },
+    {
+     "text": "跟旁边人聊两句昨天的元旦八卦，再落座",
+     "next": "early_reading",
+     "effects": {
+      "swagger": 2,
+      "love": 3
+     },
+     "note": "开早会，是高中生的自由。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "toilet_branch_appear",
+   "time": "12:52",
+   "place": "食堂·餐盘回收处",
+   "period": "午休",
+   "title": "餐盘与转角的遭遇战",
+   "speaker": "{player}",
+   "text": "你把餐盘往回收口一放，转身就撞上了杨梦的肩。她手里夹着卷子，看你的眼神像看一道没写完的题。\n「吃完了？吃完了回去写。」\n说完她走了三米，又回头补了一句：「今天下午导数第二问，我要点人上黑板。」",
+   "character": "杨梦",
+   "choices": [
+    {
+     "text": "点头哈腰应下，然后立刻跑回教室写题",
+     "next": "toilet_branch",
+     "effects": {
+      "teacherFavor": 2,
+      "homework": 9,
+      "stamina": -5
+     },
+     "note": "怂，但有用。"
+    },
+    {
+     "text": "嘴上答应，转身先去厕所溜一圈",
+     "next": "toilet_branch",
+     "effects": {
+      "swagger": 4,
+      "caughtRisk": 8
+     },
+     "note": "上有政策，下有对策。"
+    },
+    {
+     "text": "硬着头皮问：「老师，第二问能讲一遍吗？」",
+     "next": "toilet_branch",
+     "effects": {
+      "teacherFavor": 6,
+      "homework": 12,
+      "stamina": -6
+     },
+     "note": "她愣了两秒，然后真的讲了一段。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "toilet_branch",
+   "time": "12:56",
+   "place": "教学楼·二楼厕所",
+   "period": "午休",
+   "title": "中午去哪儿·饭后选择",
+   "speaker": "{player}",
+   "text": "中午的田家炳实验高中，有四种人：去操场晒太阳的、去厕所刷手机的、去小卖部排队的、去教室写作业的。\n你站在楼梯口，饭已经吃完，手里还有二十七分钟自由时间。",
+   "character": null,
+   "choices": [
+    {
+     "text": "去厕所，那里信号最好（沈鑫一定在）",
+     "next": "hang",
+     "effects": {
+      "swagger": 2,
+      "caughtRisk": 4
+     },
+     "note": "摸了。"
+    },
+    {
+     "text": "去小卖部，看看饮料机今天吞不吞币",
+     "next": "toilet_slack",
+     "effects": {
+      "stamina": 2
+     },
+     "note": "消费主义。"
+    },
+    {
+     "text": "回教室，把数学作业先干掉两道",
+     "next": "gossip_group",
+     "effects": {
+      "homework": 8,
+      "stamina": -4
+     },
+     "note": "卷王路线。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "canteen_extra",
+   "time": "12:40",
+   "place": "食堂·加餐窗口",
+   "period": "午休",
+   "title": "大盘鸡的最后一份",
+   "speaker": "吴志全",
+   "text": "食堂的加餐窗口今天有大盘鸡，限量二十份。\n吴志全端着盘子冲回来：「还有最后一份！谁要？」\n你身后排队的人瞬间往前挤了半米。\n李宇轩在你左手边，黄文康在你右手边，你们三个人在同一时刻看到了同一盘鸡。",
+   "character": "吴志全",
+   "choices": [
+    {
+     "text": "先付钱先拿，用速度解决一切纠纷",
+     "next": "toilet_branch_appear",
+     "effects": {
+      "swagger": 5,
+      "love": -2,
+      "stamina": 8
+     },
+     "note": "鸡是鸡，朋友是朋友。"
+    },
+    {
+     "text": "让给李宇轩，说自己减肥（其实很想吃）",
+     "next": "toilet_branch_appear",
+     "effects": {
+      "swagger": 3,
+      "love": 4,
+      "stamina": -4
+     },
+     "note": "装逼的最高境界是装不在乎。"
+    },
+    {
+     "text": "提议三个人分着吃，人均三口",
+     "next": "toilet_branch_appear",
+     "effects": {
+      "teacherFavor": 3,
+      "love": 3,
+      "stamina": 3
+     },
+     "note": "孔融让梨，现代版。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "hang",
+   "time": "13:05",
+   "place": "班级群·手机屏幕",
+   "period": "午休",
+   "title": "手机上的一条「已读不回」",
+   "speaker": "{player}",
+   "text": "午休，你缩在教室后排放空，手机屏幕亮了一下——班群又在刷屏，有人在发元旦晚会的假消息。\n蔡永华：「我发誓这次是真的，我表哥在教务处！」\n季心月：「你表哥去年就在教务处。」\n消息刷到99+，陶德泉那一栏始终没有动静。",
+   "character": "蔡永华",
+   "choices": [
+    {
+     "text": "加入群聊，试着制造更大的混乱",
+     "next": "gossip_group",
+     "effects": {
+      "swagger": 8,
+      "caughtRisk": 10
+     },
+     "note": "谣言工厂，今日开机。"
+    },
+    {
+     "text": "潜水，截图，把情报存进相册",
+     "next": "gossip_group",
+     "effects": {
+      "swagger": 3,
+      "homework": -2,
+      "caughtRisk": 4
+     },
+     "note": "情报人员的基本素养。"
+    },
+    {
+     "text": "关掉手机，靠在椅背上看窗外的樟树",
+     "next": "gossip_group",
+     "effects": {
+      "stamina": 6
+     },
+     "note": "高三一分钟的安静，值一节课。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "english_branch",
+   "time": "14:15",
+   "place": "高三1班教室·课前五分钟",
+   "period": "下午",
+   "title": "课前五分钟·听写前的手忙脚乱",
+   "speaker": "{player}",
+   "text": "下午第二节课前的五分钟，是尤晓涵听写前的缓冲区。\n有人翻书，有人用胶带把公式贴在小臂上，有人已经把词典摊在大腿上，准备就地起飞。\n尤晓涵走进来，看起来心情很好——这是最危险的信号。",
+   "character": "尤晓涵",
+   "choices": [
+    {
+     "text": "赶紧翻两页，临时抱佛脚",
+     "next": "english_dictation",
+     "effects": {
+      "homework": 7,
+      "stamina": -3
+     },
+     "note": "临阵磨枪，不快也光。"
+    },
+    {
+     "text": "把重点单词写在手心里，准备偷看",
+     "next": "english_dictation",
+     "effects": {
+      "homework": 10,
+      "caughtRisk": 14
+     },
+     "note": "作弊的代价，取决于被抓的概率。"
+    },
+    {
+     "text": "干脆不看了，赌自己能写出来",
+     "next": "english_dictation",
+     "effects": {
+      "swagger": 5,
+      "homework": -4
+     },
+     "note": "赌徒的浪漫。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "physics_second_round",
+   "time": "16:10",
+   "place": "高三1班教室",
+   "period": "下午",
+   "title": "物理第二张·「你们是我带过最差的一届」",
+   "speaker": "陶德泉",
+   "text": "刘军伟的地理学刚下课，陶德泉又抱着一沓卷子进来了：\n「第二张。刚才那张没做完的，算你们的。这张我讲重点，你们听好了——电磁感应，今年高考必考，我上届三年的题我都做了统计。」\n他翻开卷子，第一道题就冷场了全班。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "认真听完，把每一道题的思路都记下来",
+     "next": "evening_exam_list",
+     "effects": {
+      "teacherFavor": 4,
+      "homework": 12,
+      "stamina": -8
+     },
+     "note": "这才叫上课。"
+    },
+    {
+     "text": "听懂一半，剩下靠感觉",
+     "next": "evening_exam_list",
+     "effects": {
+      "homework": 5,
+      "stamina": -3
+     },
+     "note": "感觉，是高三最常见的替代品。"
+    },
+    {
+     "text": "在草稿纸上画陶德泉的漫画第二季",
+     "next": "evening_exam_list",
+     "effects": {
+      "swagger": 6,
+      "teacherFavor": -2,
+      "caughtRisk": 8
+     },
+     "note": "续集比第一季还像。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_exam_list",
+   "time": "16:45",
+   "place": "高三1班教室·走廊公告栏",
+   "period": "下午",
+   "title": "月考成绩单贴出来了（第二版）",
+   "speaker": "{player}",
+   "text": "陶德泉的卷子讲完，走廊公告栏上的月考成绩单还挂着。\n名次是按班级排的，1班后面跟着2班到9班，九张纸像九面镜子。\n你{player}，又看了一遍自己的名次。这一次，你终于确定自己该笑还是该不说话。",
+   "character": null,
+   "choices": [
+    {
+     "text": "回教室把错题的三道记下来，写进错题本",
+     "next": "class_cadre_predetermined",
+     "effects": {
+      "teacherFavor": 3,
+      "homework": 10,
+      "stamina": -6
+     },
+     "note": "错题本，是高三的保单。"
+    },
+    {
+     "text": "拿出手机，把成绩单拍下来发给妈妈",
+     "next": "class_cadre_predetermined",
+     "effects": {
+      "swagger": -3,
+      "teacherFavor": 2,
+      "homework": 2
+     },
+     "note": "坦白从宽。"
+    },
+    {
+     "text": "装得很淡定，跟旁边人说「反正还能再考」",
+     "next": "class_cadre_predetermined",
+     "effects": {
+      "swagger": 7,
+      "teacherFavor": -2
+     },
+     "note": "嘴硬，是今天的主题曲。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "night_moral",
+   "time": "20:50",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "晚自习后半段·教室还剩多少人",
+   "speaker": "{player}",
+   "text": "21:10，教室里还剩一半人。\n前排的同学已经开启了第三轮复习，后排的同学开始集体犯困，中间的人（比如你）正在经历高三特有的「身体在教室，灵魂在宿舍」状态。\n窗外的路灯亮了，是那种昏黄的、有飞虫的光。",
+   "character": null,
+   "choices": [
+    {
+     "text": "站起来去水房洗把脸，硬撑到放学",
+     "next": "evening_board_erase",
+     "effects": {
+      "stamina": 5
+     },
+     "note": "冷水是高三最好的药。"
+    },
+    {
+     "text": "趴桌上眯五分钟，定个闹钟",
+     "next": "evening_board_erase",
+     "effects": {
+      "homework": -4,
+      "stamina": 9
+     },
+     "note": "眯五分钟是骗人的，一定会睡到放学"
+    },
+    {
+     "text": "继续刷题，把自己写进一种状态里",
+     "next": "evening_board_erase",
+     "effects": {
+      "homework": 10,
+      "stamina": -9
+     },
+     "note": "卷是一种可以上瘾的东西。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_gate_choice",
+   "time": "21:22",
+   "place": "高三1班教室·教室门口",
+   "period": "放学",
+   "title": "门口的三秒钟决定",
+   "speaker": "陶德泉",
+   "text": "放学铃响第二声，陶德泉在门口拉着门：「路上注意安全。」\n走廊里已经开始有人喊「走不走」。这三秒钟，你要决定今晚的最后一分钟怎么过。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "去校门口跟一群人赖着不走",
+     "next": "farewell_gate",
+     "effects": {
+      "swagger": 4,
+      "love": 4
+     },
+     "note": "人多的地方，安全。"
+    },
+    {
+     "text": "直奔公交站，抢一趟车",
+     "next": "farewell_gate",
+     "effects": {
+      "stamina": -2
+     },
+     "note": "效率至上。"
+    },
+    {
+     "text": "独自走觅渡桥那条路回家",
+     "next": "farewell_gate",
+     "effects": {
+      "swagger": 3,
+      "stamina": 2
+     },
+     "note": "桥头有人，也可能没人。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_move_seats",
+   "time": "18:58",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "换座位·自由活动的前奏",
+   "speaker": "陶德泉",
+   "text": "晚自习前，陶德泉走进来，粉笔在讲台上一敲：「今天换座位，自愿，两分钟内换完，换完就闭嘴写作业。」\n全班像被按了快进键，椅子腿刮地的声音汇成一股重金属。有人为了离插座近一点撕破脸，有人为了远离讲台装模作样。\n陶德泉抱着手臂站在门口看你们，像看一场不用买票的戏：「我不管你们坐哪儿。但谁坐在窗边玩手机，我第一个看得清。」\n话音刚落，靠窗的两个位置瞬间空了。",
+   "character": "陶德泉",
+   "choices": [
+    {
+     "text": "抢后排靠门——进可攻抢饭，退可守摸鱼",
+     "next": "evening_recess_chat",
+     "effects": {
+      "swagger": 4,
+      "stamina": 2,
+      "caughtRisk": 6
+     },
+     "note": "后排靠门，高三的军事要地。"
+    },
+    {
+     "text": "抢第一排正中间，让陶德泉天天看得见你",
+     "next": "evening_recess_chat",
+     "effects": {
+      "homework": 12,
+      "teacherFavor": 8,
+      "stamina": -5
+     },
+     "note": "你选择了被阳光和目光同时照射。"
+    },
+    {
+     "text": "抢靠窗的位置，看天桥上的车流和晚霞",
+     "next": "evening_recess_chat",
+     "effects": {
+      "love": 6,
+      "swagger": 3,
+      "caughtRisk": 8
+     },
+     "note": "窗边的风景永远比黑板好看。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_notes_exchange",
+   "time": "20:05",
+   "place": "高三1班教室·后排",
+   "period": "晚自习",
+   "title": "晚自习·笔记交换协议",
+   "speaker": "沈冰雨",
+   "text": "晚自习第二节，沈冰雨把她那本《物化地错题本》从过道递过来，封面用修正液写着「看完还我，别抄，要理解」。\n你翻开第一页，字迹工整得像印刷体，连磁场线都用尺子画。第二页夹着一张贴纸，上面一行小字：\n「陶德泉昨天在办公室说，你最近挺有状态的。」\n后排传来极轻的一声咳嗽，是吴冠儒——他显然也想借这本。",
+   "character": "沈冰雨",
+   "choices": [
+    {
+     "text": "老老实实看完，把三道错题抄进本子并写批注",
+     "next": "paper_note",
+     "effects": {
+      "homework": 14,
+      "teacherFavor": 4,
+      "stamina": -6
+     },
+     "note": "理解比抄写慢，但记得牢。"
+    },
+    {
+     "text": "回一句「那你要不要见识一下我的状态」，写在贴纸背面",
+     "next": "paper_note",
+     "effects": {
+      "love": 12,
+      "swagger": 4,
+      "homework": 2
+     },
+     "note": "你把错题本变成了情书。"
+    },
+    {
+     "text": "直接抄答案，再把本子转给吴冠儒当顺水人情",
+     "next": "paper_note",
+     "effects": {
+      "swagger": 6,
+      "homework": 8,
+      "teacherFavor": -4,
+      "caughtRisk": 6
+     },
+     "note": "你成了后排的中间商。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_recess_chat",
+   "time": "19:35",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "晚自习课间·十分钟的热闹",
+   "speaker": "王子同",
+   "text": "晚自习课间十分钟，教室像被捅了的马蜂窝。\n王子同站在讲台上表演陶德泉讲课：双手一摊，「磁通量增加——来就是拒，去就是留——你越想要，它越躲你。」全班笑得椅子直晃。\n尤正鑫趴在桌上问你：「晚上开黑吗？我上钻石了，就等你一个。」\n教室另一头，霍子琪从抽屉里掏出第四个充电宝，像在拆盲盒。",
+   "character": "王子同",
+   "choices": [
+    {
+     "text": "上台跟他一起演，把陶德泉的语气模仿到以假乱真",
+     "next": "evening_notes_exchange",
+     "effects": {
+      "swagger": 10,
+      "caughtRisk": 14,
+      "stamina": 2
+     },
+     "note": "全场爆笑，除了门口那个人。"
+    },
+    {
+     "text": "和尤正鑫击掌：今晚十点半，谁不来谁孙子",
+     "next": "evening_notes_exchange",
+     "effects": {
+      "swagger": 5,
+      "love": 2,
+      "caughtRisk": 8,
+      "homework": -3
+     },
+     "note": "钻石局的召唤不可拒绝。"
+    },
+    {
+     "text": "把笑声当背景音，继续刷题",
+     "next": "evening_notes_exchange",
+     "effects": {
+      "homework": 12,
+      "teacherFavor": 5,
+      "stamina": -5
+     },
+     "note": "课间十分钟，你做完半道大题。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_board_erase",
+   "time": "20:52",
+   "place": "高三1班教室·黑板",
+   "period": "晚自习",
+   "title": "黑板上的涂鸦",
+   "speaker": "蔡永华",
+   "text": "晚自习最后一个课间，黑板右下角不知被谁画了一幅东西。\n画的是陶德泉站在讲台上，一手粉笔、一手保温杯，嘴张得老大，旁白配字：来就是拒，去就是留。画得极像，连他衬衫第二颗纽扣没扣都画出来了。\n右下角还补了一句：2026届高三1班·物理人生哲学。\n全班都在偷偷笑。然后走廊的脚步声停在了门口。",
+   "character": "蔡永华",
+   "choices": [
+    {
+     "text": "抢上去再补一句「拒绝即自由」，把艺术推向顶峰",
+     "next": "night_patrol",
+     "effects": {
+      "swagger": 16,
+      "caughtRisk": 20,
+      "teacherFavor": -8
+     },
+     "note": "你成了这幅杰作的合署人。"
+    },
+    {
+     "text": "冲上讲台把黑板擦了，救全班一命",
+     "next": "night_patrol",
+     "effects": {
+      "teacherFavor": 14,
+      "homework": -4,
+      "stamina": -6
+     },
+     "note": "你擦黑板的姿势像在抢救文物。"
+    },
+    {
+     "text": "装作没看见，低头背地理",
+     "next": "night_patrol",
+     "effects": {
+      "homework": 8,
+      "caughtRisk": 4
+     },
+     "note": "地理课本第47页，气压带和风带。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_power_off",
+   "time": "21:05",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "停电·三十秒的黑暗",
+   "speaker": "旁白",
+   "text": "21:05，教室的灯猛地闪了两下，然后全灭。\n整栋楼同时响起欢呼，像一场不请自来的节日。走廊的应急灯亮起一道绿光。\n有人跑调地唱歌，有人在黑暗里大喊「放假了」，然后被走廊里那个声音一秒压平：「谁说的？全体保持安静，等维修。」\n黑暗里，你看不清任何人的脸，只听得见自己的心跳。",
+   "character": null,
+   "choices": [
+    {
+     "text": "在黑暗里再算一道电磁感应的大题",
+     "next": "evening_promise",
+     "effects": {
+      "homework": 14,
+      "stamina": -8,
+      "teacherFavor": 4
+     },
+     "note": "停电也没停你的笔。"
+    },
+    {
+     "text": "借着黑暗，把写好的纸条塞到前面的座位里",
+     "next": "evening_promise",
+     "effects": {
+      "love": 16,
+      "caughtRisk": 10,
+      "swagger": 4
+     },
+     "note": "黑暗是三年里最好的掩护。"
+    },
+    {
+     "text": "跟大家一起吼《孤勇者》，吼到声嘶力竭",
+     "next": "evening_promise",
+     "effects": {
+      "swagger": 12,
+      "stamina": -6,
+      "love": 6
+     },
+     "note": "三十秒黑暗里，全班的嗓子同时打开。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_quiet_minute",
+   "time": "21:12",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "放学前的最后一分钟",
+   "speaker": "{player}",
+   "text": "21:12。教室里没人说话，只有翻卷子的声音和走廊远处拖椅子的声音。\n你{player}抬头看了一眼钟，还有八分钟。钟的秒针走得很慢，慢到你能听见自己的心跳混在某个人的笔尖里。\n陶德泉坐在讲台，戴着老花镜改卷。他忽然说：「最后八分钟，别浪费。」",
+   "character": null,
+   "choices": [
+    {
+     "text": "把最后一题写完，哪怕只写一个公式",
+     "next": "evening_dismiss",
+     "effects": {
+      "homework": 8,
+      "stamina": -6
+     },
+     "note": "八分钟的题，值十二分钟的心跳。"
+    },
+    {
+     "text": "把还没写完的作业本收进书包，明天再说",
+     "next": "evening_dismiss",
+     "effects": {
+      "stamina": 5,
+      "homework": -4
+     },
+     "note": "明天是另一个骗局。"
+    },
+    {
+     "text": "合上书，抬头看看窗外的路灯",
+     "next": "evening_dismiss",
+     "effects": {
+      "stamina": 3,
+      "swagger": 2
+     },
+     "note": "高三的空白，也是一种奢侈。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "evening_promise",
+   "time": "21:18",
+   "place": "高三1班教室",
+   "period": "晚自习",
+   "title": "明天一定",
+   "speaker": "蔡晨锐",
+   "text": "蔡晨锐把书包甩上肩膀，回头看你说：「{player}，明天早读物理第二张，你别再空着那题了。」\n你说好。\n他说：「你每次都说明天一定。」\n你说：「明天一定。」\n然后两个人都笑了。笑完发现陶德泉在门口看着你们，也笑了一下。",
+   "character": "蔡晨锐",
+   "choices": [
+    {
+     "text": "认真答应，明早提前半小时到教室写题",
+     "next": "evening_quiet_minute",
+     "effects": {
+      "homework": 10,
+      "teacherFavor": 5,
+      "stamina": -6
+     },
+     "note": "承诺是有代价的，但这次你真的想做到。"
+    },
+    {
+     "text": "嘴上答应，心里打算明早继续抄文星的",
+     "next": "evening_quiet_minute",
+     "effects": {
+      "swagger": 5,
+      "caughtRisk": 8,
+      "homework": 4
+     },
+     "note": "高中最经典的一句谎：明天一定。"
+    },
+    {
+     "text": "反问他：「那你呢？」把话题推回去",
+     "next": "evening_quiet_minute",
+     "effects": {
+      "swagger": 6,
+      "love": 2
+     },
+     "note": "反问，是最好的防守。"
+    }
+   ],
+   "isEnding": false
+  },
+  {
+   "id": "farewell_lookback",
+   "time": "21:22",
+   "place": "新市路·校门口",
+   "period": "放学",
+   "title": "回头看一眼教学楼",
+   "speaker": "{player}",
+   "text": "走出校门二十米，你{player}回头看了一眼。\n高三楼的灯还亮着三间：一间是陶德泉的办公室，一间是没关灯的教室，还有一间不知道是谁的。\n夜里的田家炳实验高级中学，比白天安静，也比白天更像一所学校。",
+   "character": null,
+   "choices": [
+    {
+     "text": "拍一张照片，存进相册里那个叫「高三」的文件夹",
+     "next": "farewell_gate",
+     "effects": {
+      "love": 4,
+      "stamina": 2
+     },
+     "note": "有些照片，要等到很多年以后才知道值钱。"
+    },
+    {
+     "text": "头也不回地快步走，早点回家",
+     "next": "farewell_gate",
+     "effects": {
+      "stamina": 4,
+      "homework": 2
+     },
+     "note": "效率，是高三的习惯。"
+    },
+    {
+     "text": "在心里说一句：「明天见。」",
+     "next": "farewell_gate",
+     "effects": {
+      "swagger": 3,
+      "stamina": 1
+     },
+     "note": "明天见，是最好的告别。"
+    }
+   ],
+   "isEnding": false
+  }
+ ]
+}</script>
+<script id="data-students" type="application/json">{
+  "school": {
+    "name": "苏州市田家炳实验高级中学（新市路校区）",
+    "grade": "高三",
+    "subjectCombo": "物理+化学+地理",
+    "startTime": "07:30",
+    "endTime": "21:20",
+    "classCount": 9
+  },
+  "classCount": 9,
+  "classes": [
+    {
+      "id": "class1",
+      "name": "高三1班",
+      "teacher": "陶德泉",
+      "students": [
+        {
+          "name": "邢钟铭",
+          "gender": "male",
+          "tag": "全班牌面·物理狂人",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "文星",
+          "gender": "male",
+          "tag": "嘴硬王·从不认错",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "尤正鑫",
+          "gender": "male",
+          "tag": "隐藏学霸·装菜高手",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "薛子宏",
+          "gender": "male",
+          "tag": "篮球王·早读迟到专业户",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "陈雨彤",
+          "gender": "female",
+          "tag": "班花·人缘天花板",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "王子同",
+          "gender": "male",
+          "tag": "社牛·走廊社交大使",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "沈冰雨",
+          "gender": "female",
+          "tag": "语文课代表·温柔刺客",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "霍子琪",
+          "gender": "female",
+          "tag": "手机之王·抽屉里全是充电宝",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "王苏妍",
+          "gender": "female",
+          "tag": "卷王·课间也在写题",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "蔡晨锐",
+          "gender": "male",
+          "tag": "物理狂人·爱跟老师抬杠",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "陈可馨",
+          "gender": "female",
+          "tag": "班长·眼神有杀气",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "蔡永华",
+          "gender": "male",
+          "tag": "沉默寡言·开口即暴击",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "王佳钰",
+          "gender": "female",
+          "tag": "英语课代表·听写永不翻车",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "沈钰青",
+          "gender": "male",
+          "tag": "文艺委员·随身带吉他",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "陆乔伊",
+          "gender": "male",
+          "tag": "转学生·自带苏州话",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "黄鹏",
+          "gender": "male",
+          "tag": "篮球王·一米九的移动禁区",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "杨璐嘉",
+          "gender": "male",
+          "tag": "追星大王·课桌贴满海报",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "施华靖",
+          "gender": "male",
+          "tag": "体育委员·肺活量断层第一",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "申雨辰",
+          "gender": "male",
+          "tag": "数学课代表·解题像开挂",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "李宇轩",
+          "gender": "male",
+          "tag": "游戏高玩·晚自习开黑组织者",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "孙苏海",
+          "gender": "male",
+          "tag": "摸鱼大师·厕所驻场嘉宾",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "吴家会",
+          "gender": "male",
+          "tag": "小卖部老板亲戚·零食批发商",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "吴诗溢",
+          "gender": "male",
+          "tag": "文学少女·随笔写得像散文诗",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "吴志全",
+          "gender": "male",
+          "tag": "班级纪检·记名册不离手",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "吴冠儒",
+          "gender": "male",
+          "tag": "理综铁人·三科全满",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "蔡婧怡",
+          "gender": "female",
+          "tag": "学委·温柔但铁面",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "贾雯",
+          "gender": "female",
+          "tag": "化学课代表·实验手最稳",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "张业博",
+          "gender": "male",
+          "tag": "奥赛预备队·物理组扛把子",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "谢陈悦",
+          "gender": "male",
+          "tag": "地理课代表·地图成精",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "夏晨曦",
+          "gender": "female",
+          "tag": "早读领读·嗓子自带音响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "鲁翊菲",
+          "gender": "female",
+          "tag": "美术生·课本全是素描",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "刘宇昊",
+          "gender": "male",
+          "tag": "体育特长生·跑操永远第一",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "季心月",
+          "gender": "female",
+          "tag": "心理委员·谁的情绪都归她管",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "蔡蕊",
+          "gender": "female",
+          "tag": "广播站主播·声音自带混响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "周琳娜",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "黄文康",
+          "gender": "male",
+          "tag": "副班长·陶老师心腹",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "赵紫涵",
+          "gender": "female",
+          "tag": "背单词狂人·口袋里都是单词卡",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "孙安妮",
+          "gender": "female",
+          "tag": "文艺委员·元旦节目总导演",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "杨雨晴",
+          "gender": "female",
+          "tag": "奶茶联络员·外卖门内应",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "霍欣怡",
+          "gender": "female",
+          "tag": "文静学霸·笔记像印刷体",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "袁晓天",
+          "gender": "male",
+          "tag": "课间跑廊王·一节课能跑遍三层楼",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "刘自豪",
+          "gender": "male",
+          "tag": "嘴炮王·吹牛不打草稿",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "韦可涵",
+          "gender": "female",
+          "tag": "班歌领唱·开口全班静音",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "沈鑫",
+          "gender": "male",
+          "tag": "篮球王·三分线外开火",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "许思远",
+          "gender": "male",
+          "tag": "未来程序员·上课偷偷改代码",
+          "isFavoriteNPC": true
+        },
+        {
+          "name": "丁俪芸",
+          "gender": "female",
+          "tag": "细心后勤·全班橡皮归她管",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class2",
+      "name": "高三2班",
+      "teacher": "徐立强",
+      "students": [
+        {
+          "name": "徐佳宁",
+          "gender": "female",
+          "tag": "文静学霸·笔记像印刷体",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "陆天佑",
+          "gender": "male",
+          "tag": "篮球狂魔·下课必冲球场",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "顾思齐",
+          "gender": "male",
+          "tag": "数学卷王·刷题刷到凌晨",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "吴雨桐",
+          "gender": "female",
+          "tag": "班花·笑起来有酒窝",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "周子豪",
+          "gender": "male",
+          "tag": "手机之王·充电宝三件套",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "钱嘉乐",
+          "gender": "male",
+          "tag": "社牛·谁都能聊两句",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "沈嘉怡",
+          "gender": "female",
+          "tag": "语文课代表·作文一级棒",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "朱俊熙",
+          "gender": "male",
+          "tag": "物理狂人·公式张口就来",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "许佳怡",
+          "gender": "female",
+          "tag": "奶茶达人·一天两杯不减",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "曹宇航",
+          "gender": "male",
+          "tag": "体育委员·跑操喊得最响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "姚思婷",
+          "gender": "female",
+          "tag": "隐藏学霸·考试总在前三",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "张宇航",
+          "gender": "male",
+          "tag": "沉默寡言·说话不超过五个字",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "姜天宇",
+          "gender": "male",
+          "tag": "电竞高手·中午打排位",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "祝小小",
+          "gender": "female",
+          "tag": "美术特长生·随手一张速写",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "唐一诺",
+          "gender": "female",
+          "tag": "英语课代表·听写零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "傅晨阳",
+          "gender": "male",
+          "tag": "走廊跑神·课间跑遍三层楼",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "洪明宇",
+          "gender": "male",
+          "tag": "化学实验手·点火不眨眼",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "戴雨欣",
+          "gender": "female",
+          "tag": "文艺委员·唱跳全能",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "金皓然",
+          "gender": "male",
+          "tag": "嘴硬王·从不认错",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宋雨泽",
+          "gender": "male",
+          "tag": "闷骚型·嘴上不说心里记",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "韩思远",
+          "gender": "male",
+          "tag": "未来程序员·键盘敲得飞快",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "叶梓涵",
+          "gender": "female",
+          "tag": "背单词狂人·单词卡不离手",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "葛一鸣",
+          "gender": "male",
+          "tag": "一鸣惊人·月考黑马",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "倪晓彤",
+          "gender": "female",
+          "tag": "班主任小助手·记事本达人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "潘博文",
+          "gender": "male",
+          "tag": "怼老师专业户·反问句满分",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "殷悦",
+          "gender": "female",
+          "tag": "温和调解员·吵架都找她",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "史浩宇",
+          "gender": "male",
+          "tag": "操场常客·体育课全勤",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "邱思雨",
+          "gender": "female",
+          "tag": "细致后勤·作业从来不忘交",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "方嘉宁",
+          "gender": "female",
+          "tag": "班歌领唱·开口全班静音",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "崔子瑞",
+          "gender": "male",
+          "tag": "数学课代表·解题像开挂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "汪嘉诚",
+          "gender": "male",
+          "tag": "吹牛王·故事一天一个新",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "汤欣悦",
+          "gender": "female",
+          "tag": "追星少女·课桌贴满海报",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "钟伟杰",
+          "gender": "male",
+          "tag": "地图成精·地理不复习",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "毛欣怡",
+          "gender": "female",
+          "tag": "广播站主播·声音自带混响",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class3",
+      "name": "高三3班",
+      "teacher": "程雪松",
+      "students": [
+        {
+          "name": "戴思琪",
+          "gender": "female",
+          "tag": "班长·眼神有杀气",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "陆子谦",
+          "gender": "male",
+          "tag": "冷静分析派·吵架逻辑满分",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "许家豪",
+          "gender": "male",
+          "tag": "篮球王·三分线外开火",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "沈咏恩",
+          "gender": "female",
+          "tag": "温柔但铁面·纪检不留情",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "周鹤鸣",
+          "gender": "male",
+          "tag": "声音洪亮·早读领读员",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "杨帆",
+          "gender": "male",
+          "tag": "梦想航海家·张口就环球",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "吴佳桐",
+          "gender": "female",
+          "tag": "化学课代表·实验手最稳",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "李承泽",
+          "gender": "male",
+          "tag": "物理建模控·草稿纸三本",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "何明珠",
+          "gender": "female",
+          "tag": "班花·气质挂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "马嘉豪",
+          "gender": "male",
+          "tag": "游戏高玩·晚自习开黑组织者",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "罗嘉欣",
+          "gender": "female",
+          "tag": "文学少女·随笔写得像散文诗",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "高子豪",
+          "gender": "male",
+          "tag": "体育特长生·弹跳惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "邓诗语",
+          "gender": "female",
+          "tag": "英语听力第一·耳朵成精",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "钱鹏飞",
+          "gender": "male",
+          "tag": "吹牛不改口·越吹越离谱",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "苏晓婧",
+          "gender": "female",
+          "tag": "心理委员·谁的情绪都归她管",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郑博远",
+          "gender": "male",
+          "tag": "奥赛预备队·物理组扛把子",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "梁俊杰",
+          "gender": "male",
+          "tag": "嘴炮王·表情包供应商",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "韦嘉琪",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "黄子涵",
+          "gender": "female",
+          "tag": "细心后勤·全班笔芯归她管",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "谢嘉豪",
+          "gender": "male",
+          "tag": "球场万金油·从不会累",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "雷雨欣",
+          "gender": "female",
+          "tag": "生物课代表·标本如数家珍",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "夏子航",
+          "gender": "male",
+          "tag": "手机之王·被收三台还偷用",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "孟佳",
+          "gender": "female",
+          "tag": "元旦节目总导演",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "顾天磊",
+          "gender": "male",
+          "tag": "社牛·走廊社交大使",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "项雨轩",
+          "gender": "male",
+          "tag": "棋类高手·课间摆一盘",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "范晓雯",
+          "gender": "female",
+          "tag": "笔记达人·字像印刷体",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "乔子墨",
+          "gender": "male",
+          "tag": "国风少年·琴棋书画样样会",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "傅思婷",
+          "gender": "female",
+          "tag": "奶茶联络员·外卖门内应",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "曾子豪",
+          "gender": "male",
+          "tag": "摸鱼大师·厕所驻场嘉宾",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "洪佳怡",
+          "gender": "female",
+          "tag": "卷王·课间也在写题",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "林雨欣",
+          "gender": "female",
+          "tag": "追星大王·海报贴到天花板",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "费子涵",
+          "gender": "male",
+          "tag": "物理狂人·爱跟老师抬杠",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class4",
+      "name": "高三4班",
+      "teacher": "何晓燕",
+      "students": [
+        {
+          "name": "谢佳琪",
+          "gender": "female",
+          "tag": "文静学霸·错题本厚如砖",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "邹子涵",
+          "gender": "male",
+          "tag": "篮球王·一米九的移动禁区",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "丁宇轩",
+          "gender": "male",
+          "tag": "数学狂人·一见题就兴奋",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "熊思颖",
+          "gender": "female",
+          "tag": "广播站主播·播音腔标准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "莫佳磊",
+          "gender": "male",
+          "tag": "嘴硬王·被戳穿也不改口",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "路一鸣",
+          "gender": "male",
+          "tag": "社牛·新朋友一天五个",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "毛嘉琪",
+          "gender": "female",
+          "tag": "英语课代表·听写零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "柳子豪",
+          "gender": "male",
+          "tag": "化学实验手·喜欢放烟花",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "孙浩宇",
+          "gender": "male",
+          "tag": "操场常客·下课必上球场",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郝思嘉",
+          "gender": "female",
+          "tag": "班花·笑起来有点甜",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "彭博文",
+          "gender": "male",
+          "tag": "物理怪才·别人不懂他懂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "曹嘉宁",
+          "gender": "female",
+          "tag": "细致后勤·值日排班达人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "戚子豪",
+          "gender": "male",
+          "tag": "隐藏学霸·嘴上说没复习",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "谢雨桐",
+          "gender": "female",
+          "tag": "班歌领唱·高音稳如老狗",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "秦子谦",
+          "gender": "male",
+          "tag": "外交型·谁都能聊起来",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "石佳颖",
+          "gender": "female",
+          "tag": "纪律委员·从不放过迟到",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "龚天佑",
+          "gender": "male",
+          "tag": "走廊跑神·被抓住三十次",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "蒋思婷",
+          "gender": "female",
+          "tag": "语文课代表·读后感写三页",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "许嘉豪",
+          "gender": "male",
+          "tag": "球场万金油·体力怪",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "樊雨轩",
+          "gender": "male",
+          "tag": "游戏高玩·开黑指挥位",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "沈佳怡",
+          "gender": "female",
+          "tag": "笔记达人·一学期写八本",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "魏晓东",
+          "gender": "male",
+          "tag": "未来程序员·上课敲代码",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "苏子豪",
+          "gender": "male",
+          "tag": "吹牛王·越吹越起劲",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "徐诗雨",
+          "gender": "female",
+          "tag": "追星少女·应援色头绳",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "曹雨晴",
+          "gender": "female",
+          "tag": "元旦节目总导演",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "余子航",
+          "gender": "male",
+          "tag": "篮球王·绝杀专业户",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "欧嘉欣",
+          "gender": "female",
+          "tag": "心理委员·谁的心事都听得懂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "项天宇",
+          "gender": "male",
+          "tag": "物理建模控·爱画受力图",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "容子涵",
+          "gender": "male",
+          "tag": "摸鱼大师·厕所常驻",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "薛佳妮",
+          "gender": "female",
+          "tag": "英语听力成精·耳朵从不掉线",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "朱子睿",
+          "gender": "male",
+          "tag": "奥赛预备队·题感惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "纪思远",
+          "gender": "male",
+          "tag": "沉默寡言·一开口是金句",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "包语桐",
+          "gender": "female",
+          "tag": "美术生·课本全是素描",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "殷嘉颖",
+          "gender": "female",
+          "tag": "卷王·连食堂都在背单词",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class5",
+      "name": "高三5班",
+      "teacher": "邱建华",
+      "students": [
+        {
+          "name": "管思远",
+          "gender": "male",
+          "tag": "物理狂人·公式张口就来",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "施嘉怡",
+          "gender": "female",
+          "tag": "班长·眼神有杀气",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "聂子豪",
+          "gender": "male",
+          "tag": "嘴炮王·下课全是他声音",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "苗雨欣",
+          "gender": "female",
+          "tag": "英语课代表·听写零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "詹天豪",
+          "gender": "male",
+          "tag": "篮球王·抢板不要命",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "万子谦",
+          "gender": "male",
+          "tag": "文艺委员·随身带吉他",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "鞠佳宁",
+          "gender": "female",
+          "tag": "静默型·存在感全靠成绩",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "梁博文",
+          "gender": "male",
+          "tag": "学霸但低调·成绩单常第一",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "洪诗雨",
+          "gender": "female",
+          "tag": "追星达人·壁纸一周一换",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宋子涵",
+          "gender": "male",
+          "tag": "化学课代表·实验敢点火",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "钟佳琪",
+          "gender": "female",
+          "tag": "广播站主播·声音自带混响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "崔宇航",
+          "gender": "male",
+          "tag": "体育特长生·跑操永远第一",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "尤佳磊",
+          "gender": "male",
+          "tag": "游戏高玩·开黑指挥位",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "何雨萱",
+          "gender": "female",
+          "tag": "奶茶联络员·外卖门内应",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "谢子健",
+          "gender": "male",
+          "tag": "手机之王·抽屉塞三台",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "温佳怡",
+          "gender": "female",
+          "tag": "笔记达人·卷面永远整洁",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "臧浩宇",
+          "gender": "male",
+          "tag": "数学卷王·刷题刷到凌晨",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "贺思颖",
+          "gender": "female",
+          "tag": "语文课代表·作文年级范文",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "吴子豪",
+          "gender": "male",
+          "tag": "沉默寡言·说话不超过五个字",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "商嘉欣",
+          "gender": "female",
+          "tag": "细致后勤·作业从不漏交",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "严子航",
+          "gender": "male",
+          "tag": "物理怪才·爱推公式",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "卜雨桐",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "罗子睿",
+          "gender": "male",
+          "tag": "奥赛预备队·题感惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "梅佳妮",
+          "gender": "female",
+          "tag": "温柔但铁面·纪检不留情",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "段天佑",
+          "gender": "male",
+          "tag": "球场万金油·从不会累",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "游子涵",
+          "gender": "male",
+          "tag": "吹牛王·故事一天一个新",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "喻子墨",
+          "gender": "male",
+          "tag": "国风少年·琴棋书画样样会",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "程雨晴",
+          "gender": "female",
+          "tag": "元旦节目总导演",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "牛博远",
+          "gender": "male",
+          "tag": "未来程序员·键盘敲得飞快",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "莫佳琪",
+          "gender": "female",
+          "tag": "班花·气质挂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "童一鸣",
+          "gender": "male",
+          "tag": "一鸣惊人·月考黑马",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "鞠思婷",
+          "gender": "female",
+          "tag": "心理委员·谁的情绪都归她管",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "官子豪",
+          "gender": "male",
+          "tag": "走廊跑神·课间跑遍三层楼",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "霍佳怡",
+          "gender": "female",
+          "tag": "卷王·课间也在写题",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class6",
+      "name": "高三6班",
+      "teacher": "严志勇",
+      "students": [
+        {
+          "name": "乔诗涵",
+          "gender": "female",
+          "tag": "文静学霸·错题本厚如砖",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "鲁子健",
+          "gender": "male",
+          "tag": "篮球王·绝杀专业户",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "柏子涵",
+          "gender": "male",
+          "tag": "物理建模控·草稿纸三本",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "池佳琪",
+          "gender": "female",
+          "tag": "课代表·作业收缴零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "计宇航",
+          "gender": "male",
+          "tag": "摸鱼大师·厕所驻场嘉宾",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "翟雨欣",
+          "gender": "female",
+          "tag": "班歌领唱·高音稳如老狗",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "苏嘉豪",
+          "gender": "male",
+          "tag": "嘴硬王·从不认错",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "司文博",
+          "gender": "male",
+          "tag": "物理狂人·爱跟老师抬杠",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "包佳宁",
+          "gender": "female",
+          "tag": "班长·眼神有杀气",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "权子豪",
+          "gender": "male",
+          "tag": "操场上瘾·体育课全勤",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宁思远",
+          "gender": "male",
+          "tag": "冷面型·只对物理笑",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "穆佳怡",
+          "gender": "female",
+          "tag": "英语听力成精·耳朵抓音神准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "闵子豪",
+          "gender": "male",
+          "tag": "数学课代表·解题像开挂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "雷嘉乐",
+          "gender": "male",
+          "tag": "社牛·谁都能聊两句",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "詹雨婷",
+          "gender": "female",
+          "tag": "文艺委员·元旦节目御用",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "庞子谦",
+          "gender": "male",
+          "tag": "手机之王·上课偷刷视频",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "楼思颖",
+          "gender": "female",
+          "tag": "笔记达人·一学期写八本",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "明文轩",
+          "gender": "male",
+          "tag": "未来程序员·上课偷偷改代码",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "樊天宇",
+          "gender": "male",
+          "tag": "地理课代表·地图背到闭眼",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "达佳磊",
+          "gender": "male",
+          "tag": "球场万金油·体力怪",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "项雨晴",
+          "gender": "female",
+          "tag": "奶茶达人·一天两杯不减",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "钟子航",
+          "gender": "male",
+          "tag": "马拉松型·跑操永远第一",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "施嘉颖",
+          "gender": "female",
+          "tag": "追星少女·应援色头绳",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "尚子豪",
+          "gender": "male",
+          "tag": "吹牛王·越吹越离谱",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "韦雨桐",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "安博文",
+          "gender": "male",
+          "tag": "沉默寡言·一开口是金句",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "骆佳怡",
+          "gender": "female",
+          "tag": "心理委员·谁的心事都听得懂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "车天磊",
+          "gender": "male",
+          "tag": "篮球王·抢板不要命",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "欧阳嘉欣",
+          "gender": "female",
+          "tag": "卷王·连食堂都在背单词",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "黎思远",
+          "gender": "male",
+          "tag": "隐藏学霸·嘴上说没复习",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "储子睿",
+          "gender": "male",
+          "tag": "物理狂人·张口牛顿三定律",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "潘雨桐",
+          "gender": "female",
+          "tag": "英语晨读领读·发音标准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "封子谦",
+          "gender": "male",
+          "tag": "国风少年·古筝十级",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "翟子涵",
+          "gender": "male",
+          "tag": "物理建模控·草稿纸三本",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "解佳琪",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class7",
+      "name": "高三7班",
+      "teacher": "汪晓东",
+      "students": [
+        {
+          "name": "锦程",
+          "gender": "male",
+          "tag": "数学狂人·难题收集癖",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "王毓涵",
+          "gender": "female",
+          "tag": "文静·一肚子冷笑话",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郑凯文",
+          "gender": "male",
+          "tag": "篮球王·球场气氛组组长",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "蔡诗琪",
+          "gender": "female",
+          "tag": "英语课代表·晨读领读",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "冯宇航",
+          "gender": "male",
+          "tag": "物理狂人·张口牛顿三定律",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "蒋思远",
+          "gender": "male",
+          "tag": "奥赛预备队·物理组扛把子",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "窦佳琪",
+          "gender": "female",
+          "tag": "班长·气场一米八",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "平子豪",
+          "gender": "male",
+          "tag": "走廊跑神·被抓住三十次",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "赵嘉欣",
+          "gender": "female",
+          "tag": "文学少女·作文只写散文",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "闵子墨",
+          "gender": "male",
+          "tag": "国风少年·琴棋书画样样会",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "董佳磊",
+          "gender": "male",
+          "tag": "体育委员·跑操喊得最响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "莫雨欣",
+          "gender": "female",
+          "tag": "细致后勤·全班橡皮归她管",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "泰子涵",
+          "gender": "male",
+          "tag": "吹牛王·故事一天一个新",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "葛雨桐",
+          "gender": "female",
+          "tag": "周末见不得·一进校就困",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郎子睿",
+          "gender": "male",
+          "tag": "未来程序员·键盘敲到飞起",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "饶佳怡",
+          "gender": "female",
+          "tag": "元旦节目总导演",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "栗子豪",
+          "gender": "male",
+          "tag": "球场万金油·体力怪",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "帅思颖",
+          "gender": "female",
+          "tag": "广播站主播·声音自带混响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郁佳宁",
+          "gender": "female",
+          "tag": "英语听力成精·耳朵从不掉线",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "祁宇航",
+          "gender": "male",
+          "tag": "物理建模控·爱画受力图",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "戎思远",
+          "gender": "male",
+          "tag": "冷面型·只对物理笑",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "解子豪",
+          "gender": "male",
+          "tag": "嘴硬王·从不认错",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "闫嘉怡",
+          "gender": "female",
+          "tag": "奶茶联络员·外卖门内应",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "饶思婷",
+          "gender": "female",
+          "tag": "课代表·作业收缴零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "曾雨欣",
+          "gender": "female",
+          "tag": "追星达人·海报糊满课桌",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "强子健",
+          "gender": "male",
+          "tag": "操场常客·体育课全勤",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "鹿子涵",
+          "gender": "male",
+          "tag": "低调型·成绩从不宣传",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "易佳欣",
+          "gender": "female",
+          "tag": "心理委员·谁的情绪都归她管",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "邢天宇",
+          "gender": "male",
+          "tag": "物理狂人·公式张口就来",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "柳雨涵",
+          "gender": "female",
+          "tag": "笔记本比教科书还全",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "房子豪",
+          "gender": "male",
+          "tag": "游戏高玩·开黑指挥位",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "花子墨",
+          "gender": "male",
+          "tag": "国风少年·琴棋书画样样会",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "查佳颖",
+          "gender": "female",
+          "tag": "班花·笑起来有酒窝",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "冷子健",
+          "gender": "male",
+          "tag": "闷骚型·嘴上不说心里记",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宣子涵",
+          "gender": "male",
+          "tag": "数学卷王·刷题刷到凌晨",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "邬思远",
+          "gender": "male",
+          "tag": "沉默寡言·说话不超过五个字",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class8",
+      "name": "高三8班",
+      "teacher": "薛文斌",
+      "students": [
+        {
+          "name": "韩宇航",
+          "gender": "male",
+          "tag": "物理怪才·别人不懂他懂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "景佳铭",
+          "gender": "male",
+          "tag": "篮球王·三分线外开火",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "池雨欣",
+          "gender": "female",
+          "tag": "文静学霸·笔记像印刷体",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "俞子豪",
+          "gender": "male",
+          "tag": "嘴炮王·表情包供应商",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "花思远",
+          "gender": "male",
+          "tag": "奥赛预备队·题感惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "齐雨桐",
+          "gender": "female",
+          "tag": "语文课代表·作文一级棒",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "邹宇航",
+          "gender": "male",
+          "tag": "手机之王·被收两台还偷用",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "尤佳琪",
+          "gender": "female",
+          "tag": "班长·眼神有杀气",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "闻子涵",
+          "gender": "male",
+          "tag": "物理建模控·草稿纸三本",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "闻嘉怡",
+          "gender": "female",
+          "tag": "英语课代表·听写零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "盛子健",
+          "gender": "male",
+          "tag": "体育特长生·弹跳惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "车思颖",
+          "gender": "female",
+          "tag": "美术生·课本全是素描",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "花子豪",
+          "gender": "male",
+          "tag": "走廊跑神·课间跑遍三层楼",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "来佳宁",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "司徒子涵",
+          "gender": "male",
+          "tag": "未来程序员·上课改代码",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "易雨婷",
+          "gender": "female",
+          "tag": "文艺委员·唱跳全能",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宁宇航",
+          "gender": "male",
+          "tag": "球场万金油·从不会累",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "云佳磊",
+          "gender": "male",
+          "tag": "沉默寡言·一开口是金句",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "尉雨晴",
+          "gender": "female",
+          "tag": "卷王·课间也在写题",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郑思远",
+          "gender": "male",
+          "tag": "数学课代表·解题像开挂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "卜嘉豪",
+          "gender": "male",
+          "tag": "摸鱼大师·厕所驻场嘉宾",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "尹诗涵",
+          "gender": "female",
+          "tag": "笔记本比教科书还全",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "郭佳怡",
+          "gender": "female",
+          "tag": "奶茶联络员·外卖门内应",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "霍子健",
+          "gender": "male",
+          "tag": "物理狂人·爱跟老师抬杠",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "巩雨欣",
+          "gender": "female",
+          "tag": "广播站主播·声音自带混响",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "项嘉乐",
+          "gender": "male",
+          "tag": "一鸣惊人·月考黑马",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "毕子航",
+          "gender": "male",
+          "tag": "篮球王·绝杀专业户",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "牟思婷",
+          "gender": "female",
+          "tag": "心理委员·谁的心事都听得懂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "卓雨桐",
+          "gender": "female",
+          "tag": "追星少女·应援色头绳",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "岑子豪",
+          "gender": "male",
+          "tag": "吹牛王·越吹越起劲",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "巫子谦",
+          "gender": "male",
+          "tag": "国风少年·琴棋书画样样会",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "雷佳琪",
+          "gender": "female",
+          "tag": "英语听力成精·嘴角挂笑",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "冉思远",
+          "gender": "male",
+          "tag": "外交型·新朋友一天五个",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "简雨涵",
+          "gender": "female",
+          "tag": "细致后勤·作业从不漏交",
+          "isFavoriteNPC": false
+        }
+      ]
+    },
+    {
+      "id": "class9",
+      "name": "高三9班",
+      "teacher": "欧阳静",
+      "students": [
+        {
+          "name": "施宇航",
+          "gender": "male",
+          "tag": "物理狂人·公式张口就来",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "夏佳铭",
+          "gender": "male",
+          "tag": "篮球王·绝杀专业户",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "戚雨欣",
+          "gender": "female",
+          "tag": "文静学霸·错题本厚如砖",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "仲子豪",
+          "gender": "male",
+          "tag": "嘴硬王·从不认错",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "褚思远",
+          "gender": "male",
+          "tag": "奥赛预备队·题感惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "皇甫佳怡",
+          "gender": "female",
+          "tag": "班长·眼神有杀气",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "梁宇豪",
+          "gender": "male",
+          "tag": "数学卷王·刷题刷到凌晨",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "沈梦琪",
+          "gender": "female",
+          "tag": "班花·笑起来有酒窝",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "章子健",
+          "gender": "male",
+          "tag": "手机之王·充电宝三件套",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "万嘉豪",
+          "gender": "male",
+          "tag": "球场万金油·体力无限",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "祝雨桐",
+          "gender": "female",
+          "tag": "英语课代表·听写零失误",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "闵子涵",
+          "gender": "male",
+          "tag": "物理建模控·爱画受力图",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "季佳磊",
+          "gender": "male",
+          "tag": "体育特长生·弹跳惊人",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "常思婷",
+          "gender": "female",
+          "tag": "语文课代表·作文一级棒",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "晏子航",
+          "gender": "male",
+          "tag": "未来程序员·键盘敲到飞起",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "苟雨晴",
+          "gender": "female",
+          "tag": "美术生·课本全是素描",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "柴子豪",
+          "gender": "male",
+          "tag": "走廊跑神·被抓住三十次",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "商嘉怡",
+          "gender": "female",
+          "tag": "心理委员·谁的心事都听得懂",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "卫子辉",
+          "gender": "male",
+          "tag": "闷骚型·心里戏最多",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宿佳宁",
+          "gender": "female",
+          "tag": "宿舍长·查寝比老师还准",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "丰宇航",
+          "gender": "male",
+          "tag": "一鸣惊人·月考黑马",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "窦思颖",
+          "gender": "female",
+          "tag": "课本插图手绘小能手",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "游嘉豪",
+          "gender": "male",
+          "tag": "摸鱼大师·厕所常驻",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "柳子涵",
+          "gender": "male",
+          "tag": "球场面孔·气氛组组长",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "马佳琪",
+          "gender": "female",
+          "tag": "英语听力成精·耳朵从不掉线",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "牟雨轩",
+          "gender": "male",
+          "tag": "物理怪才·看题就笑",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "翁子谦",
+          "gender": "male",
+          "tag": "国风少年·琴棋书画样样会",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "索雨欣",
+          "gender": "female",
+          "tag": "追星少女·海报贴满墙",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宁嘉乐",
+          "gender": "male",
+          "tag": "吹牛王·故事一天一个新",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "宗思远",
+          "gender": "male",
+          "tag": "沉默寡言·说话不超过五个字",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "万佳瑜",
+          "gender": "female",
+          "tag": "元旦节目总导演",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "曲子豪",
+          "gender": "male",
+          "tag": "篮球王·三分线外开火",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "何雨桐",
+          "gender": "female",
+          "tag": "奶茶联络员·外卖门内应",
+          "isFavoriteNPC": false
+        },
+        {
+          "name": "席子涵",
+          "gender": "male",
+          "tag": "数学课代表·解题像开挂",
+          "isFavoriteNPC": false
+        }
+      ]
+    }
+  ],
+  "teachers": [
+    {
+      "subject": "物理",
+      "name": "陶德泉",
+      "isHeadTeacher": true,
+      "title": "班主任",
+      "persona": "陶德泉，男，物理老师兼高三1班班主任，四十出头，头发梳得像被静电理过，说话永远比学生慢半拍，因为他要先在脑子里跑一遍完整推演再开口。全校公认最难糊弄的人——你随口说一句“昨天写完作业两点睡”，他抬眼看你三秒：“你眼神聚散正常、字迹没抖、早读打哈欠时长0.8秒，两点睡的人打哈欠会带泪，你是十点半睡的。”逻辑碾压，盯人更狠，晚自习后门的脚步声就是他，永远的“嗒、嗒、拖”——第三声那个拖，是他在看你的抽屉。最恐怖的是他从不吼人，只用一句“来，你把这题再讲一遍”把全场冻结。学生们私下拉了个“被陶老师问过的题”互相传递，传到最后比高考真题还全。口头禅：“我不骂人，我讲道理。”“你觉得你演得像吗？”“来，三秒钟，自己想。”“这不是我要的答案，这是你想要我听的答案。”传说他一年只笑两次，一次是班级物理均分超年级线，一次是有人在课上问出好问题。"
+    },
+    {
+      "subject": "语文",
+      "name": "张彤",
+      "isHeadTeacher": false,
+      "title": "语文教研组长",
+      "persona": "张彤，女，语文老师，典型文青，永远抱着一个磨出毛边的笔记本，上讲台第一句话通常是“今天我们不做题，聊点人生”。作文讲评能从一句“我家窗外有棵香樟”扯到个体的存在意义、城市的速度、人为什么要往前走，讲到动情处会停下来喝一口保温杯里的茶，然后问全班：“你有没有一个瞬间，觉得自己不属于这里？”全班鸦雀无声。她批作文从不打低分，只在旁边写一段比作文还长的评语，最后一句永远是“你的立意可以更远”。最离谱的是她会在月考前一晚发一条群消息：“孩子们，睡觉吧，分数不会因为你熬夜而爱你。”口头禅：“来，我们谈一谈立意。”“作文不是造句，是有话要说。”“这句话，有味道。”“换个角度，世界就宽了。”被她表扬过一次的学生，会在日记本里记上三页。她还有个习惯——把全班最好的那句作文挂在教室后墙，按月更换，被挂上去的人走路都会飘一周。"
+    },
+    {
+      "subject": "数学",
+      "name": "杨梦",
+      "isHeadTeacher": false,
+      "title": "数学备课组长",
+      "persona": "杨梦，女，数学老师，脾气暴躁到可以电离空气，讲函数图象能从单调性一路怼到学生脑子里。她说话像连珠炮，一节课能吐出两万个字，语速快到黑板都跟不上：“这个导数不会？不会？昨晚干嘛去了？刷题！刷够了吗？没刷够！站起来！”罚站界天花板，罚站花样多到出册子：单脚站、面壁站、站到黑板边讲题站、站到讲完这道题为止站。但全班都认——她讲的题，第二天考试真的考。她生气是因为急，急是因为真的想让你考好。最经典的场面是她一边骂你一边把你的草稿纸抽走，看完之后冷冷一句“思路对了，写得像屎”，然后重新写一遍给你。口头禅：“再看一遍！”“这个不会就是没做作业！”“站着听，站直了！”“我讲最后一遍！”学生们偷偷统计过，她一节课平均说37次“不对”，但也会悄悄说一次“不错”。"
+    },
+    {
+      "subject": "英语",
+      "name": "尤晓涵",
+      "isHeadTeacher": false,
+      "title": "英语教师",
+      "persona": "尤晓涵，女，英语老师，说话轻轻柔柔，笑起来眼睛弯成一条缝，课堂上温柔得能给全班理好衣领。但是她是听写界的恐怖存在——每节课前三分钟默写，错一个字扣一分，错了要罚抄二十遍，第二天还要重听写，重听写再错，第三天加倍。她的温柔里藏着刀：“错的不是单词，是你对待人生的态度哦。”她有个雷打不动的听写本，红笔标记密密麻麻，能精确记住谁在哪个词上栽过三次。她还会在早读时轻声走过每一排，被点到的同学要立刻站起来背，背不出来她也不凶，只说“回去再看看，老师等你”。这句话比骂人更可怕。口头禅：“来，我们听写一下。”“这个词，昨天讲过哦。”“错的只是这个单词，不是你。”“再想想，你可以的。”“今天听写，全对的话，老师请你们听一首歌。”全班为此拼命背单词。"
+    },
+    {
+      "subject": "化学",
+      "name": "马媛",
+      "isHeadTeacher": false,
+      "title": "化学实验员兼教师",
+      "persona": "马媛，女，化学老师，二十多岁，扎高马尾，走路带风，是全校最像学生的一位老师，也是最敢在教室放烟的一位老师。她坚信化学是用手学会的：“看一百遍不如烧一次。”于是实验课上，教室里不时升起白烟、蓝火和刺鼻气味，隔壁班同学扒着门缝看，她挥挥手：“别慌，这叫现象明显！”她曾经为了演示钠和水反应，在讲台上放了半块钠，全班看着那团小火球在水面飞窜，气氛热烈到像跨年。学校不让做的实验，她做成小视频课后发在群里，配文“大家看看，但不要模仿”。口头禅：“注意安全——主要注意别把走廊熏到。”“这个反应，漂亮！”“手别抖，抖就炸。”“实验失败也是数据。”“化学不是背，是动手。”她自己也承认，最高纪录一学期炸了三个烧杯，安委会都认识她。"
+    },
+    {
+      "subject": "地理",
+      "name": "刘军伟",
+      "isHeadTeacher": false,
+      "title": "地理教师",
+      "persona": "刘军伟，男，地理老师，中年男人，全办公室最离谱的一位，一开口就能把地理讲成科幻玄学加人生哲学。讲季风能扯到“你的人生就像东南季风，来得猛，去得也突然，但总会带点雨”；讲板块运动能讲出“人类其实都在漂，只是漂得慢一点”；讲城市热岛效应会突然沉默半分钟，然后说“你们看窗外那栋楼，它的温度里有多少人的疲惫”。他板书写得狂野，地图画得比印刷品还准，却总在讲完一段之后悠悠补一句“这不只是地理，这是命”。学生们一会儿觉得他胡说，一会儿又被他说得心里一震，最后全班地理成绩居然还不错。口头禅：“这不是地理，这是命。”“往远处看，地球是圆的。”“坐标定住的是位置，定不住的是人。”“你看那条河，它一直在改主意。”“记住这句话，高考可能不考，但人生会考。”他被同事称为“文青科学家”，被学生称为“活着的段子”。"
+    }
+  ]
+}</script>
+<script>
+'use strict';
+/* ================= Stats 移植 ================= */
+const Stats = {
+  swagger:'swagger', teacherFavor:'teacherFavor', love:'love',
+  homework:'homework', stamina:'stamina', caughtRisk:'caughtRisk',
+  keys:['swagger','teacherFavor','love','homework','stamina','caughtRisk'],
+  labels:{swagger:'装逼值',teacherFavor:'班主任好感',love:'恋爱进度',
+    homework:'作业完成度',stamina:'体力',caughtRisk:'被抓风险'},
+  emojis:{swagger:'😎',teacherFavor:'📈',love:'💖',homework:'📚',
+    stamina:'🔋',caughtRisk:'🚨'},
+  initial:{swagger:35,teacherFavor:50,love:10,homework:25,stamina:80,caughtRisk:10},
+  clamp:v=>v<0?0:(v>100?100:v)
+};
+const COL = {
+  bgTop:'#0B0E1A', card:'rgba(26,33,56,.95)',
+  neon:'#38F2C8', pink:'#FF4FA3', yellow:'#FFD84D', blue:'#4DA3FF',
+  textMain:'#EAF2FF', textDim:'#9AA8C4'
+};
+const hexToRgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);
+  return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;};
+
+/* ================= Ending 移植 ================= */
+const EndingAll = {
+  king:{key:'king',title:'牛逼之壁',subtitle:'装逼值爆表，江湖人称「高三第一嘴」',
+    emoji:'😎',badge:'KING OF 装逼',
+    description:'你在走廊里说的每一句话都被做成班级群表情包，\n陆德泉在办公室提起你时先叹口气再点头，说"这孩子……挺有想法"。\n你不一定分最高，但你一定是高三1班最响的那一个。'},
+  love:{key:'love',title:'恋爱大师',subtitle:'纸条、晚霞、桥头，一整天都没有白熬',
+    emoji:'💕',badge:'心动收割机',
+    description:'新市路的晚霞、狮山桥的风、公交站最后一班车，\n你把握住了每一个心动瞬间。放学道别那句"明天见"，\n说出口的时候，心跳比月考还响。'},
+  grind:{key:'grind',title:'卷王之王',subtitle:'作业全对，笔记全彩，错题本厚过字典',
+    emoji:'📚',badge:'卷宗级学神',
+    description:'你在晚自习最后一分钟仍然在算最后一道大题，\n陆德泉收卷时看了你一眼，说"周考满分就是你了"。\n全年级九个班，只有你在 21:20 之后还想着物理。'},
+  focus:{key:'focus',title:'班主任重点关注',subtitle:'陆德泉的「重点关注名单」第一名',
+    emoji:'🚨',badge:'办公室常驻VIP',
+    description:'手机、纸条、外卖、开黑……你一天之内把高三禁忌项写了一整本。\n陆德泉把你叫到办公室，递给你一杯热水："喝吧，明天继续。"'},
+  mediocre:{key:'mediocre',title:'平平无奇',subtitle:'一个平平无奇、但总算熬完的高三日',
+    emoji:'😐',badge:'合格的高三零件',
+    description:'没有惊天动地的装逼，没有被没收的手机，也没有心跳加速的纸条。\n你只是安安静静地把这一天过完了——\n而这，已经是大多数高三学生的全部。'},
+  hidden:{key:'hidden',title:'平平无奇但嘴硬',subtitle:'【隐藏结局】什么都没干成，但嘴一直很硬',
+    emoji:'🫥',badge:'硬嘴分子',
+    description:'你睡了一整天、作业一个字没写、老师点名时你在梦里回答问题。\n但当陆德泉问"今天学了什么"，你站起来，清了清嗓子，\n张口就是一本《教育心理学》——\n"我只是不屑于用平凡的方式证明我的优秀。"全班沉默三秒，然后集体鼓掌。'}
+};
+function keyFromNext(next){
+  if(next.startsWith('ENDING:')){
+    const k=next.substring(7);
+    if(EndingAll[k]) return k;
+  }
+  return 'mediocre';
+}
+
+/* ================= GameEvent / Choice ================= */
+function Choice(json){
+  const eff={};
+  const raw=json&&json.effects;
+  if(raw&&typeof raw==='object'&&!Array.isArray(raw)){
+    for(const k of Object.keys(raw)){
+      const v=raw[k];
+      if(typeof v==='number') eff[k]=Math.trunc(v);
+    }
+  }
+  this.text=String(json&&json.text!=null?json.text:'……');
+  this.next=String(json&&json.next!=null?json.next:'');
+  this.effects=eff;
+  this.note=String(json&&json.note!=null?json.note:'');
+}
+Choice.prototype.safeEffects=function(){
+  const out={};
+  for(const k of Object.keys(this.effects)){
+    const v=this.effects[k];
+    if(Stats.keys.includes(k)&&v!==0) out[k]=v>30?30:(v<-30?-30:v);
+  }
+  return out;
+};
+function GameEvent(json){
+  const ch=[];
+  const rc=json&&json.choices;
+  if(Array.isArray(rc)) for(const it of rc) if(it&&typeof it==='object') ch.push(new Choice(it));
+  if(ch.length===0) ch.push(new Choice({text:'继续',next:'RESTART'}));
+  const rawChar=json&&json.character!=null?String(json.character):null;
+  this.id=String(json&&json.id!=null?json.id:'');
+  this.time=String(json&&json.time!=null?json.time:'--:--');
+  this.place=String(json&&json.place!=null?json.place:'苏州市田家炳实验高级中学');
+  this.period=String(json&&json.period!=null?json.period:'上午');
+  this.title=String(json&&json.title!=null?json.title:'');
+  this.speaker=String(json&&json.speaker!=null?json.speaker:'旁白');
+  this.text=String(json&&json.text!=null?json.text:'');
+  this.character=(rawChar===null||rawChar===''||rawChar==='null')?null:rawChar;
+  this.choices=ch;
+  this.isEnding=!!(json&&json.isEnding===true);
+}
+
+/* ================= GameEngine 移植 ================= */
+function GameEngine(events,ordered,startEventId,endings,meta){
+  this.events=events; this.orderedEvents=ordered;
+  this.startEventId=startEventId; this.endings=endings; this.meta=meta;
+  this.stats=Object.assign({},Stats.initial);
+  this.visited=[]; this.allDeltas=[]; this.notes=[]; this.choicesMade=[];
+  this.currentEventId=startEventId; this.step=0; this.playerName='无名之辈';
+}
+Object.defineProperty(GameEngine.prototype,'currentEvent',{get:function(){
+  return this.events[this.currentEventId]||this.events[this.startEventId];
+}});
+Object.defineProperty(GameEngine.prototype,'totalStat',{get:function(){
+  let s=0; for(const k of Stats.keys) s+=(this.stats[k]||0); return s;
+}});
+Object.defineProperty(GameEngine.prototype,'nodeCount',{get:function(){
+  return Object.keys(this.events).length;
+}});
+Object.defineProperty(GameEngine.prototype,'progress',{get:function(){
+  return Math.min(1.0,this.visited.length/Math.max(1,Math.min(40,this.nodeCount)));
+}});
+GameEngine.prototype.resolve=function(raw){
+  const n=this.playerName==null?'':String(this.playerName);
+  return String(raw==null?'':raw).split('{player}').join(n).split('{主角}').join(n);
+};
+GameEngine.prototype.nextEventIdFor=function(choice){
+  const next=choice.next;
+  if(next.startsWith('ENDING:')) return next;
+  if(next==='JUDGE'||next==='RESTART') return 'ENDING:'+this.resolveEndingKey();
+  if(Object.prototype.hasOwnProperty.call(this.events,next)) return next;
+  return 'ENDING:mediocre';
+};
+GameEngine.prototype.resolveEndingKey=function(){
+  const sw=this.stats[Stats.swagger]||0, tf=this.stats[Stats.teacherFavor]||0;
+  const lv=this.stats[Stats.love]||0, hw=this.stats[Stats.homework]||0;
+  const st=this.stats[Stats.stamina]||0, cr=this.stats[Stats.caughtRisk]||0;
+  if(st<=20&&hw<=30&&sw>=55) return 'hidden';
+  if(cr>=82) return 'focus';
+  if(cr>=70&&tf<=35) return 'focus';
+  if(lv>=70&&hw>=35) return 'love';
+  if(hw>=95&&cr<55) return 'grind';
+  if(hw>=88&&st<=30) return 'grind';
+  if(sw>=68&&hw<85) return 'king';
+  if(sw>=62&&tf>=60) return 'king';
+  if(sw>=50&&hw<=40&&st<=35) return 'hidden';
+  return 'mediocre';
+};
+GameEngine.prototype.applyChoice=function(choice){
+  const applied=[];
+  const safe=choice.safeEffects();
+  for(const k of Object.keys(safe)){
+    const v=safe[k];
+    const before=this.stats[k]||0;
+    const after=Stats.clamp(before+v);
+    this.stats[k]=after;
+    if(after!==before){
+      applied.push({key:k,delta:after-before});
+      this.allDeltas.push({key:k,delta:after-before});
+    }
+  }
+  this.choicesMade.push(choice.text);
+  if(choice.note&&choice.note.length>0) this.notes.push(choice.note);
+  this.step++;
+  return applied;
+};
+GameEngine.prototype.goTo=function(id){
+  this.currentEventId=id;
+  if(!this.visited.includes(id)) this.visited.push(id);
+};
+GameEngine.prototype.endingFor=function(e){
+  const key=keyFromNext(e.choices[0].next);
+  return this.endings[key]||EndingAll[key]||EndingAll.mediocre;
+};
+GameEngine.fromJsonString=function(raw){
+  const root=JSON.parse(raw);
+  const map={}, ordered=[];
+  const rawEvents=root.events;
+  if(Array.isArray(rawEvents)){
+    for(const item of rawEvents){
+      if(item&&typeof item==='object'&&!Array.isArray(item)){
+        const e=new GameEvent(item);
+        if(e.id.length>0&&!Object.prototype.hasOwnProperty.call(map,e.id)){
+          map[e.id]=e; ordered.push(e);
+        }
+      }
+    }
+  }
+  if(Object.keys(map).length===0){
+    const fb=new GameEvent({id:'fallback',time:'07:30',place:'高三1班',period:'早读',
+      title:'空教室',speaker:'旁白',text:'教室里一片空白。看来档案丢了。',
+      choices:[{text:'算了，毕业吧',next:'JUDGE'}],isEnding:false});
+    map[fb.id]=fb; ordered.push(fb);
+  }
+  const ends={};
+  const rawEndings=root.endings;
+  if(rawEndings&&typeof rawEndings==='object'&&!Array.isArray(rawEndings)){
+    for(const k of Object.keys(rawEndings)){
+      const v=rawEndings[k];
+      let base=EndingAll[k]||EndingAll.mediocre;
+      if(v&&typeof v==='object'&&!Array.isArray(v)){
+        const t=String(v.title!=null?v.title:'');
+        const d=String(v.description!=null?v.description:'');
+        if(t.length>1||d.length>5){
+          base={key:k,
+            title:v.title!=null?String(v.title):base.title,
+            subtitle:v.subtitle!=null?String(v.subtitle):base.subtitle,
+            emoji:v.emoji!=null?String(v.emoji):base.emoji,
+            description:v.description!=null?String(v.description):base.description,
+            badge:v.badge!=null?String(v.badge):base.badge};
+        }
+      }
+      ends[k]=base;
+    }
+  }
+  const rawMeta=root.meta;
+  const metaMap=(rawMeta&&typeof rawMeta==='object'&&!Array.isArray(rawMeta))
+    ? Object.assign({},rawMeta) : {};
+  const initFromJson={};
+  const absorb=function(rawInit){
+    if(!rawInit||typeof rawInit!=='object'||Array.isArray(rawInit)) return;
+    for(const k of Object.keys(rawInit)){
+      const v=rawInit[k];
+      if(typeof v==='number'&&Stats.keys.includes(k)) initFromJson[k]=Math.trunc(v);
+    }
+  };
+  absorb(metaMap.initial); absorb(root.initial);
+
+  let start=root.startEvent!=null?root.startEvent
+    :(metaMap.startEvent!=null?metaMap.startEvent:Object.keys(map)[0]);
+  start=String(start);
+  const safeStart=Object.prototype.hasOwnProperty.call(map,start)?start:Object.keys(map)[0];
+
+  const resolvedInitial=Object.assign({},Stats.initial,initFromJson);
+  const engine=new GameEngine(map,ordered,safeStart,ends,
+    Object.assign({},metaMap,{initial:resolvedInitial}));
+  engine.stats=Object.assign({},resolvedInitial);
+  engine.visited.push(safeStart);
+  if(Object.keys(ends).length===0){
+    for(const k of Object.keys(EndingAll)) ends[k]=EndingAll[k];
+  }
+  return engine;
+};
+GameEngine.fromScratch=function(template){
+  const g=new GameEngine(template.events,template.orderedEvents,
+    template.startEventId,template.endings,template.meta);
+  const init=template.meta&&template.meta.initial;
+  if(init&&typeof init==='object'&&!Array.isArray(init)){
+    const resolved=Object.assign({},Stats.initial);
+    for(const k of Object.keys(init)){
+      const v=init[k];
+      if(typeof v==='number'&&Stats.keys.includes(k)) resolved[k]=Math.trunc(v);
+    }
+    g.stats=Object.assign({},resolved);
+  }
+  g.visited.push(template.startEventId);
+  return g;
+};
+
+/* ================= WorldData 移植 ================= */
+function Teacher(json){this.subject=String(json.subject!=null?json.subject:'');
+  this.name=String(json.name!=null?json.name:'');
+  this.isHeadTeacher=json.isHeadTeacher===true;
+  this.title=String(json.title!=null?json.title:'教师');
+  this.persona=String(json.persona!=null?json.persona:'');}
+function Student(json){this.name=String(json.name!=null?json.name:'');
+  this.gender=String(json.gender!=null?json.gender:'male');
+  this.tag=String(json.tag!=null?json.tag:'普通学生');
+  this.isFavoriteNPC=json.isFavoriteNPC===true;}
+Object.defineProperty(Student.prototype,'isMale',{get:function(){return this.gender==='male';}});
+function ClassRoom(json){
+  const list=[]; const raw=json.students;
+  if(Array.isArray(raw)) for(const s of raw) if(s&&typeof s==='object') list.push(new Student(s));
+  this.id=String(json.id!=null?json.id:''); this.name=String(json.name!=null?json.name:'');
+  this.teacher=String(json.teacher!=null?json.teacher:''); this.students=list;}
+function WorldData(json){
+  const cs=[]; const rawClasses=json.classes;
+  if(Array.isArray(rawClasses)) for(const c of rawClasses) if(c&&typeof c==='object') cs.push(new ClassRoom(c));
+  const ts=[]; const rawTeachers=json.teachers;
+  if(Array.isArray(rawTeachers)) for(const t of rawTeachers) if(t&&typeof t==='object') ts.push(new Teacher(t));
+  const rawSchool=json.school;
+  const info=(rawSchool&&typeof rawSchool==='object')?{
+    name:String(rawSchool.name!=null?rawSchool.name:'苏州市田家炳实验高级中学（新市路校区）'),
+    grade:String(rawSchool.grade!=null?rawSchool.grade:'高三'),
+    subjectCombo:String(rawSchool.subjectCombo!=null?rawSchool.subjectCombo:'物理+化学+地理'),
+    startTime:String(rawSchool.startTime!=null?rawSchool.startTime:'07:30'),
+    endTime:String(rawSchool.endTime!=null?rawSchool.endTime:'21:20'),
+    classCount:typeof rawSchool.classCount==='number'?Math.trunc(rawSchool.classCount):9
+  }:{name:'苏州市田家炳实验高级中学（新市路校区）',grade:'高三',
+    subjectCombo:'物理+化学+地理',startTime:'07:30',endTime:'21:20',classCount:9};
+  this.school=info; this.classes=cs; this.teachers=ts;
+}
+Object.defineProperty(WorldData.prototype,'mainClass',{get:function(){
+  return this.classes.length?this.classes[0]:
+    new ClassRoom({id:'class1',name:'高三1班',teacher:'陆德泉',students:[]});}});
+Object.defineProperty(WorldData.prototype,'mainStudents',{get:function(){
+  return this.mainClass.students;}});
+Object.defineProperty(WorldData.prototype,'favoriteNpcs',{get:function(){
+  return this.mainStudents.filter(s=>s.isFavoriteNPC);}});
+Object.defineProperty(WorldData.prototype,'headTeacher',{get:function(){
+  for(const t of this.teachers) if(t.isHeadTeacher) return t;
+  return this.teachers.length?this.teachers[0]:null;}});
+WorldData.prototype.teacherByName=function(name){
+  for(const t of this.teachers) if(t.name===name) return t; return null;
+};
+
+/* ================= 工具 ================= */
+const $=(s,r)=>(r||document).querySelector(s);
+const el=(tag,cls,html)=>{const n=document.createElement(tag);
+  if(cls) n.className=cls; if(html!=null) n.innerHTML=html; return n;};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;',
+  '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const root=document.getElementById('app');
+
+/* ================= 渲染：StatsBar ================= */
+function statColor(key,v){
+  switch(key){
+    case 'swagger': return COL.yellow;
+    case 'teacherFavor': return COL.blue;
+    case 'love': return COL.pink;
+    case 'homework': return '#8CFF9A';
+    case 'stamina': return '#7FE7FF';
+    case 'caughtRisk': return v>=65?'#FF5A5A':'#FF9C5A';
+    default: return COL.neon;
+  }
+}
+function renderStatsBar(stats,compact){
+  const box=el('div','statsbar'+(compact?'':' full'));
+  if(!compact){
+    const t=el('div','statsbar-title');
+    t.innerHTML='<span>⚡</span><span>隐藏属性</span>';
+    box.appendChild(t);
+  }
+  const grid=el('div','stat-grid');
+  for(const k of Stats.keys){
+    const v=stats[k]||0;
+    const c=statColor(k,v);
+    const tile=el('div','stat');
+    tile.innerHTML=
+      '<div class="stat-top"><span class="stat-emoji">'+esc(Stats.emojis[k])+'</span>'+
+      '<span class="stat-label">'+esc(Stats.labels[k])+'</span>'+
+      '<span class="stat-val" style="color:'+c+'">'+v+'</span></div>'+
+      '<div class="stat-track"><i style="width:'+Math.max(0,Math.min(100,v))+
+      '%;background:'+c+'"></i></div>';
+    grid.appendChild(tile);
+  }
+  box.appendChild(grid);
+  return box;
+}
+
+/* ================= 首页 ================= */
+function HomeScreen(engine,world){
+  const state={tab:0,selected:null,openClasses:new Set()};
+  const view=el('div'); view.style.cssText='display:flex;flex-direction:column;height:100%';
+
+  // header
+  const hd=el('div','header');
+  hd.innerHTML=
+    '<div class="title">高三1班的一天</div>'+
+    '<div class="school">'+esc(world.school.name)+'</div>'+
+    '<div class="meta-line">'+esc(world.school.subjectCombo)+' · '+
+      world.school.classCount+' 个班 · '+esc(world.school.startTime)+' 到校 → '+
+      esc(world.school.endTime)+' 放学</div>';
+  view.appendChild(hd);
+
+  // tabs
+  const tabs=el('div','tabs');
+  const titles=['选主角','看名册','看老师'];
+  const tabEls=titles.map((t,i)=>{
+    const b=el('div','tab'+(i===0?' on':''),esc(t));
+    b.onclick=()=>{state.tab=i;sync();};
+    tabs.appendChild(b); return b;
+  });
+  view.appendChild(tabs);
+
+  const body=el('div','scroll');
+  view.appendChild(body);
+
+  // start bar
+  const sb=el('div','startbar');
+  const startBtn=el('button','btn-neon');
+  sb.appendChild(startBtn); view.appendChild(sb);
+
+  function sync(){
+    tabEls.forEach((b,i)=>b.classList.toggle('on',state.tab===i));
+    body.innerHTML='';
+    if(state.tab===0) body.appendChild(pickTab());
+    else if(state.tab===1) body.appendChild(rosterTab());
+    else body.appendChild(infoTab());
+    startBtn.textContent=state.selected==null
+      ? '选中主角后开工（点击上方姓名）'
+      : '▶ 以「'+state.selected+'」的身份开始这一天';
+  }
+
+  function pickTab(){
+    const list=el('div','list');
+    for(const s of world.mainStudents){
+      const on=state.selected===s.name;
+      const row=el('div','stu'+(on?' on':''));
+      row.innerHTML=
+        '<div class="avatar '+(s.isMale?'male':'female')+'">'+
+          esc(s.name.substring(0,1))+'</div>'+
+        '<div class="stu-name">'+esc(s.name)+'</div>'+
+        '<div class="tag">'+esc(s.tag)+'</div>'+
+        (s.isFavoriteNPC?'<div class="star">★</div>':'');
+      row.onclick=()=>{state.selected=s.name;sync();};
+      list.appendChild(row);
+    }
+    return list;
+  }
+
+  function rosterTab(){
+    const list=el('div','list');
+    for(const c of world.classes){
+      const male=c.students.filter(s=>s.isMale).length;
+      const card=el('div','cls panel'+(state.openClasses.has(c.id)?' open':''));
+      const head=el('div','cls-head');
+      head.innerHTML='<div><div class="cls-title">'+esc(c.name)+'</div>'+
+        '<div class="cls-sub">班主任 '+esc(c.teacher)+' · '+c.students.length+
+        ' 人（男 '+male+' / 女 '+(c.students.length-male)+'）</div></div>'+
+        '<div class="chev">▼</div>';
+      head.onclick=()=>{
+        if(state.openClasses.has(c.id)) state.openClasses.delete(c.id);
+        else state.openClasses.add(c.id);
+        card.classList.toggle('open');
+      };
+      card.appendChild(head);
+      const bd=el('div','cls-body');
+      const chips=el('div','chips');
+      for(const s of c.students){
+        chips.appendChild(el('span','chipname '+(s.isMale?'male':'female'),esc(s.name)));
+      }
+      bd.appendChild(chips); card.appendChild(bd);
+      list.appendChild(card);
+    }
+    return list;
+  }
+
+  function infoTab(){
+    const list=el('div','list');
+    for(const t of world.teachers){
+      const card=el('div','teacher panel');
+      let row='<div class="t-subject">'+esc(t.subject)+'</div>'+
+        '<div class="t-name">'+esc(t.name)+'</div>';
+      if(t.isHeadTeacher) row+='<span style="color:'+COL.pink+';font-size:16px">🔥</span>'+
+        '<span class="t-title">'+esc(t.title)+'</span>';
+      card.innerHTML='<div class="t-row">'+row+'</div>'+
+        '<div class="t-persona">'+esc(t.persona)+'</div>';
+      list.appendChild(card);
+    }
+    return list;
+  }
+
+  startBtn.onclick=()=>{
+    const name=state.selected!=null?state.selected:
+      (world.mainStudents.length?world.mainStudents[0].name:'');
+    root.innerHTML='';
+    root.appendChild(GameScreen(GameEngine.fromScratch(engine),world,name,()=>{
+      root.innerHTML=''; root.appendChild(HomeScreen(engine,world));
+    }));
+  };
+
+  sync();
+  return view;
+}
+
+/* ================= 日志弹层 ================= */
+function LogSheet(engine){
+  const mask=el('div','mask');
+  const sheet=el('div','sheet log');
+  const hd=el('div','sheet-hd');
+  hd.innerHTML='<div class="grab"></div><div class="sheet-title">今日轨迹</div>';
+  sheet.appendChild(hd);
+  const sc=el('div','sheet-scroll');
+  const visited=engine.visited, evs=engine.events, choices=engine.choicesMade;
+  visited.forEach((id,i)=>{
+    const e=evs[id]; if(!e) return;
+    const item=el('div','log-item');
+    const hasChoice=i<choices.length;
+    item.innerHTML=
+      '<div><div class="log-dot"></div><div class="log-line"></div></div>'+
+      '<div style="flex:1 1 auto;min-width:0">'+
+      '<div class="log-t1">'+esc(e.time)+'  '+esc(e.title)+'</div>'+
+      (hasChoice?'<div class="log-t2">选择：'+esc(choices[i])+'</div>':'')+
+      '</div>';
+    sc.appendChild(item);
+  });
+  sheet.appendChild(sc);
+  mask.appendChild(sheet);
+  mask.onclick=ev=>{if(ev.target===mask) mask.remove();};
+  return {mask};
+}
+
+/* ================= 结局弹层 ================= */
+function EndingSheet(engine,world,ending,playerName,onRestart){
+  const stats=engine.stats;
+  const st=Stats;
+  const score=(stats[st.swagger]||0)+(stats[st.teacherFavor]||0)+
+    (stats[st.love]||0)+(stats[st.homework]||0)+(stats[st.stamina]||0)+
+    Math.trunc((100-(stats[st.caughtRisk]||0))/1);
+  const total=engine.nodeCount, visited=engine.visited.length, steps=engine.step;
+
+  const mask=el('div','mask');
+  const sheet=el('div','sheet');
+  const sc=el('div','sheet-scroll');
+
+  const endingBox=el('div','ending');
+  endingBox.innerHTML=
+    '<div class="ending-emoji">'+esc(ending.emoji)+'</div>'+
+    '<div class="ending-kicker">21:20 · 通关</div>'+
+    '<div class="ending-title">'+esc(ending.title)+'</div>'+
+    '<div class="ending-sub">'+esc(ending.subtitle)+'</div>'+
+    '<div class="badge">称号：'+esc(ending.badge)+'</div>';
+  sc.appendChild(endingBox);
+
+  const desc=el('div','desc');
+  desc.textContent=ending.description+'\n\n主角：'+playerName+
+    ' · 今日经历 '+visited+'/'+total+' 个瞬间，做出 '+steps+' 次选择';
+  sc.appendChild(desc);
+
+  const sbar=renderStatsBar(stats,false);
+  sbar.style.margin='14px 0 0';
+  sc.appendChild(sbar);
+
+  const row=el('div','score-row');
+  const mkChip=(label,value,c)=>{
+    const d=el('div','score');
+    d.style.background=hexToRgba(c,.1);
+    d.style.borderColor=hexToRgba(c,.4);
+    d.innerHTML='<div class="score-v" style="color:'+c+'">'+esc(value)+'</div>'+
+      '<div class="score-l">'+esc(label)+'</div>';
+    return d;
+  };
+  row.appendChild(mkChip('综合评分',String(score),COL.yellow));
+  row.appendChild(mkChip('选择次数',String(steps),COL.blue));
+  row.appendChild(mkChip('事件数',String(total),COL.pink));
+  sc.appendChild(row);
+
+  if(engine.notes.length){
+    const q=el('div','quotes');
+    q.innerHTML='<h4>今日金句</h4>';
+    engine.notes.slice().reverse().slice(0,3).forEach(n=>{
+      q.appendChild(el('p',null,'· '+esc(n)));
+    });
+    sc.appendChild(q);
+  }
+
+  const btn=el('button','again','再来一天（换个活法）');
+  btn.onclick=()=>{onRestart();};
+  sc.appendChild(btn);
+
+  sheet.appendChild(sc);
+  mask.appendChild(sheet);
+  return mask;
+}
+
+/* ================= 游戏主界面 ================= */
+function GameScreen(engine,world,playerName,onHome){
+  engine.playerName=playerName;
+  if(!engine.visited.includes(engine.currentEventId)) engine.visited.push(engine.currentEventId);
+
+  const state={busy:false,showStats:true,lastDeltas:[],ended:false};
+  const view=el('div'); view.style.cssText='display:flex;flex-direction:column;height:100%;min-height:0';
+
+  const header=el('div','ghead');
+  const statsWrap=el('div'); statsWrap.style.flex='0 0 auto';
+  const scroll=el('div','scroll glist');
+  view.appendChild(header); view.appendChild(statsWrap); view.appendChild(scroll);
+
+  function periodColor(p){
+    switch(p){
+      case '早读': return '#FFD84D';
+      case '上午': return '#4DA3FF';
+      case '午休': return '#FF9C5A';
+      case '下午': return '#38F2C8';
+      case '晚自习': return '#9B7BFF';
+      case '放学': return '#FF4FA3';
+      default: return COL.neon;
+    }
+  }
+  function teacherSuffix(name){
+    const t=world.teacherByName(name);
+    if(t) return t.subject+(t.isHeadTeacher?'·班主任':'');
+    const s=world.mainStudents.filter(x=>x.name===name)[0];
+    return s?s.tag:'';
+  }
+
+  function renderHeader(e){
+    const total=engine.nodeCount;
+    const pct=Math.max(0,Math.min(1,engine.visited.length/(total*0.45)));
+    header.innerHTML='';
+    const row=el('div','ghead-row');
+    const tb=el('div','timebox',esc(e.time));
+    const pl=el('div','place',esc(e.place));
+    const bLog=el('div','iconbtn','📖');
+    bLog.innerHTML='<span style="font-size:18px">📖</span>';
+    bLog.title='日志';
+    bLog.style.color=COL.blue;
+    const bVis=el('div','iconbtn');
+    bVis.innerHTML=state.showStats
+      ? '<span style="font-size:19px">👁</span>'
+      : '<span style="font-size:19px">🙈</span>';
+    bVis.title='属性';
+    bVis.style.color=COL.neon;
+    row.appendChild(tb); row.appendChild(pl); row.appendChild(bLog); row.appendChild(bVis);
+    header.appendChild(row);
+    const bar=el('div','bar');
+    const fill=el('i');
+    fill.style.width=(pct*100).toFixed(2)+'%';
+    bar.appendChild(fill);
+    header.appendChild(bar);
+
+    bLog.onclick=()=>{
+      document.querySelectorAll('body > .mask.log').forEach(n=>n.remove());
+      const {mask}=LogSheet(engine);
+      document.body.appendChild(mask);
+    };
+    bVis.onclick=()=>{state.showStats=!state.showStats;renderStats();renderHeader(e);};
+  }
+
+  function renderStats(){
+    statsWrap.innerHTML='';
+    if(!state.showStats) return;
+    statsWrap.appendChild(renderStatsBar(engine.stats,true));
+  }
+
+  function renderBody(e,animate){
+    scroll.innerHTML='';
+    const card=el('div','event-card panel'+(animate?' fade-in':''));
+    const title=engine.resolve(e.title);
+    const text=engine.resolve(e.text);
+    const speaker=engine.resolve(e.speaker);
+    const character=e.character!=null?engine.resolve(e.character):null;
+    const pc=periodColor(e.period);
+    card.appendChild(el('div','ec-row',
+      '<div class="period" style="background:'+hexToRgba(pc,.14)+
+      ';color:'+pc+';border:1px solid '+hexToRgba(pc,.5)+'">'+esc(e.period)+'</div>'+
+      '<div class="ec-title">'+esc(title)+'</div>'));
+    if(character!=null){
+      const who=el('div','ec-who');
+      who.innerHTML='<div class="avatar" style="background:rgba(56,242,200,.18);'+
+        'color:'+COL.neon+';width:30px;height:30px;flex:0 0 30px;border-radius:50%;'+
+        'display:flex;align-items:center;justify-content:center;font-weight:800">'+
+        esc(character.length?character.substring(0,1):'?')+'</div>'+
+        '<div class="ec-who-t">'+esc(character+' · '+teacherSuffix(character))+'</div>';
+      card.appendChild(who);
+    }
+    card.appendChild(el('div','ec-text',esc(text)));
+    card.appendChild(el('div','ec-speaker','<span>💬</span><span>'+esc(speaker)+'</span>'));
+    scroll.appendChild(card);
+
+    if(state.lastDeltas.length){
+      const toast=el('div','tost');
+      for(const d of state.lastDeltas){
+        const up=d.delta>0;
+        const c=up?'#8CFF9A':'#FF6B6B';
+        const s=el('span',null,esc(Stats.labels[d.key])+' '+(up?'+':'')+d.delta);
+        s.style.color=c;
+        s.style.background=hexToRgba(c,.12);
+        s.style.borderColor=hexToRgba(c,.55);
+        toast.appendChild(s);
+      }
+      scroll.appendChild(toast);
+    }
+
+    const gap=el('div'); gap.style.height='14px'; scroll.appendChild(gap);
+
+    e.choices.forEach((c,i)=>{
+      const tile=el('div','choice'+(state.busy?' dis':''));
+      const cbody=el('div','c-body');
+      cbody.appendChild(el('div','c-text',esc(c.text)));
+      const safe=c.safeEffects();
+      const keys=Object.keys(safe);
+      if(keys.length){
+        const eff=el('div','c-eff');
+        for(const k of keys){
+          const v=safe[k], up=v>0, risk=(k===Stats.caughtRisk);
+          const cc=risk?(up?'#FF9C5A':'#8CFF9A'):(up?'#8CFF9A':'#FF6B6B');
+          const sp=el('span',null,esc(Stats.labels[k])+(up?'+':'')+v);
+          sp.style.color=cc; sp.style.background=hexToRgba(cc,.1);
+          eff.appendChild(sp);
+        }
+        cbody.appendChild(eff);
+      }
+      tile.innerHTML='<div class="c-idx">'+String.fromCharCode(65+i)+'</div>';
+      tile.appendChild(cbody);
+      tile.appendChild(el('div','c-chev','›'));
+      tile.onclick=()=>choose(c);
+      scroll.appendChild(tile);
+    });
+
+    if(engine.notes.length){
+      scroll.appendChild(el('div','note','📌 记录：'+esc(engine.notes[engine.notes.length-1])));
+    }
+  }
+
+  function choose(c){
+    if(state.busy||state.ended) return;
+    state.busy=true;
+    const deltas=engine.applyChoice(c);
+    const nextId=engine.nextEventIdFor(c);
+    const toEnding=nextId.startsWith('ENDING:');
+    if(!toEnding) engine.goTo(nextId);
+    state.lastDeltas=deltas;
+    state.busy=false;
+
+    const e=engine.currentEvent;
+    renderHeader(e); renderStats(); renderBody(e,!toEnding||true);
+
+    const isEndingNode=!toEnding&&e.isEnding;
+    if(isEndingNode||toEnding){
+      const key=isEndingNode?keyFromNext(e.choices[0].next):keyFromNext(nextId);
+      setTimeout(()=>{
+        if(state.ended) return;
+        state.ended=true;
+        const ending=engine.endings[key]||EndingAll[key]||EndingAll.mediocre;
+        const mask=EndingSheet(engine,world,ending,playerName,()=>{
+          // 清理全部浮层，避免第二次游玩时叠层
+          document.querySelectorAll('body > .mask').forEach(n=>n.remove());
+          root.innerHTML=''; onHome();
+        });
+        document.body.appendChild(mask);
+      },320);
+    } else {
+      scroll.scrollTo({top:0,behavior:'smooth'});
+    }
+  }
+
+  const e0=engine.currentEvent;
+  renderHeader(e0); renderStats(); renderBody(e0,true);
+  return view;
+}
+
+/* ================= 启动 ================= */
+function boot(){
+  try{
+    const rawEvents=document.getElementById('data-events').textContent;
+    const rawStudents=document.getElementById('data-students').textContent;
+    const engine=GameEngine.fromJsonString(rawEvents);
+    const world=new WorldData(JSON.parse(rawStudents));
+    root.innerHTML='';
+    root.appendChild(HomeScreen(engine,world));
+  }catch(err){
+    root.innerHTML='';
+    const c=el('div','center');
+    c.innerHTML='<div class="err-t">🌙 校园系统崩了</div>'+
+      '<div class="err-d">'+esc(err&&err.message?err.message:err)+'</div>'+
+      '<button class="btn-neon" style="max-width:180px;height:44px">重试</button>';
+    c.querySelector('button').onclick=()=>location.reload();
+    root.appendChild(c);
+  }
+}
+boot();
+</script>
+</body>
+</html>
